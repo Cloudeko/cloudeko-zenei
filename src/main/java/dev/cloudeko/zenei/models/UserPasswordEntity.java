@@ -7,9 +7,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "sessions")
+@Table(name = "user_passwords")
 @EqualsAndHashCode(callSuper = true)
-@NamedQuery(name = "UserPasswordEntity.isValidPassword", query = "SELECT u FROM UserPasswordEntity u WHERE u.user.email = ?1 AND u.passwordHash = ?2")
+@NamedQuery(name = "UserPasswordEntity.isValidPassword", query = "SELECT u FROM UserPasswordEntity u WHERE u.user.email = :email AND u.passwordHash = :passwordHash")
 public class UserPasswordEntity extends PanacheEntity {
 
     @OneToOne
