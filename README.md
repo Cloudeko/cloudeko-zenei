@@ -12,4 +12,4 @@ It's built with [Quarkus](https://quarkus.io) and provides authentication via OA
 
 ## License
 
-Zenei is licensed under the [MIT](LICENSE) license.
+Zenei is licensed under the [Apache-2.0](LICENSE) license.
