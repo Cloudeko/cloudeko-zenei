@@ -6,9 +6,9 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class SessionRepository implements PanacheRepository<RefreshTokenEntity> {
+public class RefreshTokenRepository implements PanacheRepository<RefreshTokenEntity> {
 
-    public Uni<RefreshTokenEntity> findByValidSessionToken(String sessionToken) {
-        return find("#RefreshTokenEntity.findByValidSessionToken", sessionToken).firstResult();
+    public Uni<RefreshTokenEntity> findByValidRefreshToken(String token) {
+        return find("#RefreshTokenEntity.findByValidSessionToken", token).firstResult();
     }
 }

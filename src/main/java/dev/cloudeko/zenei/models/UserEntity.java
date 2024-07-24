@@ -1,7 +1,4 @@
 package dev.cloudeko.zenei.models;
-
-import com.cloudeko.api.auth.session.SessionEntity;
-import dev.cloudeko.model.app.UserRole;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -28,7 +25,7 @@ public class UserEntity extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uid;
 
-    @Column(name = "name", nullable = false, length = 64)
+    @Column(name = "name", length = 64)
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
