@@ -20,7 +20,7 @@ public class RefreshTokenEntity extends PanacheEntity {
     private String token;
 
     @ManyToOne
-    @JoinColumn(name = "user", referencedColumnName = "uid", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "uid", nullable = false)
     private UserEntity user;
 
     @Column(name = "revoked", nullable = false)

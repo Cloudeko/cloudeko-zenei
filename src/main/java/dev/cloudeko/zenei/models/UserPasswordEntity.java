@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 public class UserPasswordEntity extends PanacheEntity {
 
     @OneToOne
-    @JoinColumn(name = "user", referencedColumnName = "uid", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "uid", nullable = false)
     private UserEntity user;
 
     @Column(name = "password_hash", nullable = false)
