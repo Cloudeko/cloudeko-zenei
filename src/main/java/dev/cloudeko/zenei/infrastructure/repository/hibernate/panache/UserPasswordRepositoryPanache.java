@@ -14,8 +14,12 @@ public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<Use
 
     @Override
     public void createUserPassword(UserPassword userPassword) {
-        UserEntity user = findUserEntityById(userPassword.getUser());
-        UserPasswordEntity userPasswordEntity = new UserPasswordEntity();
+        if (userPassword == null || userPassword.getUser() == null) {
+            throw new IllegalArgumentException("User reference cannot be null");
+        }
+
+        final var user = findUserEntityById(userPassword.getUser());
+        final var userPasswordEntity = new UserPasswordEntity();
 
         userPasswordEntity.setUser(user);
         userPasswordEntity.setPasswordHash(userPassword.getPasswordHash());
@@ -25,8 +29,8 @@ public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<Use
 
     @Override
     public void updateUserPassword(UserPassword userPassword) {
-        UserEntity user = findUserEntityById(userPassword.getUser());
-        UserPasswordEntity userPasswordEntity = find("user", user).firstResult();
+        final var user = findUserEntityById(userPassword.getUser());
+        final var userPasswordEntity = find("user", user).firstResult();
 
         userPasswordEntity.setPasswordHash(userPassword.getPasswordHash());
 
@@ -34,14 +38,17 @@ public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<Use
     }
 
     @Override
-    public Optional<UserPassword> getUserPasswordByEmailAndPassword(String email, String password) {
-        UserEntity user = findUserEntityByEmail(email);
-        UserPasswordEntity userPasswordEntity = find("user", user).firstResult();
+    public Optional<UserPassword> getUserPasswordByEmail(String email) {
+        final var userPasswordEntity = find("user.email", email).firstResult();
 
         if (userPasswordEntity == null) {
             return Optional.empty();
         }
 
-        return Optional.of(new UserPassword());
+        final var userPassword = new UserPassword();
+        userPassword.setUser(userPasswordEntity.getUser().getId());
+        userPassword.setPasswordHash(userPasswordEntity.getPasswordHash());
+
+        return Optional.of(userPassword);
     }
 }

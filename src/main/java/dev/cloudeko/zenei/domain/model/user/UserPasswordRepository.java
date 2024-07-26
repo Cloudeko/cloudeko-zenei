@@ -8,5 +8,5 @@ public interface UserPasswordRepository {
 
     void updateUserPassword(UserPassword userPassword);
 
-    Optional<UserPassword> getUserPasswordByEmailAndPassword(String email, String password);
+    Optional<UserPassword> getUserPasswordByEmail(String email);
 }

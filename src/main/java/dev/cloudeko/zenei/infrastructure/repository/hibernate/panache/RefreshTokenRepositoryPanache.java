@@ -11,12 +11,23 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
 
     @Override
     public RefreshToken createRefreshToken(RefreshToken refreshToken) {
-        return null;
+        final var refreshTokenEntity = new RefreshTokenEntity();
+
+        refreshTokenEntity.setToken(refreshToken.getToken());
+        refreshTokenEntity.setUser(findUserEntityById(refreshToken.getUserId()));
+        refreshTokenEntity.setRevoked(refreshToken.isRevoked());
+        refreshTokenEntity.setExpiresAt(refreshToken.getExpiresAt());
+        refreshTokenEntity.setCreatedAt(refreshToken.getCreatedAt());
+        refreshTokenEntity.setUpdatedAt(refreshToken.getUpdatedAt());
+
+        persist(refreshTokenEntity);
+
+        return refreshToken;
     }
 
     @Override
     public Optional<RefreshToken> findRefreshTokenByToken(String token) {
-        RefreshTokenEntity refreshToken = getEntityManager().createQuery(
+        final var refreshToken = getEntityManager().createQuery(
                         "SELECT s.user FROM RefreshTokenEntity s WHERE s.token = :token AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false",
                         RefreshTokenEntity.class)
                 .setParameter("token", token)
@@ -26,8 +37,14 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
             return Optional.empty();
         }
 
-        RefreshToken refreshTokenModel = new RefreshToken();
-        refreshToken.setToken(refreshToken.getToken());
+        final var refreshTokenModel = new RefreshToken();
+
+        refreshTokenModel.setUserId(refreshToken.getUser().getId());
+        refreshTokenModel.setToken(refreshToken.getToken());
+        refreshTokenModel.setRevoked(refreshToken.isRevoked());
+        refreshTokenModel.setExpiresAt(refreshToken.getExpiresAt());
+        refreshTokenModel.setCreatedAt(refreshToken.getCreatedAt());
+        refreshTokenModel.setUpdatedAt(refreshToken.getUpdatedAt());
 
         return Optional.of(refreshTokenModel);
     }

@@ -1,11 +1,14 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.entity;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,9 +20,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity extends PanacheEntityBase {
 
     @Id
+    @UuidGenerator
     private UUID id;
 
     @Column(name = "username", length = 64)

@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.entity;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public class UserPasswordEntity {
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "uid", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserEntity user;
 
     @Column(name = "password_hash", nullable = false)

@@ -1,11 +1,13 @@
 package dev.cloudeko.zenei.domain.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "Token", description = "Represents a token")

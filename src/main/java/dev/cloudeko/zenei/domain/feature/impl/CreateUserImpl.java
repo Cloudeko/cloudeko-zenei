@@ -23,18 +23,18 @@ public class CreateUserImpl implements CreateUser {
         checkExistingUsername(user.getUsername());
         checkExistingEmail(user.getEmail());
 
-        final var createdUser = userRepository.createUser(user);
+        userRepository.createUser(user);
 
         if (createUserInput.isPasswordEnabled()) {
             final var userPassword = UserPassword.builder()
-                    .user(createdUser.getId())
+                    .user(user.getId())
                     .passwordHash(hashProvider.hashPassword(createUserInput.getPassword()))
                     .build();
 
             userPasswordRepository.createUserPassword(userPassword);
         }
 
-        return createdUser;
+        return user;
     }
 
     private void checkExistingUsername(String username) {

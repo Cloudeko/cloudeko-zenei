@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface UserRepository {
 
-    User createUser(User user);
+    void createUser(User user);
 
     boolean existsByEmail(String email);
 

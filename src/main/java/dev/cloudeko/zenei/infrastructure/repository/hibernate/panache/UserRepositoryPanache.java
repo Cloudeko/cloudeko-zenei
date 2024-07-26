@@ -1,19 +1,26 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
+import dev.cloudeko.zenei.domain.mapping.UserMapper;
 import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
+import io.quarkus.hibernate.orm.panache.Panache;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
+@AllArgsConstructor
 public class UserRepositoryPanache extends AbstractPanacheRepositoryBase<UserEntity, UUID> implements UserRepository {
 
+    private final UserMapper userMapper;
+
     @Override
-    public User createUser(User user) {
-        UserEntity userEntity = new UserEntity();
+    public void createUser(User user) {
+        final var userEntity = new UserEntity();
 
         userEntity.setEmail(user.getEmail());
         userEntity.setUsername(user.getUsername());
@@ -21,8 +28,7 @@ public class UserRepositoryPanache extends AbstractPanacheRepositoryBase<UserEnt
         userEntity.setAdmin(user.isAdmin());
 
         persist(userEntity);
-
-        return new User();
+        userMapper.updateDomainFromEntity(userEntity, user);
     }
 
     @Override
@@ -37,31 +43,31 @@ public class UserRepositoryPanache extends AbstractPanacheRepositoryBase<UserEnt
 
     @Override
     public Optional<User> getUserById(UUID id) {
-        UserEntity userEntity = findUserEntityById(id);
+        final var userEntity = findUserEntityById(id);
         if (userEntity == null) {
             return Optional.empty();
         }
 
-        return Optional.of(new User());
+        return Optional.of(userMapper.toDomain(userEntity));
     }
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        UserEntity userEntity = findUserEntityByEmail(email);
+        final var userEntity = findUserEntityByEmail(email);
         if (userEntity == null) {
             return Optional.empty();
         }
 
-        return Optional.of(new User());
+        return Optional.of(userMapper.toDomain(userEntity));
     }
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        UserEntity userEntity = find("username", username).firstResult();
+        final var userEntity = find("username", username).firstResult();
         if (userEntity == null) {
             return Optional.empty();
         }
 
-        return Optional.of(new User());
+        return Optional.of(userMapper.toDomain(userEntity));
     }
 }

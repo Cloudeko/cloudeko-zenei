@@ -12,15 +12,18 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "refresh_tokens")
-@EqualsAndHashCode(callSuper = true)
 @NamedQuery(name = "RefreshTokenEntity.findByValidToken", query = "SELECT s.user FROM RefreshTokenEntity s WHERE s.token = ?1 AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false")
-public class RefreshTokenEntity extends PanacheEntity {
+public class RefreshTokenEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "token", nullable = false)
     private String token;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "uid", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserEntity user;
 
     @Column(name = "revoked", nullable = false)
