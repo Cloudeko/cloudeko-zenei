@@ -1,29 +1,13 @@
 package dev.cloudeko.zenei.service;
 
-import dev.cloudeko.zenei.dto.Token;
-import dev.cloudeko.zenei.dto.User;
-import dev.cloudeko.zenei.models.RefreshTokenEntity;
-import dev.cloudeko.zenei.models.UserEntity;
-import dev.cloudeko.zenei.repository.RefreshTokenRepository;
-import dev.cloudeko.zenei.repository.UserPasswordRepository;
-import dev.cloudeko.zenei.repository.UserRepository;
-import io.quarkus.elytron.security.common.BcryptUtil;
-import io.quarkus.hibernate.reactive.panache.common.WithSession;
-import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
-import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.BadRequestException;
 import lombok.extern.jbosslog.JBossLog;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @JBossLog
 @ApplicationScoped
 public class AuthenticationService {
 
-    @Inject
+    /*@Inject
     UserService userService;
 
     @Inject
@@ -54,5 +38,5 @@ public class AuthenticationService {
     @WithTransaction
     public Uni<Token> refreshToken(String refreshToken) {
         return tokenService.refreshToken(refreshToken);
-    }
+    }*/
 }

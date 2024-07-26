@@ -1,17 +1,11 @@
 package dev.cloudeko.zenei.service;
 
-import dev.cloudeko.zenei.dto.Token;
-import dev.cloudeko.zenei.models.UserEntity;
-import dev.cloudeko.zenei.repository.UserRepository;
-import io.smallrye.jwt.build.Jwt;
-import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class TokenService {
 
-    @Inject
+    /*@Inject
     UserRepository userRepository;
 
     @Inject
@@ -50,5 +44,5 @@ public class TokenService {
         token.setExpiresIn(3600);
 
         return token;
-    }
+    }*/
 }

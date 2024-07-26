@@ -1,22 +1,11 @@
 package dev.cloudeko.zenei.service;
 
-import dev.cloudeko.zenei.dto.User;
-import dev.cloudeko.zenei.mapping.UserMapper;
-import dev.cloudeko.zenei.models.UserEntity;
-import dev.cloudeko.zenei.models.UserPasswordEntity;
-import dev.cloudeko.zenei.repository.UserPasswordRepository;
-import dev.cloudeko.zenei.repository.UserRepository;
-import io.quarkus.elytron.security.common.BcryptUtil;
-import io.quarkus.hibernate.reactive.panache.common.WithSession;
-import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
-import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class UserService {
 
-    @Inject
+    /*@Inject
     UserMapper userMapper;
 
     @Inject
@@ -54,5 +43,5 @@ public class UserService {
     @WithSession
     public Uni<User> getUserByName(String name) {
         return userRepository.findByName(name).onItem().ifNotNull().transform(userMapper::toDomain);
-    }
+    }*/
 }

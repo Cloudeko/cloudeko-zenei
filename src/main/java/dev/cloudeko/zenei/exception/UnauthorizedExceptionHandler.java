@@ -1,6 +1,5 @@
 package dev.cloudeko.zenei.exception;
 
-import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
