@@ -3,7 +3,9 @@ package dev.cloudeko.zenei.application.web.resource;
 import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
 import dev.cloudeko.zenei.domain.feature.CreateUser;
 import dev.cloudeko.zenei.domain.feature.LoginUserWithPassword;
+import dev.cloudeko.zenei.domain.feature.RefreshAccessToken;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
+import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -21,6 +23,7 @@ public class AuthenticationResource {
 
     private final CreateUser createUser;
     private final LoginUserWithPassword loginUserWithPassword;
+    private final RefreshAccessToken refreshAccessToken;
 
     @POST
     @Transactional
@@ -33,21 +36,22 @@ public class AuthenticationResource {
     }
 
     @POST
+    @Transactional
     @Path("/token")
     public Response token(@QueryParam("grant_type") String grantType,
             @QueryParam("username") String username,
             @QueryParam("password") String password,
             @QueryParam("refresh_token") String refreshToken) {
-        switch (grantType) {
-            case "password": {
+        return switch (grantType) {
+            case "password" -> {
                 final var token = loginUserWithPassword.handle(new LoginPasswordInput(username, password));
-                return Response.ok(token).build();
+                yield Response.ok(token).build();
             }
-            case "refresh_token": {
-
+            case "refresh_token" -> {
+                final var token = refreshAccessToken.handle(new RefreshTokenInput(refreshToken));
+                yield Response.ok(token).build();
             }
-            default:
-                return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+            default -> Response.status(Response.Status.BAD_REQUEST).build();
+        };
     }
 }

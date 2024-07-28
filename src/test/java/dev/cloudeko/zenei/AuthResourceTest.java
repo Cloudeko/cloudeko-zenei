@@ -63,4 +63,53 @@ public class AuthResourceTest {
                 () -> assertNotNull(token.getRefreshToken())
         );
     }
+
+    @Test
+    @Order(3)
+    @DisplayName("Retrieve a new access token using refresh token")
+    void testGetAccessTokenUsingRefreshToken() {
+        Token token = given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("grant_type", "password")
+                .queryParam("username", "test@test.com")
+                .queryParam("password", "test-password")
+                .post("/token")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(Token.class);
+
+        assertAll(
+                () -> assertNotNull(token),
+                () -> assertNotNull(token.getAccessToken()),
+                () -> assertNotNull(token.getRefreshToken())
+        );
+
+        Token newToken = given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("grant_type", "refresh_token")
+                .queryParam("refresh_token", token.getRefreshToken())
+                .post("/token")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(Token.class);
+
+        assertAll(
+                () -> assertNotNull(newToken),
+                () -> assertNotNull(newToken.getAccessToken()),
+                () -> assertNotNull(newToken.getRefreshToken())
+        );
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Retrieve a new access token using invalid refresh token")
+    void testGetAccessTokenUsingInvalidRefreshToken() {
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("grant_type", "refresh_token")
+                .queryParam("refresh_token", "invalid-refresh-token")
+                .post("/token")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+    }
 }
