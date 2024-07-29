@@ -71,28 +71,23 @@ public class AuthResourceTest {
                 .post("/token")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
+                .body(
+                        "accessToken", notNullValue(),
+                        "refreshToken", notNullValue()
+                )
                 .extract().as(Token.class);
 
-        assertAll(
-                () -> assertNotNull(token),
-                () -> assertNotNull(token.getAccessToken()),
-                () -> assertNotNull(token.getRefreshToken())
-        );
-
-        Token newToken = given()
+        given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "refresh_token")
                 .queryParam("refresh_token", token.getRefreshToken())
                 .post("/token")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .extract().as(Token.class);
-
-        assertAll(
-                () -> assertNotNull(newToken),
-                () -> assertNotNull(newToken.getAccessToken()),
-                () -> assertNotNull(newToken.getRefreshToken())
-        );
+                .body(
+                        "accessToken", notNullValue(),
+                        "refreshToken", notNullValue()
+                );
     }
 
     @Test
