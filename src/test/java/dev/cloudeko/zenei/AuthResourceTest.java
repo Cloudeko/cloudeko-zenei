@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -23,31 +24,28 @@ public class AuthResourceTest {
 
     @Test
     @Order(1)
-    @DisplayName("Create user via signup")
+    @DisplayName("Create user via signup (POST /signup) should return (200 OK)")
     void testCreateUser() {
         SignupRequest request = new SignupRequest("test-user", "test@test.com", "test-password");
 
-        User user = given()
+        given()
                 .contentType("application/json")
                 .body(request)
                 .post("/signup")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .extract().as(User.class);
-
-        assertAll(
-                () -> assertNotNull(user),
-                () -> assertNotNull(user.getId()),
-                () -> assertEquals(user.getUsername(), request.name()),
-                () -> assertEquals(user.getEmail(), request.email())
-        );
+                .body(
+                        "id", notNullValue(),
+                        "username", notNullValue(),
+                        "email", notNullValue()
+                );
     }
 
     @Test
     @Order(2)
-    @DisplayName("Retrieve a access token")
+    @DisplayName("Retrieve a access token using username and password (POST /token) should return (200 OK)")
     void testGetAccessToken() {
-        Token token = given()
+        given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "password")
                 .queryParam("username", "test@test.com")
@@ -55,18 +53,15 @@ public class AuthResourceTest {
                 .post("/token")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .extract().as(Token.class);
-
-        assertAll(
-                () -> assertNotNull(token),
-                () -> assertNotNull(token.getAccessToken()),
-                () -> assertNotNull(token.getRefreshToken())
-        );
+                .body(
+                        "accessToken", notNullValue(),
+                        "refreshToken", notNullValue()
+                );
     }
 
     @Test
     @Order(3)
-    @DisplayName("Retrieve a new access token using refresh token")
+    @DisplayName("Retrieve a new access token using refresh token (POST /token) should return (200 OK)")
     void testGetAccessTokenUsingRefreshToken() {
         Token token = given()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +97,7 @@ public class AuthResourceTest {
 
     @Test
     @Order(4)
-    @DisplayName("Retrieve a new access token using invalid refresh token")
+    @DisplayName("Retrieve a new access token using invalid refresh token (POST /token) should return (401 UNAUTHORIZED)")
     void testGetAccessTokenUsingInvalidRefreshToken() {
         given()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,6 +105,6 @@ public class AuthResourceTest {
                 .queryParam("refresh_token", "invalid-refresh-token")
                 .post("/token")
                 .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
 }

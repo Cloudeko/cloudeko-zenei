@@ -54,11 +54,7 @@ public class UserRepositoryPanache extends AbstractPanacheRepositoryBase<UserEnt
     @Override
     public Optional<User> getUserByEmail(String email) {
         final var userEntity = findUserEntityByEmail(email);
-        if (userEntity == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(userMapper.toDomain(userEntity));
+        return userEntity.map(userMapper::toDomain);
     }
 
     @Override

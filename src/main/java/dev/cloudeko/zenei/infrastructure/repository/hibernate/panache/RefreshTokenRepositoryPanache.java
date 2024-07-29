@@ -1,9 +1,11 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
+import dev.cloudeko.zenei.domain.exception.InvalidRefreshTokenException;
 import dev.cloudeko.zenei.domain.model.token.RefreshToken;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.RefreshTokenEntity;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.NoResultException;
 
 import java.util.Optional;
 
@@ -29,13 +31,9 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
     }
 
     @Override
-    public RefreshToken swapRefreshToken(RefreshToken oldRefreshToken, RefreshToken newRefreshToken) {
-        final var oldRefreshTokenEntity = getEntityManager().createQuery(
-                        "SELECT s FROM RefreshTokenEntity s WHERE s.token = :token AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false",
-                        RefreshTokenEntity.class)
-                .setParameter("token", oldRefreshToken.getToken())
-                .getSingleResult();
-
+    public RefreshToken swapRefreshToken(RefreshToken currentRefreshToken, RefreshToken newRefreshToken) {
+        final var currentRefreshTokenEntity = findRefreshTokenEntityByToken(currentRefreshToken.getToken())
+                .orElseThrow(InvalidRefreshTokenException::new);
         final var newRefreshTokenEntity = new RefreshTokenEntity();
 
         newRefreshTokenEntity.setToken(newRefreshToken.getToken());
@@ -43,9 +41,9 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
         newRefreshTokenEntity.setRevoked(newRefreshToken.isRevoked());
         newRefreshTokenEntity.setExpiresAt(newRefreshToken.getExpiresAt());
 
-        oldRefreshTokenEntity.setRevoked(true);
+        currentRefreshTokenEntity.setRevoked(true);
 
-        persist(newRefreshTokenEntity, oldRefreshTokenEntity);
+        persist(newRefreshTokenEntity, currentRefreshTokenEntity);
 
         newRefreshToken.setCreatedAt(newRefreshTokenEntity.getCreatedAt());
         newRefreshToken.setUpdatedAt(newRefreshTokenEntity.getUpdatedAt());
@@ -55,16 +53,13 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
 
     @Override
     public Optional<RefreshToken> findRefreshTokenByToken(String token) {
-        final var refreshToken = getEntityManager().createQuery(
-                        "SELECT s FROM RefreshTokenEntity s WHERE s.token = :token AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false",
-                        RefreshTokenEntity.class)
-                .setParameter("token", token)
-                .getSingleResult();
+        final var refreshTokenResult = findRefreshTokenEntityByToken(token);
 
-        if (refreshToken == null) {
+        if (refreshTokenResult.isEmpty()) {
             return Optional.empty();
         }
 
+        final var refreshToken = refreshTokenResult.get();
         final var refreshTokenModel = new RefreshToken();
 
         refreshTokenModel.setUserId(refreshToken.getUser().getId());
@@ -75,5 +70,17 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
         refreshTokenModel.setUpdatedAt(refreshToken.getUpdatedAt());
 
         return Optional.of(refreshTokenModel);
+    }
+
+    private Optional<RefreshTokenEntity> findRefreshTokenEntityByToken(String token) {
+        try {
+            return Optional.of(getEntityManager().createQuery(
+                            "SELECT s FROM RefreshTokenEntity s WHERE s.token = :token AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false",
+                            RefreshTokenEntity.class)
+                    .setParameter("token", token)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 }

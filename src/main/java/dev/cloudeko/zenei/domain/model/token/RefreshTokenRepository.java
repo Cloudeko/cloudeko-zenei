@@ -6,7 +6,7 @@ public interface RefreshTokenRepository {
 
     RefreshToken createRefreshToken(RefreshToken refreshToken);
 
-    RefreshToken swapRefreshToken(RefreshToken oldRefreshToken, RefreshToken newRefreshToken);
+    RefreshToken swapRefreshToken(RefreshToken currentRefreshToken, RefreshToken newRefreshToken);
 
     Optional<RefreshToken> findRefreshTokenByToken(String token);
 
