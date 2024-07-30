@@ -32,6 +32,14 @@ public class UserRepositoryPanache extends AbstractPanacheRepositoryBase<UserEnt
     }
 
     @Override
+    public void updateEmailVerified(String email, boolean verified) {
+        getEntityManager().createNamedQuery("UserEntity.updateEmailVerified")
+                .setParameter("emailVerified", verified)
+                .setParameter("email", email)
+                .executeUpdate();
+    }
+
+    @Override
     public boolean existsByEmail(String email) {
         return find("email", email).count() > 0;
     }

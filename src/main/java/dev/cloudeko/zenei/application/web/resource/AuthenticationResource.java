@@ -1,9 +1,9 @@
 package dev.cloudeko.zenei.application.web.resource;
 
 import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
-import dev.cloudeko.zenei.domain.feature.CreateUser;
-import dev.cloudeko.zenei.domain.feature.LoginUserWithPassword;
-import dev.cloudeko.zenei.domain.feature.RefreshAccessToken;
+import dev.cloudeko.zenei.domain.feature.*;
+import dev.cloudeko.zenei.domain.model.mail.ConfirmEmailInput;
+import dev.cloudeko.zenei.domain.model.mail.EmailInput;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
 import jakarta.transaction.Transactional;
@@ -22,17 +22,33 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 public class AuthenticationResource {
 
     private final CreateUser createUser;
+    private final VerifyEmail verifyEmail;
+    private final SendConfirmationEmail sendConfirmationEmail;
     private final LoginUserWithPassword loginUserWithPassword;
     private final RefreshAccessToken refreshAccessToken;
 
     @POST
     @Transactional
     @Path("/signup")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response signup(@Valid SignupRequest request) {
         final var user = createUser.handle(request.toCreateUserInput());
+        if (!sendConfirmationEmail.handle(new EmailInput(user.getEmail()))) {
+            return Response.serverError().build();
+        }
+
         return Response.ok(user).build();
+    }
+
+    @POST
+    @Transactional
+    @Path("/verify-email")
+    @Consumes(MediaType.MEDIA_TYPE_WILDCARD)
+    public Response verifyEmail(@QueryParam("token") String token) {
+        if (verifyEmail.handle(new ConfirmEmailInput(token))) {
+            return Response.noContent().build();
+        }
+
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
     @POST

@@ -30,6 +30,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spotless.version>2.40.0</spotless.version>
         <mutiny.version>2.5.1</mutiny.version>
+        <mailpit.version>1.1.1</mailpit.version>
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
         <version.org.jboss.logging>3.5.3.Final</version.org.jboss.logging>
         <surefire-plugin.version>3.1.2</surefire-plugin.version>
@@ -77,7 +78,7 @@
         <dependency>
             <groupId>io.quarkiverse.mailpit</groupId>
             <artifactId>quarkus-mailpit</artifactId>
-            <version>1.1.1</version>
+            <version>${mailpit.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -174,7 +175,7 @@
         <dependency>
             <groupId>io.quarkiverse.mailpit</groupId>
             <artifactId>quarkus-mailpit-testing</artifactId>
-            <version>1.1.1</version>
+            <version>${mailpit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

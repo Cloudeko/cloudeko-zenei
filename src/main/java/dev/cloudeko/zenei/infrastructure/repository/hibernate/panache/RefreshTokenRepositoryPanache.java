@@ -74,11 +74,10 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
 
     private Optional<RefreshTokenEntity> findRefreshTokenEntityByToken(String token) {
         try {
-            return Optional.of(getEntityManager().createQuery(
-                            "SELECT s FROM RefreshTokenEntity s WHERE s.token = :token AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false",
-                            RefreshTokenEntity.class)
-                    .setParameter("token", token)
-                    .getSingleResult());
+            return Optional.of(
+                    getEntityManager().createNamedQuery("RefreshTokenEntity.findByValidToken", RefreshTokenEntity.class)
+                            .setParameter("token", token)
+                            .getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();
         }

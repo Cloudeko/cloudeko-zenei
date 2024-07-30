@@ -20,7 +20,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class UserEntity extends PanacheEntityBase {
+@NamedQueries({
+        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email"),
+        @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
+        @NamedQuery(name = "UserEntity.updateEmailVerified", query = "UPDATE UserEntity u SET u.emailVerified = :emailVerified WHERE u.email = :email"),
+})
+public class UserEntity {
 
     @Id
     @UuidGenerator

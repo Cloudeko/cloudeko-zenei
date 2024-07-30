@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "refresh_tokens")
-@NamedQuery(name = "RefreshTokenEntity.findByValidToken", query = "SELECT s.user FROM RefreshTokenEntity s WHERE s.token = ?1 AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false")
+@NamedQuery(name = "RefreshTokenEntity.findByValidToken", query = "SELECT s FROM RefreshTokenEntity s WHERE s.token = :token AND s.expiresAt > CURRENT_TIMESTAMP AND s.revoked = false")
 public class RefreshTokenEntity {
 
     @Id

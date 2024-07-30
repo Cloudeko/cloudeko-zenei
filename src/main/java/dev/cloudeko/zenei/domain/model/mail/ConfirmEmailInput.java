@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreateConfirmationEmailInput {
-    private String email;
+public class ConfirmEmailInput {
+    private String token;
 }

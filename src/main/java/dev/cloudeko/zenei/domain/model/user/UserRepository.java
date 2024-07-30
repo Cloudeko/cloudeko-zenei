@@ -7,6 +7,8 @@ public interface UserRepository {
 
     void createUser(User user);
 
+    void updateEmailVerified(String email, boolean verified);
+
     boolean existsByEmail(String email);
 
     boolean existsByUsername(String username);

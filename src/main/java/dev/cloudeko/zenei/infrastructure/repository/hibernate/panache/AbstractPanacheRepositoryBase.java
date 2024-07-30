@@ -15,10 +15,9 @@ public abstract class AbstractPanacheRepositoryBase<ENTITY, ID> implements Panac
 
     protected Optional<UserEntity> findUserEntityByEmail(String email) {
         try {
-            return Optional.of(
-                    getEntityManager().createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
-                            .setParameter("email", email)
-                            .getSingleResult());
+            return Optional.of(getEntityManager().createNamedQuery("UserEntity.findByEmail", UserEntity.class)
+                    .setParameter("email", email)
+                    .getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();
         }

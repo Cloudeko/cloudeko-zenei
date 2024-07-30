@@ -3,11 +3,18 @@ package dev.cloudeko.zenei;
 import dev.cloudeko.zenei.domain.model.Token;
 import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
+import io.quarkiverse.mailpit.test.Mailbox;
+import io.quarkus.mailer.Mail;
+import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
+import io.vertx.ext.mail.MailMessage;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.*;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
@@ -17,16 +24,24 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AuthResourceTest {
 
+    @Inject
+    MockMailbox mailbox;
+
     @BeforeAll
     static void setup() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    }
+
+    @BeforeEach
+    void init() {
+        mailbox.clear();
     }
 
     @Test
     @Order(1)
     @DisplayName("Create user via signup (POST /signup) should return (200 OK)")
     void testCreateUser() {
-        SignupRequest request = new SignupRequest("test-user", "test@test.com", "test-password");
+        final var request = new SignupRequest("test-user", "test@test.com", "test-password");
 
         given()
                 .contentType("application/json")
@@ -39,6 +54,29 @@ public class AuthResourceTest {
                         "username", notNullValue(),
                         "email", notNullValue()
                 );
+
+        assertEquals(1, mailbox.getTotalMessagesSent());
+
+        final var sentMails = mailbox.getMailMessagesSentTo("test@test.com");
+        assertEquals(1, sentMails.size());
+
+        final var mail = sentMails.getFirst();
+
+        assertNotNull(mail);
+        assertEquals("Welcome to Zenei", mail.getSubject());
+
+        final var body = mail.getHtml();
+        assertNotNull(body);
+
+        var verificationLink = body.substring(body.indexOf("href=\"") + 6, body.indexOf("\">"));
+        assertNotNull(verificationLink);
+
+        verificationLink = verificationLink.replace("http://localhost:8080", "http://localhost:8081");
+
+        given()
+                .post(verificationLink)
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
@@ -63,7 +101,7 @@ public class AuthResourceTest {
     @Order(3)
     @DisplayName("Retrieve a new access token using refresh token (POST /token) should return (200 OK)")
     void testGetAccessTokenUsingRefreshToken() {
-        Token token = given()
+        final var token = given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "password")
                 .queryParam("username", "test@test.com")
