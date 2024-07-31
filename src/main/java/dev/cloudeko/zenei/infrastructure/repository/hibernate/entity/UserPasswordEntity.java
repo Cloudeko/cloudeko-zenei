@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.entity;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,10 +10,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "user_passwords")
 @NamedQuery(name = "UserPasswordEntity.isValidPassword", query = "SELECT u FROM UserPasswordEntity u WHERE u.user.email = ?1 AND u.passwordHash = ?2")
-public class UserPasswordEntity {
-
-    @Id
-    private UUID id;
+public class UserPasswordEntity extends PanacheEntity {
 
     @MapsId
     @OneToOne

@@ -30,19 +30,14 @@ public class RefreshAccessTokenImpl implements RefreshAccessToken {
             throw new InvalidRefreshTokenException();
         }
 
-        final var user = userRepository.getUserById(refreshToken.get().getUserId());
+        final var user = refreshToken.get().getUser();
 
-        if (user.isEmpty()) {
-            // This should never happen
-            throw new RuntimeException();
-        }
+        final var refreshTokenData = refreshTokenProvider.generateRefreshToken(user);
+        final var accessTokenData = tokenProvider.generateToken(user);
 
-        final var refreshTokenData = refreshTokenProvider.generateRefreshToken(user.get());
-        final var accessTokenData = tokenProvider.generateToken(user.get());
-
-        final var newRefreshToken = TokenUtil.createRefreshToken(user.get(), refreshTokenData);
+        final var newRefreshToken = TokenUtil.createRefreshToken(user, refreshTokenData);
         final var newToken = refreshTokenRepository.swapRefreshToken(refreshToken.get(), newRefreshToken);
 
-        return TokenUtil.createToken(user.get(), accessTokenData, newRefreshToken);
+        return TokenUtil.createToken(user, accessTokenData, newRefreshToken);
     }
 }

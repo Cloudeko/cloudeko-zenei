@@ -1,24 +1,29 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
 import dev.cloudeko.zenei.domain.exception.InvalidRefreshTokenException;
+import dev.cloudeko.zenei.domain.mapping.RefreshTokenMapper;
 import dev.cloudeko.zenei.domain.model.token.RefreshToken;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.RefreshTokenEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.NoResultException;
+import lombok.AllArgsConstructor;
 
 import java.util.Optional;
 
 @ApplicationScoped
+@AllArgsConstructor
 public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<RefreshTokenEntity> implements
         RefreshTokenRepository {
+
+    private final RefreshTokenMapper refreshTokenMapper;
 
     @Override
     public RefreshToken createRefreshToken(RefreshToken refreshToken) {
         final var refreshTokenEntity = new RefreshTokenEntity();
 
         refreshTokenEntity.setToken(refreshToken.getToken());
-        refreshTokenEntity.setUser(findUserEntityById(refreshToken.getUserId()));
+        refreshTokenEntity.setUser(findUserEntityById(refreshToken.getUser().getId()));
         refreshTokenEntity.setRevoked(refreshToken.isRevoked());
         refreshTokenEntity.setExpiresAt(refreshToken.getExpiresAt());
 
@@ -37,7 +42,7 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
         final var newRefreshTokenEntity = new RefreshTokenEntity();
 
         newRefreshTokenEntity.setToken(newRefreshToken.getToken());
-        newRefreshTokenEntity.setUser(findUserEntityById(newRefreshToken.getUserId()));
+        newRefreshTokenEntity.setUser(findUserEntityById(newRefreshToken.getUser().getId()));
         newRefreshTokenEntity.setRevoked(newRefreshToken.isRevoked());
         newRefreshTokenEntity.setExpiresAt(newRefreshToken.getExpiresAt());
 
@@ -54,22 +59,7 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
     @Override
     public Optional<RefreshToken> findRefreshTokenByToken(String token) {
         final var refreshTokenResult = findRefreshTokenEntityByToken(token);
-
-        if (refreshTokenResult.isEmpty()) {
-            return Optional.empty();
-        }
-
-        final var refreshToken = refreshTokenResult.get();
-        final var refreshTokenModel = new RefreshToken();
-
-        refreshTokenModel.setUserId(refreshToken.getUser().getId());
-        refreshTokenModel.setToken(refreshToken.getToken());
-        refreshTokenModel.setRevoked(refreshToken.isRevoked());
-        refreshTokenModel.setExpiresAt(refreshToken.getExpiresAt());
-        refreshTokenModel.setCreatedAt(refreshToken.getCreatedAt());
-        refreshTokenModel.setUpdatedAt(refreshToken.getUpdatedAt());
-
-        return Optional.of(refreshTokenModel);
+        return refreshTokenResult.map(refreshTokenMapper::toDomain);
     }
 
     private Optional<RefreshTokenEntity> findRefreshTokenEntityByToken(String token) {

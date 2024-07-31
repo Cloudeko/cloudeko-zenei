@@ -1,4 +1,4 @@
-package dev.cloudeko.zenei.domain.model.auth;
+package dev.cloudeko.zenei.domain.model.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +11,14 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SigninAttempt {
-    private long id;
-    private Strategy strategy;
+public class EmailAddress {
+    private Long id;
 
-    private boolean pending;
+    private String email;
+    private Boolean emailVerified;
+
+    private String emailVerificationToken;
+    private LocalDateTime emailVerificationTokenExpiresAt;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

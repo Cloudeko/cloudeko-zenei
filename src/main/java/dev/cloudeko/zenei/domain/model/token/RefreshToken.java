@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.domain.model.token;
 
+import dev.cloudeko.zenei.domain.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RefreshToken {
     private String token;
-    private UUID userId;
+    private User user;
     private boolean revoked;
     private LocalDateTime expiresAt;
     private LocalDateTime createdAt;

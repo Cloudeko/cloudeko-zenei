@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @ApplicationScoped
 @AllArgsConstructor
-public class UserRepositoryPanache extends AbstractPanacheRepositoryBase<UserEntity, UUID> implements UserRepository {
+public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity> implements UserRepository {
 
     private final UserMapper userMapper;
 
@@ -48,7 +48,7 @@ public class UserRepositoryPanache extends AbstractPanacheRepositoryBase<UserEnt
     }
 
     @Override
-    public Optional<User> getUserById(UUID id) {
+    public Optional<User> getUserById(Long id) {
         final var userEntity = findUserEntityById(id);
         if (userEntity == null) {
             return Optional.empty();

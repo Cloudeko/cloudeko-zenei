@@ -2,8 +2,8 @@ package dev.cloudeko.zenei.application.web.resource;
 
 import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
 import dev.cloudeko.zenei.domain.feature.*;
-import dev.cloudeko.zenei.domain.model.mail.ConfirmEmailInput;
-import dev.cloudeko.zenei.domain.model.mail.EmailInput;
+import dev.cloudeko.zenei.domain.model.email.ConfirmEmailInput;
+import dev.cloudeko.zenei.domain.model.email.EmailInput;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.net.URI;
 
-@Path("/sign-up")
+@Path("/user")
 @AllArgsConstructor
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

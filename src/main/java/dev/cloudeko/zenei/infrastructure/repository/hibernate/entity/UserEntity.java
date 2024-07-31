@@ -1,5 +1,7 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.entity;
 
+import dev.cloudeko.zenei.domain.model.auth.Strategy;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,26 +25,35 @@ import java.util.UUID;
         @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
         @NamedQuery(name = "UserEntity.updateEmailVerified", query = "UPDATE UserEntity u SET u.emailVerified = :emailVerified WHERE u.email = :email"),
 })
-public class UserEntity {
+public class UserEntity extends PanacheEntity {
 
-    @Id
-    @UuidGenerator
-    private UUID id;
+    @Column(name = "strategy")
+    @Enumerated(EnumType.STRING)
+    private Strategy strategy;
 
     @Column(name = "username", length = 64)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "email_verified", nullable = false)
-    private boolean emailVerified;
+    @Column(name = "last_name")
+    private String lastName;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmailAddressEntity> emailAddresses = new ArrayList<>();
 
     @Column(name = "image")
     private String image;
 
     @Column(name = "admin")
     private boolean admin;
+
+    @Column(name = "password_enabled")
+    private boolean passwordEnabled;
+
+    @OneToMany(mappedBy = "userId")
+    private List<SessionEntity> sessions;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RefreshTokenEntity> refreshTokens = new ArrayList<>();

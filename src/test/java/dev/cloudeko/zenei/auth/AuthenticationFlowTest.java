@@ -32,7 +32,7 @@ public class AuthenticationFlowTest {
 
     @Test
     @Order(1)
-    @DisplayName("Create user via signupAttempt (POST /signupAttempt) should return (200 OK)")
+    @DisplayName("Create user via registerAttempt (POST /registerAttempt) should return (200 OK)")
     void testCreateUser() {
         given()
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)

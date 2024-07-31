@@ -1,8 +1,8 @@
 package dev.cloudeko.zenei.domain.feature.impl;
 
 import dev.cloudeko.zenei.domain.feature.SendConfirmationEmail;
-import dev.cloudeko.zenei.domain.model.mail.ConfirmationTokenRepository;
-import dev.cloudeko.zenei.domain.model.mail.EmailInput;
+import dev.cloudeko.zenei.domain.model.email.ConfirmationTokenRepository;
+import dev.cloudeko.zenei.domain.model.email.EmailInput;
 import dev.cloudeko.zenei.domain.provider.MailTemplateProvider;
 import dev.cloudeko.zenei.domain.provider.StringTokenProvider;
 import io.quarkus.mailer.Mail;

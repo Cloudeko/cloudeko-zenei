@@ -2,8 +2,8 @@ package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
 import dev.cloudeko.zenei.domain.exception.UserNotFoundException;
 import dev.cloudeko.zenei.domain.mapping.ConfirmationTokenMapper;
-import dev.cloudeko.zenei.domain.model.mail.ConfirmationToken;
-import dev.cloudeko.zenei.domain.model.mail.ConfirmationTokenRepository;
+import dev.cloudeko.zenei.domain.model.email.ConfirmationToken;
+import dev.cloudeko.zenei.domain.model.email.ConfirmationTokenRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.ConfirmationTokenEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -19,7 +19,7 @@ public class TokenUtil {
 
     public static RefreshToken createRefreshToken(User user, String refreshToken) {
         final var token = new RefreshToken();
-        token.setUserId(user.getId());
+        token.setUser(user);
         token.setToken(refreshToken);
         token.setRevoked(false);
         token.setExpiresAt(LocalDateTime.now().plusDays(30));

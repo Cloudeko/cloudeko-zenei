@@ -1,15 +1,22 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
+import dev.cloudeko.zenei.domain.mapping.UserMapper;
+import dev.cloudeko.zenei.domain.mapping.UserPasswordMapper;
 import dev.cloudeko.zenei.domain.model.user.UserPassword;
 import dev.cloudeko.zenei.domain.model.user.UserPasswordRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserPasswordEntity;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AllArgsConstructor;
 
 import java.util.Optional;
 
 @ApplicationScoped
+@AllArgsConstructor
 public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<UserPasswordEntity>
         implements UserPasswordRepository {
+
+    private final UserMapper userMapper;
+    private final UserPasswordMapper userPasswordMapper;
 
     @Override
     public void createUserPassword(UserPassword userPassword) {
@@ -17,10 +24,10 @@ public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<Use
             throw new IllegalArgumentException("User reference cannot be null");
         }
 
-        final var user = findUserEntityById(userPassword.getUser());
+        final var user = userPassword.getUser();
         final var userPasswordEntity = new UserPasswordEntity();
 
-        userPasswordEntity.setUser(user);
+        userPasswordEntity.setUser(findUserEntityById(user.getId()));
         userPasswordEntity.setPasswordHash(userPassword.getPasswordHash());
 
         persist(userPasswordEntity);
@@ -28,8 +35,7 @@ public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<Use
 
     @Override
     public void updateUserPassword(UserPassword userPassword) {
-        final var user = findUserEntityById(userPassword.getUser());
-        final var userPasswordEntity = find("user", user).firstResult();
+        final var userPasswordEntity = find("user", userPassword.getUser().getId()).firstResult();
 
         userPasswordEntity.setPasswordHash(userPassword.getPasswordHash());
 
@@ -44,10 +50,6 @@ public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<Use
             return Optional.empty();
         }
 
-        final var userPassword = new UserPassword();
-        userPassword.setUser(userPasswordEntity.getUser().getId());
-        userPassword.setPasswordHash(userPasswordEntity.getPasswordHash());
-
-        return Optional.of(userPassword);
+        return Optional.of(userPasswordMapper.toDomain(userPasswordEntity));
     }
 }

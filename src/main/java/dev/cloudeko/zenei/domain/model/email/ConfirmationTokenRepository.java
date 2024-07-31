@@ -1,4 +1,4 @@
-package dev.cloudeko.zenei.domain.model.mail;
+package dev.cloudeko.zenei.domain.model.email;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

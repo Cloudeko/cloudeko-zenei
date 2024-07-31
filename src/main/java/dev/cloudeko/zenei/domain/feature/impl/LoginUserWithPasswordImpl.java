@@ -35,20 +35,15 @@ public class LoginUserWithPasswordImpl implements LoginUserWithPassword {
         }
 
         if (hashProvider.checkPassword(loginPasswordInput.getPassword(), userPassword.get().getPasswordHash())) {
-            final var user = userRepository.getUserById(userPassword.get().getUser());
+            final var user = userPassword.get().getUser();
 
-            if (user.isEmpty()) {
-                // This should never happen
-                throw new UserNotFoundException();
-            }
+            final var refreshTokenData = refreshTokenProvider.generateRefreshToken(user);
+            final var accessTokenData = tokenProvider.generateToken(user);
 
-            final var refreshTokenData = refreshTokenProvider.generateRefreshToken(user.get());
-            final var accessTokenData = tokenProvider.generateToken(user.get());
-
-            final var refreshToken = TokenUtil.createRefreshToken(user.get(), refreshTokenData);
+            final var refreshToken = TokenUtil.createRefreshToken(user, refreshTokenData);
             final var token = refreshTokenRepository.createRefreshToken(refreshToken);
 
-            return TokenUtil.createToken(user.get(), accessTokenData, refreshToken);
+            return TokenUtil.createToken(user, accessTokenData, refreshToken);
         } else {
             throw new UserNotFoundException();
         }

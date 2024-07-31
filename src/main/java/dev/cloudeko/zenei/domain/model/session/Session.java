@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Session {
-    private UUID id;
+    private Long id;
     private User user;
     private LocalDateTime expiresAt;
     private LocalDateTime issuedAt;

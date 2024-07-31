@@ -10,21 +10,27 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "confirmation_tokens")
-public class ConfirmationTokenEntity extends PanacheEntity {
-
-    @Column(name = "token", nullable = false)
-    private String token;
+@Table(name = "email_addresses")
+public class EmailAddressEntity extends PanacheEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserEntity user;
 
-    @Column(name = "expires_at", nullable = false)
-    private LocalDateTime expiresAt;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified;
+
+    @Column(name = "email_verification_token")
+    private String emailVerificationToken;
+
+    @Column(name = "email_verification_token_expires_at")
+    private LocalDateTime emailVerificationTokenExpiresAt;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp

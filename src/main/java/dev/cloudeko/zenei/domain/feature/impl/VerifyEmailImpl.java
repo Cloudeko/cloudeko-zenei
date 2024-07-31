@@ -2,8 +2,8 @@ package dev.cloudeko.zenei.domain.feature.impl;
 
 import dev.cloudeko.zenei.domain.exception.InvalidConfirmationTokenException;
 import dev.cloudeko.zenei.domain.feature.VerifyEmail;
-import dev.cloudeko.zenei.domain.model.mail.ConfirmEmailInput;
-import dev.cloudeko.zenei.domain.model.mail.ConfirmationTokenRepository;
+import dev.cloudeko.zenei.domain.model.email.ConfirmEmailInput;
+import dev.cloudeko.zenei.domain.model.email.ConfirmationTokenRepository;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.MailTemplateProvider;
 import dev.cloudeko.zenei.domain.provider.StringTokenProvider;
@@ -38,8 +38,7 @@ public class VerifyEmailImpl implements VerifyEmail {
             throw new InvalidConfirmationTokenException();
         }
 
-        final var userId = confirmationToken.get().getUser();
-        final var user = userRepository.getUserById(userId).orElseThrow();
+        final var user = confirmationToken.get().getUser();
 
         userRepository.updateEmailVerified(user.getEmail(), true);
         confirmationTokenRepository.deleteConfirmationToken(input.getToken());

@@ -12,6 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserPassword {
-    private UUID user;
+    private User user;
     private String passwordHash;
 }

@@ -23,7 +23,7 @@ public class AuthenticationService {
     UserPasswordRepository userPasswordRepository;
 
     @WithTransaction
-    public Uni<User> signupAttempt(String name, String email, String password) {
+    public Uni<User> registerAttempt(String name, String email, String password) {
         return userService.getUserByEmail(email)
                 .onItem().ifNotNull().failWith(() -> new BadRequestException("User already exists"))
                 .onItem().ifNull().switchTo(() -> userService.createUser(name, email, password, null));

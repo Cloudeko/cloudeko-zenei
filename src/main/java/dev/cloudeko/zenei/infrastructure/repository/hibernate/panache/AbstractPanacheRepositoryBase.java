@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public abstract class AbstractPanacheRepositoryBase<ENTITY, ID> implements PanacheRepositoryBase<ENTITY, ID> {
 
-    protected UserEntity findUserEntityById(UUID id) {
+    protected UserEntity findUserEntityById(Long id) {
         return getEntityManager().find(UserEntity.class, id);
     }
 

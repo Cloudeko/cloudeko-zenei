@@ -13,7 +13,7 @@ public interface UserRepository {
 
     boolean existsByUsername(String username);
 
-    Optional<User> getUserById(UUID id);
+    Optional<User> getUserById(Long id);
 
     Optional<User> getUserByEmail(String email);
 
