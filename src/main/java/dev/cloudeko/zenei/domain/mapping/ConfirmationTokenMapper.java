@@ -1,9 +1,7 @@
 package dev.cloudeko.zenei.domain.mapping;
 
 import dev.cloudeko.zenei.domain.model.mail.ConfirmationToken;
-import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.ConfirmationTokenEntity;
-import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

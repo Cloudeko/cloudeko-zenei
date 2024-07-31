@@ -24,14 +24,9 @@
         <quarkus.platform.version>${quarkus.version}</quarkus.platform.version>
 
         <!-- Various plugin versions -->
-        <maven.shade.version>3.5.1</maven.shade.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spotless.version>2.40.0</spotless.version>
-        <mutiny.version>2.5.1</mutiny.version>
-        <mailpit.version>1.1.1</mailpit.version>
-        <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
         <version.org.jboss.logging>3.5.3.Final</version.org.jboss.logging>
         <surefire-plugin.version>3.1.2</surefire-plugin.version>
     </properties>
@@ -74,11 +69,6 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-mailer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkiverse.mailpit</groupId>
-            <artifactId>quarkus-mailpit</artifactId>
-            <version>${mailpit.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -170,12 +160,6 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-test-security</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkiverse.mailpit</groupId>
-            <artifactId>quarkus-mailpit-testing</artifactId>
-            <version>${mailpit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

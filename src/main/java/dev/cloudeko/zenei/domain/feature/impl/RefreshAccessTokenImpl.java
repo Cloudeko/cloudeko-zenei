@@ -4,19 +4,13 @@ import dev.cloudeko.zenei.domain.exception.InvalidRefreshTokenException;
 import dev.cloudeko.zenei.domain.feature.RefreshAccessToken;
 import dev.cloudeko.zenei.domain.feature.util.TokenUtil;
 import dev.cloudeko.zenei.domain.model.Token;
-import dev.cloudeko.zenei.domain.model.token.RefreshToken;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
-import dev.cloudeko.zenei.domain.model.user.User;
-import dev.cloudeko.zenei.domain.model.user.UserPasswordRepository;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
-import dev.cloudeko.zenei.domain.provider.HashProvider;
 import dev.cloudeko.zenei.domain.provider.RefreshTokenProvider;
 import dev.cloudeko.zenei.domain.provider.TokenProvider;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @ApplicationScoped
 @AllArgsConstructor

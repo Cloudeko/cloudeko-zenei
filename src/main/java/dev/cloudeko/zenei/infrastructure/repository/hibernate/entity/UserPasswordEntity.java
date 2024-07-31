@@ -1,6 +1,5 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.entity;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.Data;
 

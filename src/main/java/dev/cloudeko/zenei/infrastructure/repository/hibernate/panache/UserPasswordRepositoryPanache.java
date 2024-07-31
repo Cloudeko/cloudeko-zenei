@@ -2,7 +2,6 @@ package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
 import dev.cloudeko.zenei.domain.model.user.UserPassword;
 import dev.cloudeko.zenei.domain.model.user.UserPasswordRepository;
-import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserPasswordEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 

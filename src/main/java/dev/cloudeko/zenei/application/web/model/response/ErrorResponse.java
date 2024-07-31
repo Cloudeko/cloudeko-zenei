@@ -1,10 +1,7 @@
 package dev.cloudeko.zenei.application.web.model.response;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;

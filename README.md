@@ -1,4 +1,4 @@
-# Zenei
+# Cloudeko Zenei
 
 Zenei is a open-source user management system that allows you to use authentication, user management and organizations management
 in your applications.

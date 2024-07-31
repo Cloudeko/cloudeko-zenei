@@ -14,7 +14,9 @@ import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Path("")
+import java.net.URI;
+
+@Path("/sign-up")
 @AllArgsConstructor
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,11 +31,15 @@ public class AuthenticationResource {
 
     @POST
     @Transactional
-    @Path("/signup")
-    public Response signup(@Valid SignupRequest request) {
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response signup(@BeanParam @Valid SignupRequest request) {
         final var user = createUser.handle(request.toCreateUserInput());
         if (!sendConfirmationEmail.handle(new EmailInput(user.getEmail()))) {
             return Response.serverError().build();
+        }
+
+        if (request.getRedirectTo() != null) {
+            return Response.temporaryRedirect(request.getRedirectTo()).build();
         }
 
         return Response.ok(user).build();
@@ -43,12 +49,13 @@ public class AuthenticationResource {
     @Transactional
     @Path("/verify-email")
     @Consumes(MediaType.MEDIA_TYPE_WILDCARD)
-    public Response verifyEmail(@QueryParam("token") String token) {
-        if (verifyEmail.handle(new ConfirmEmailInput(token))) {
-            return Response.noContent().build();
+    public Response verifyEmail(@QueryParam("token") String token, @QueryParam("redirect_to") URI redirectTo) {
+        verifyEmail.handle(new ConfirmEmailInput(token));
+        if (redirectTo != null) {
+            return Response.temporaryRedirect(redirectTo).build();
         }
 
-        return Response.status(Response.Status.BAD_REQUEST).build();
+        return Response.noContent().build();
     }
 
     @POST

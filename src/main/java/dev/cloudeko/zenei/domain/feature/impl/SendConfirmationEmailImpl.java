@@ -35,7 +35,7 @@ public class SendConfirmationEmailImpl implements SendConfirmationEmail {
         }
 
         try {
-            final var content = mailTemplateProvider.defaultCreateConfirmationMailTemplate("http://localhost:8080/verify-email",
+            final var content = mailTemplateProvider.defaultCreateConfirmationMailTemplate("http://localhost:8080/user/verify-email",
                     token.getToken());
             final var mail = Mail.withHtml(input.getEmail(), "Welcome to Zenei", content);
 

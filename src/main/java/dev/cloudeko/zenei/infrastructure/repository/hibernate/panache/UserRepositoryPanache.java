@@ -4,9 +4,7 @@ import dev.cloudeko.zenei.domain.mapping.UserMapper;
 import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
-import io.quarkus.hibernate.orm.panache.Panache;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
