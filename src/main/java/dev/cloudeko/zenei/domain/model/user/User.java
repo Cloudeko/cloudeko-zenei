@@ -17,6 +17,7 @@ import java.util.UUID;
 public class User {
     private Long id;
     private String username;
+    private String primaryEmailAddress;
     private List<EmailAddress> emailAddresses;
     private String image;
     private boolean admin;

@@ -21,11 +21,8 @@ public class PrivateUserResponse {
     @Schema(description = "Username of the user")
     private String username;
 
-    @Schema(description = "Email of the user")
-    private String email;
-
-    @Schema(description = "Whether the user's email has been verified")
-    private Boolean emailVerified;
+    @Schema(description = "Primary email of the user")
+    private String primaryEmailAddress;
 
     @Schema(description = "URL of the user's profile picture")
     private String image;

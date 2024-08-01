@@ -25,16 +25,17 @@ public class AuthenticationResource {
 
     private final CreateUser createUser;
     private final VerifyEmail verifyEmail;
-    private final SendConfirmationEmail sendConfirmationEmail;
-    private final LoginUserWithPassword loginUserWithPassword;
     private final RefreshAccessToken refreshAccessToken;
+    private final CreateEmailAddress createEmailAddress;
+    private final LoginUserWithPassword loginUserWithPassword;
 
     @POST
     @Transactional
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response signup(@BeanParam @Valid SignupRequest request) {
         final var user = createUser.handle(request.toCreateUserInput());
-        if (!sendConfirmationEmail.handle(new EmailInput(user.getEmail()))) {
+        final var emailAddress = user.getEmailAddresses().stream().findFirst().orElseThrow();
+        if (!createEmailAddress.handle(new EmailInput(emailAddress))) {
             return Response.serverError().build();
         }
 

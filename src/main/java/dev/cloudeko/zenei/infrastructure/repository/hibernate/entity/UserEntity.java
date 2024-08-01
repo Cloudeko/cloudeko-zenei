@@ -21,9 +21,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "users")
 @NamedQueries({
-        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email"),
+        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.primaryEmailAddress = :email"),
         @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
-        @NamedQuery(name = "UserEntity.updateEmailVerified", query = "UPDATE UserEntity u SET u.emailVerified = :emailVerified WHERE u.email = :email"),
 })
 public class UserEntity extends PanacheEntity {
 
@@ -39,6 +38,9 @@ public class UserEntity extends PanacheEntity {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "primary_email_address", unique = true)
+    private String primaryEmailAddress;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmailAddressEntity> emailAddresses = new ArrayList<>();

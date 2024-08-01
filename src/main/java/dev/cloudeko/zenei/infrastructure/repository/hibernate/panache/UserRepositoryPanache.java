@@ -22,7 +22,6 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
 
         userEntity.setEmail(user.getEmail());
         userEntity.setUsername(user.getUsername());
-        userEntity.setEmailVerified(user.isEmailVerified());
         userEntity.setAdmin(user.isAdmin());
 
         persist(userEntity);
@@ -39,7 +38,7 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
 
     @Override
     public boolean existsByEmail(String email) {
-        return find("email", email).count() > 0;
+        return find("primaryEmailAddress", email).count() > 0;
     }
 
     @Override
