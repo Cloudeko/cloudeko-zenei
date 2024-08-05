@@ -3,7 +3,7 @@ package dev.cloudeko.zenei.application.web.resource;
 import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
 import dev.cloudeko.zenei.domain.feature.*;
 import dev.cloudeko.zenei.domain.model.email.ConfirmEmailInput;
-import dev.cloudeko.zenei.domain.model.email.EmailInput;
+import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
 import jakarta.transaction.Transactional;
@@ -34,9 +34,10 @@ public class AuthenticationResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response signup(@BeanParam @Valid SignupRequest request) {
         final var user = createUser.handle(request.toCreateUserInput());
-        final var emailAddress = user.getEmailAddresses().stream().findFirst().orElseThrow();
-        if (!createEmailAddress.handle(new EmailInput(emailAddress))) {
-            return Response.serverError().build();
+        final var emailAddress = user.getPrimaryEmailAddress();
+
+        if (!emailAddress.getEmailVerified() && emailAddress.getEmailVerificationToken() != null) {
+            createEmailAddress.handle(new EmailAddressInput(emailAddress));
         }
 
         if (request.getRedirectTo() != null) {

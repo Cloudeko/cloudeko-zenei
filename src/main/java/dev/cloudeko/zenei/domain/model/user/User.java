@@ -23,4 +23,11 @@ public class User {
     private boolean admin;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public EmailAddress getPrimaryEmailAddress() {
+        return emailAddresses.stream()
+                .filter(e -> e.getEmail().equals(primaryEmailAddress))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("User has no primary email address"));
+    }
 }

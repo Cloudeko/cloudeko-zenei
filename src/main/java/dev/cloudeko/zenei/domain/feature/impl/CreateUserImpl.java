@@ -25,7 +25,7 @@ public class CreateUserImpl implements CreateUser {
         final var user = User.builder().username(createUserInput.getUsername()).emailAddresses(List.of(emailAddress)).build();
 
         checkExistingUsername(user.getUsername());
-        checkExistingEmail(user.getPrimaryEmailAddress());
+        checkExistingEmail(user.getPrimaryEmailAddress().getEmail()
 
         userRepository.createUser(user);
 

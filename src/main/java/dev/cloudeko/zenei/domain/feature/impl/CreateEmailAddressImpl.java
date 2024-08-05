@@ -3,7 +3,7 @@ package dev.cloudeko.zenei.domain.feature.impl;
 import dev.cloudeko.zenei.domain.exception.UserNotFoundException;
 import dev.cloudeko.zenei.domain.feature.CreateEmailAddress;
 import dev.cloudeko.zenei.domain.model.email.ConfirmationTokenRepository;
-import dev.cloudeko.zenei.domain.model.email.EmailInput;
+import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.MailTemplateProvider;
 import dev.cloudeko.zenei.domain.provider.StringTokenProvider;
@@ -28,7 +28,7 @@ public class CreateEmailAddressImpl implements CreateEmailAddress {
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
     @Override
-    public void handle(EmailInput input) {
+    public void handle(EmailAddressInput input) {
         final var user = userRepository.getUserByEmail(input.getEmailAddress());
 
         if (user.isEmpty()) {
