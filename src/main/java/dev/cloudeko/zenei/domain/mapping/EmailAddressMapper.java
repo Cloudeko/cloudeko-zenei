@@ -17,4 +17,6 @@ public interface EmailAddressMapper {
     EmailAddress toDomain(EmailAddressEntity entity);
 
     void updateDomainFromEntity(EmailAddressEntity entity, @MappingTarget EmailAddress domain);
+
+    EmailAddressEntity toEntity(EmailAddress domain);
 }

@@ -15,12 +15,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     private Long id;
+
     private String username;
+    private String firstName;
+    private String lastName;
+
     private String primaryEmailAddress;
     private List<EmailAddress> emailAddresses;
+
     private String image;
     private boolean admin;
+    private boolean passwordEnabled;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

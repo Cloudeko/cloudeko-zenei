@@ -15,4 +15,6 @@ public interface UserMapper {
     User toDomain(UserEntity entity);
 
     void updateDomainFromEntity(UserEntity entity, @MappingTarget User domain);
+
+    UserEntity toEntity(User domain);
 }

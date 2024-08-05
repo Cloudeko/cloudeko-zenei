@@ -18,12 +18,7 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
 
     @Override
     public void createUser(User user) {
-        final var userEntity = new UserEntity();
-
-        userEntity.setEmail(user.getEmail());
-        userEntity.setUsername(user.getUsername());
-        userEntity.setAdmin(user.isAdmin());
-
+        final var userEntity = userMapper.toEntity(user);
         persist(userEntity);
         userMapper.updateDomainFromEntity(userEntity, user);
     }
