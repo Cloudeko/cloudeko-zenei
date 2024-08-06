@@ -22,10 +22,13 @@ public class CreateUserImpl implements CreateUser {
     @Override
     public User handle(CreateUserInput createUserInput) {
         final var emailAddress = EmailAddress.builder().email(createUserInput.getEmail()).build();
-        final var user = User.builder().username(createUserInput.getUsername()).emailAddresses(List.of(emailAddress)).build();
+        final var user = User.builder()
+                .username(createUserInput.getUsername())
+                .primaryEmailAddress(emailAddress.getEmail())
+                .emailAddresses(List.of(emailAddress)).build();
 
         checkExistingUsername(user.getUsername());
-        checkExistingEmail(user.getPrimaryEmailAddress().getEmail()
+        checkExistingEmail(user.getPrimaryEmailAddress().getEmail());
 
         userRepository.createUser(user);
 
