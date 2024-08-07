@@ -14,16 +14,34 @@ env:
   DISTRIBUTION: "corretto"
   CONTAINER_REGISTRY: "ghcr.io"
   CONTAINER_GROUP: "cloudeko/services"
+  MODULE_NAME: "zenei"
 
 jobs:
-  build-image:
-    name: Build Docker Image
+  build-and-push:
+    strategy:
+      matrix:
+        include:
+          - type: jvm
+            build_args: "-Dquarkus.container-image.build=true"
+            group: ${{ env.CONTAINER_GROUP }}
+          - type: native
+            build_args: "-Dnative -Dquarkus.native.container-build=true"
+            group: ${{ env.CONTAINER_GROUP }}/native
+
+    name: Build and Push ${{ matrix.type }} Image
     environment: development
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -32,76 +50,25 @@ jobs:
           distribution: ${{ env.DISTRIBUTION }}
           cache: maven
 
-      - name: Get Short SHA
-        id: short_sha
-        run: echo "short_sha=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
+      - name: Calculate Short SHA and Image Name
+        id: meta
+        run: |
+          echo "short_sha=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
+          IMAGE_NAME=$(echo "${{ env.MODULE_NAME }}" | sed -r 's/([a-z])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
+          echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
 
       - name: Set Maven Version
-        run: |
-          mvn versions:set -DnewVersion=${{ steps.short_sha.outputs.short_sha }}
-
-      - name: Set IMAGE_NAME env variable
-        run: |
-          MODULE_NAME=zenei
-          TEMP_NAME=$(echo "${MODULE_NAME}")
-          IMAGE_NAME=$(echo "$TEMP_NAME" | sed -r 's/([a-z])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
-          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+        run: mvn versions:set -DnewVersion=${{ steps.meta.outputs.short_sha }}
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.CONTAINER_REGISTRY }} -u ${{ github.actor }} --password-stdin
 
-      - name: Build and push native image
+      - name: Build and push image
         run: |
           mvn clean install -DskipTests \
-          -Dquarkus.container-image.build=true \
+          ${{ matrix.build_args }} \
           -Dquarkus.container-image.push=true \
           -Dquarkus.container-image.registry=${{ env.CONTAINER_REGISTRY }} \
-          -Dquarkus.container-image.group=${{ env.CONTAINER_GROUP }} \
-          -Dquarkus.container-image.name=${{ env.IMAGE_NAME }} \
-          -Dquarkus.container-image.tag=${{ steps.short_sha.outputs.short_sha }}
-
-  build-native-image:
-    name: Build Native Docker Image
-    environment: development
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.DISTRIBUTION }}
-          cache: maven
-
-      - name: Get Short SHA
-        id: short_sha
-        run: echo "short_sha=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
-
-      - name: Set Maven Version
-        run: |
-          mvn versions:set -DnewVersion=${{ steps.short_sha.outputs.short_sha }}
-
-      - name: Set IMAGE_NAME env variable
-        run: |
-          MODULE_NAME=zenei
-          TEMP_NAME=$(echo "${MODULE_NAME}")
-          IMAGE_NAME=$(echo "$TEMP_NAME" | sed -r 's/([a-z])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
-          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
-
-      - name: Log in to registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.CONTAINER_REGISTRY }} -u ${{ github.actor }} --password-stdin
-
-      - name: Build and push native image
-        run: |
-          mvn clean install -DskipTests \
-          -Dnative \
-          -Dquarkus.native.container-build=true \
-          -Dquarkus.container-image.build=true \
-          -Dquarkus.container-image.push=true \
-          -Dquarkus.container-image.registry=${{ env.CONTAINER_REGISTRY }} \
-          -Dquarkus.container-image.group=${{ env.CONTAINER_GROUP }}/native \
-          -Dquarkus.container-image.name=${{ env.IMAGE_NAME }} \
-          -Dquarkus.container-image.tag=${{ steps.short_sha.outputs.short_sha }}
+          -Dquarkus.container-image.group=${{ matrix.group }} \
+          -Dquarkus.container-image.name=${{ steps.meta.outputs.image_name }} \
+          -Dquarkus.container-image.tag=${{ steps.meta.outputs.short_sha }}
