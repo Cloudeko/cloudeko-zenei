@@ -1,0 +1,72 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  JAVA_VERSION: "21"
+  DISTRIBUTION: "corretto"
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - type: jvm
+            build_args: ""
+          - type: native
+            build_args: "-Dnative"
+    name: Run ${{ matrix.type }} Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.DISTRIBUTION }}
+          cache: maven
+
+      - name: Run Tests
+        run: mvn clean test ${{ matrix.build_args }}
+
+      - name: Output Test Results
+        if: always()
+        run: |
+          echo "${{ matrix.type }} Test Results:" >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY
+          if [[ -f "target/surefire-reports/TEST-*.xml" ]]; then
+            mvn surefire-report:report-only -DshowSuccess=true | awk '
+              BEGIN { inTestSection = 0; }
+              /-------------------------------------------------------/ {
+                if (inTestSection) {
+                  print "";  # Add blank line after each test section
+                }
+                inTestSection = 1;
+                print;  # Print the test section header
+              }
+              inTestSection { print; }  # Print test results within a section
+            ' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No test results found." >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "```" >> $GITHUB_STEP_SUMMARY
