@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+  release:
+    types: [created]
 
 permissions:
   contents: read
@@ -50,20 +52,25 @@ jobs:
           distribution: ${{ env.DISTRIBUTION }}
           cache: maven
 
-      - name: Calculate Short SHA and Image Name
+      - name: Determine Version and Image Name
         id: meta
         run: |
-          echo "short_sha=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            VERSION="${{ github.event.release.tag_name }}"
+          else
+            VERSION=$(echo $GITHUB_SHA | head -c7)
+          fi
           IMAGE_NAME=$(echo "${{ env.MODULE_NAME }}" | sed -r 's/([a-z])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
 
       - name: Set Maven Version
-        run: mvn versions:set -DnewVersion=${{ steps.meta.outputs.short_sha }}
+        run: mvn versions:set -DnewVersion=${{ steps.meta.outputs.version }}
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.CONTAINER_REGISTRY }} -u ${{ github.actor }} --password-stdin
 
-      - name: Build and push image
+      - name: Build and push images
         run: |
           mvn clean install -DskipTests \
           ${{ matrix.build_args }} \
@@ -71,4 +78,14 @@ jobs:
           -Dquarkus.container-image.registry=${{ env.CONTAINER_REGISTRY }} \
           -Dquarkus.container-image.group=${{ matrix.group }} \
           -Dquarkus.container-image.name=${{ steps.meta.outputs.image_name }} \
-          -Dquarkus.container-image.tag=${{ steps.meta.outputs.short_sha }}
+          -Dquarkus.container-image.tag=${{ steps.meta.outputs.version }}
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            mvn clean install -DskipTests \
+            ${{ matrix.build_args }} \
+            -Dquarkus.container-image.push=true \
+            -Dquarkus.container-image.registry=${{ env.CONTAINER_REGISTRY }} \
+            -Dquarkus.container-image.group=${{ matrix.group }} \
+            -Dquarkus.container-image.name=${{ steps.meta.outputs.image_name }} \
+            -Dquarkus.container-image.tag=latest \
+            -Dquarkus.container-image.additional-tags=${{ steps.meta.outputs.version }}
+          fi
