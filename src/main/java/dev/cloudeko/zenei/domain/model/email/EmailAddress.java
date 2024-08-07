@@ -15,7 +15,7 @@ public class EmailAddress {
     private Long id;
 
     private String email;
-    private Boolean emailVerified;
+    private Boolean emailVerified = true;
 
     private String emailVerificationToken;
     private LocalDateTime emailVerificationTokenExpiresAt;

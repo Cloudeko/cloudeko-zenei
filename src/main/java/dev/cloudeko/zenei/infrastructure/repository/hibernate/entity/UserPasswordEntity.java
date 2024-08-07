@@ -4,12 +4,10 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 @Entity
 @Table(name = "user_passwords")
-@NamedQuery(name = "UserPasswordEntity.isValidPassword", query = "SELECT u FROM UserPasswordEntity u WHERE u.user.email = ?1 AND u.passwordHash = ?2")
+@NamedQuery(name = "UserPasswordEntity.isValidPassword", query = "SELECT u FROM UserPasswordEntity u WHERE u.user.primaryEmailAddress = ?1 AND u.passwordHash = ?2")
 public class UserPasswordEntity extends PanacheEntity {
 
     @MapsId

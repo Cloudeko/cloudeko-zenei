@@ -32,7 +32,7 @@ public class AuthenticationFlowTest {
 
     @Test
     @Order(1)
-    @DisplayName("Create user via registerAttempt (POST /registerAttempt) should return (200 OK)")
+    @DisplayName("Create user via email and password (POST /user) should return (200 OK)")
     void testCreateUser() {
         given()
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -46,13 +46,13 @@ public class AuthenticationFlowTest {
                 .body(
                         "id", notNullValue(),
                         "username", notNullValue(),
-                        "email", notNullValue()
+                        "primaryEmailAddress", notNullValue()
                 );
     }
 
     @Test
     @Order(2)
-    @DisplayName("Validate user email (POST /verify-email) should return redirect (303 SEE_OTHER)")
+    @DisplayName("Validate user email (POST /user/verify-email) should return redirect (303 SEE_OTHER)")
     void testVerifyEmail() {
         assertEquals(1, mailbox.getTotalMessagesSent());
 
@@ -81,7 +81,7 @@ public class AuthenticationFlowTest {
 
     @Test
     @Order(3)
-    @DisplayName("Retrieve a access token using username and password (POST /token) should return (200 OK)")
+    @DisplayName("Retrieve a access token using username and password (POST /user/token) should return (200 OK)")
     void testGetAccessToken() {
         given()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -98,8 +98,22 @@ public class AuthenticationFlowTest {
     }
 
     @Test
+    @Order(3)
+    @DisplayName("Try to retrieve a access token using invalid username and password (POST /user/token) should return (401 UNAUTHORIZED)")
+    void testGetAccessTokenInvalid() {
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("grant_type", "password")
+                .queryParam("username", "test@test.com")
+                .queryParam("password", "invalid-password")
+                .post("/user/token")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
+    @Test
     @Order(4)
-    @DisplayName("Retrieve a new access token using refresh token (POST /token) should return (200 OK)")
+    @DisplayName("Retrieve a new access token using refresh token (POST /user/token) should return (200 OK)")
     void testGetAccessTokenUsingRefreshToken() {
         final var token = given()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -130,7 +144,7 @@ public class AuthenticationFlowTest {
 
     @Test
     @Order(5)
-    @DisplayName("Retrieve a new access token using invalid refresh token (POST /token) should return (401 UNAUTHORIZED)")
+    @DisplayName("Try to retrieve a new access token using invalid refresh token (POST /user/token) should return (401 UNAUTHORIZED)")
     void testGetAccessTokenUsingInvalidRefreshToken() {
         given()
                 .contentType(MediaType.APPLICATION_JSON)

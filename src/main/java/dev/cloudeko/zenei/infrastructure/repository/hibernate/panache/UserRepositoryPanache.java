@@ -8,7 +8,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 @AllArgsConstructor
@@ -19,16 +18,11 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
     @Override
     public void createUser(User user) {
         final var userEntity = userMapper.toEntity(user);
-        persist(userEntity);
-        userMapper.updateDomainFromEntity(userEntity, user);
-    }
+        userEntity.getEmailAddresses().forEach(emailAddressEntity -> emailAddressEntity.setUser(userEntity));
 
-    @Override
-    public void updateEmailVerified(String email, boolean verified) {
-        getEntityManager().createNamedQuery("UserEntity.updateEmailVerified")
-                .setParameter("emailVerified", verified)
-                .setParameter("email", email)
-                .executeUpdate();
+        persist(userEntity);
+
+        userMapper.updateDomainFromEntity(userEntity, user);
     }
 
     @Override

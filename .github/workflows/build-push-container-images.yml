@@ -1,0 +1,106 @@
+name: Build and Push Container Images
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  JAVA_VERSION: "21"
+  DISTRIBUTION: "corretto"
+  CONTAINER_REGISTRY: "ghcr.io"
+  CONTAINER_GROUP: "cloudeko/services"
+
+jobs:
+  build-image:
+    name: Build Docker Image
+    environment: development
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.DISTRIBUTION }}
+          cache: maven
+
+      - name: Get Short SHA
+        id: short_sha
+        run: echo "short_sha=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
+
+      - name: Set Maven Version
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.short_sha.outputs.short_sha }}
+
+      - name: Set IMAGE_NAME env variable
+        run: |
+          MODULE_NAME=zenei
+          TEMP_NAME=$(echo "${MODULE_NAME}")
+          IMAGE_NAME=$(echo "$TEMP_NAME" | sed -r 's/([a-z])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.CONTAINER_REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push native image
+        run: |
+          mvn clean install -DskipTests \
+          -Dquarkus.container-image.build=true \
+          -Dquarkus.container-image.push=true \
+          -Dquarkus.container-image.registry=${{ env.CONTAINER_REGISTRY }} \
+          -Dquarkus.container-image.group=${{ env.CONTAINER_GROUP }} \
+          -Dquarkus.container-image.name=${{ env.IMAGE_NAME }} \
+          -Dquarkus.container-image.tag=${{ steps.short_sha.outputs.short_sha }}
+
+  build-native-image:
+    name: Build Native Docker Image
+    environment: development
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.DISTRIBUTION }}
+          cache: maven
+
+      - name: Get Short SHA
+        id: short_sha
+        run: echo "short_sha=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_OUTPUT
+
+      - name: Set Maven Version
+        run: |
+          mvn versions:set -DnewVersion=${{ steps.short_sha.outputs.short_sha }}
+
+      - name: Set IMAGE_NAME env variable
+        run: |
+          MODULE_NAME=zenei
+          TEMP_NAME=$(echo "${MODULE_NAME}")
+          IMAGE_NAME=$(echo "$TEMP_NAME" | sed -r 's/([a-z])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.CONTAINER_REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push native image
+        run: |
+          mvn clean install -DskipTests \
+          -Dnative \
+          -Dquarkus.native.container-build=true \
+          -Dquarkus.container-image.build=true \
+          -Dquarkus.container-image.push=true \
+          -Dquarkus.container-image.registry=${{ env.CONTAINER_REGISTRY }} \
+          -Dquarkus.container-image.group=${{ env.CONTAINER_GROUP }}/native \
+          -Dquarkus.container-image.name=${{ env.IMAGE_NAME }} \
+          -Dquarkus.container-image.tag=${{ steps.short_sha.outputs.short_sha }}

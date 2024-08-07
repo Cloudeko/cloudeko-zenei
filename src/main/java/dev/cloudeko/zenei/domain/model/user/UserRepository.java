@@ -1,13 +1,10 @@
 package dev.cloudeko.zenei.domain.model.user;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface UserRepository {
 
     void createUser(User user);
-
-    void updateEmailVerified(String email, boolean verified);
 
     boolean existsByEmail(String email);
 

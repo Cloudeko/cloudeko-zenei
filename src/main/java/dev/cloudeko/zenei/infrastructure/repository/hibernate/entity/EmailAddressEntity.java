@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "email_addresses")
+@NamedQuery(name = "EmailAddressEntity.confirmEmail", query = "UPDATE EmailAddressEntity e SET e.emailVerified = true, e.emailVerificationToken = null, e.emailVerificationTokenExpiresAt = null WHERE e.emailVerificationToken = :token AND e.emailVerificationTokenExpiresAt > CURRENT_TIMESTAMP")
 public class EmailAddressEntity extends PanacheEntity {
 
     @ManyToOne

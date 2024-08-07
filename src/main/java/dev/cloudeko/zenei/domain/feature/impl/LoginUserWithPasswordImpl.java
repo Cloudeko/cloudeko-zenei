@@ -1,11 +1,13 @@
 package dev.cloudeko.zenei.domain.feature.impl;
 
+import dev.cloudeko.zenei.domain.exception.InvalidPasswordException;
 import dev.cloudeko.zenei.domain.exception.UserNotFoundException;
 import dev.cloudeko.zenei.domain.feature.LoginUserWithPassword;
 import dev.cloudeko.zenei.domain.feature.util.TokenUtil;
 import dev.cloudeko.zenei.domain.model.Token;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
+import dev.cloudeko.zenei.domain.model.user.UserPassword;
 import dev.cloudeko.zenei.domain.model.user.UserPasswordRepository;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.HashProvider;
@@ -45,7 +47,7 @@ public class LoginUserWithPasswordImpl implements LoginUserWithPassword {
 
             return TokenUtil.createToken(user, accessTokenData, refreshToken);
         } else {
-            throw new UserNotFoundException();
+            throw new InvalidPasswordException();
         }
     }
 }

@@ -1,8 +1,6 @@
 package dev.cloudeko.zenei.domain.mapping;
 
-import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.domain.model.user.UserPassword;
-import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserPasswordEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

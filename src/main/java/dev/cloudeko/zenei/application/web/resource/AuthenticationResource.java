@@ -26,7 +26,7 @@ public class AuthenticationResource {
     private final CreateUser createUser;
     private final VerifyEmail verifyEmail;
     private final RefreshAccessToken refreshAccessToken;
-    private final CreateEmailAddress createEmailAddress;
+    private final SendMagicLinkVerifyEmail sendMagicLinkVerifyEmail;
     private final LoginUserWithPassword loginUserWithPassword;
 
     @POST
@@ -37,7 +37,7 @@ public class AuthenticationResource {
         final var emailAddress = user.getPrimaryEmailAddress();
 
         if (!emailAddress.getEmailVerified() && emailAddress.getEmailVerificationToken() != null) {
-            createEmailAddress.handle(new EmailAddressInput(emailAddress));
+            sendMagicLinkVerifyEmail.handle(new EmailAddressInput(emailAddress));
         }
 
         if (request.getRedirectTo() != null) {

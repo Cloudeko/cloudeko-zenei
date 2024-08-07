@@ -19,6 +19,6 @@ public class BCryptRefreshTokenProvider implements RefreshTokenProvider {
     }
 
     private String generateHash(User user) {
-        return BcryptUtil.bcryptHash(user.getEmail() + System.currentTimeMillis() + UUID.randomUUID().toString());
+        return BcryptUtil.bcryptHash(user.getPrimaryEmailAddress().getEmail() + System.currentTimeMillis() + UUID.randomUUID().toString());
     }
 }

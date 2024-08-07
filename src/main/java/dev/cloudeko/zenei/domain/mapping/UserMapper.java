@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.domain.mapping;
 
+import dev.cloudeko.zenei.domain.model.email.EmailAddress;
 import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
 import org.mapstruct.Mapper;
@@ -17,4 +18,8 @@ public interface UserMapper {
     void updateDomainFromEntity(UserEntity entity, @MappingTarget User domain);
 
     UserEntity toEntity(User domain);
+
+    default String map(EmailAddress emailAddress) {
+        return emailAddress.getEmail();
+    }
 }

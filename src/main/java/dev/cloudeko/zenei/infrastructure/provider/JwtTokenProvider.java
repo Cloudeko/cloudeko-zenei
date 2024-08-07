@@ -10,7 +10,7 @@ public class JwtTokenProvider implements TokenProvider {
     @Override
     public String generateToken(User user) {
         return Jwt.issuer("https://zenei.cloudeko.dev/")
-                .subject(user.getEmail())
+                .subject(user.getPrimaryEmailAddress().getEmail())
                 .groups(user.isAdmin() ? "admin" : "user")
                 .claim("username", user.getUsername())
                 .sign();

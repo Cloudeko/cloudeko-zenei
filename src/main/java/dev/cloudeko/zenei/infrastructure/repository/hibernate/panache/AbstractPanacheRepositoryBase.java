@@ -5,7 +5,6 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.persistence.NoResultException;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public abstract class AbstractPanacheRepositoryBase<ENTITY, ID> implements PanacheRepositoryBase<ENTITY, ID> {
 

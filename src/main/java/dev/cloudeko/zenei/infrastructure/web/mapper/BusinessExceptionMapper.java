@@ -27,6 +27,7 @@ public class BusinessExceptionMapper implements ExceptionMapper<BusinessExceptio
                 new HashMap<Class<? extends BusinessException>, Function<BusinessException, Response>>();
 
         handlerMap.put(EmailAlreadyExistsException.class, this::conflict);
+        handlerMap.put(EmailNotFoundException.class, this::notFound);
         handlerMap.put(UserNotFoundException.class, this::notFound);
         handlerMap.put(InvalidPasswordException.class, this::unauthorized);
         handlerMap.put(InvalidConfirmationTokenException.class, this::unauthorized);

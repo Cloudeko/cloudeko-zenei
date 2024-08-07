@@ -44,7 +44,7 @@ public class UserPasswordRepositoryPanache extends AbstractPanacheRepository<Use
 
     @Override
     public Optional<UserPassword> getUserPasswordByEmail(String email) {
-        final var userPasswordEntity = find("user.email", email).firstResult();
+        final var userPasswordEntity = find("user.primaryEmailAddress", email).firstResult();
 
         if (userPasswordEntity == null) {
             return Optional.empty();

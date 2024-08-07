@@ -9,4 +9,6 @@ public interface EmailAddressRepository {
     void deleteEmailAddress(String emailAddress);
 
     Optional<EmailAddress> findByEmailAddress(String emailAddress);
+
+    void confirmEmailAddress(String token);
 }

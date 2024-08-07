@@ -21,6 +21,12 @@ public class PrivateUserResponse {
     @Schema(description = "Username of the user")
     private String username;
 
+    @Schema(description = "First name of the user")
+    private String firstName;
+
+    @Schema(description = "Last name of the user")
+    private String lastName;
+
     @Schema(description = "Primary email of the user")
     private String primaryEmailAddress;
 
@@ -29,6 +35,9 @@ public class PrivateUserResponse {
 
     @Schema(description = "Whether the user is an admin")
     private Boolean admin;
+
+    @Schema(description = "Whether the user has a password")
+    private Boolean passwordEnabled;
 
     @Schema(description = "Timestamp when the user was created")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -41,10 +50,12 @@ public class PrivateUserResponse {
     public PrivateUserResponse(User user) {
         this.id = user.getId().toString();
         this.username = user.getUsername();
-        this.email = user.getEmail();
-        this.emailVerified = user.isEmailVerified();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.primaryEmailAddress = user.getPrimaryEmailAddress().getEmail();
         this.image = user.getImage();
         this.admin = user.isAdmin();
+        this.passwordEnabled = user.isPasswordEnabled();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
