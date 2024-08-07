@@ -7,10 +7,11 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 env:
   JAVA_VERSION: "21"
-  DISTRIBUTION: "corretto"
+  DISTRIBUTION: "openjdk"
   CONTAINER_REGISTRY: "ghcr.io"
   CONTAINER_GROUP: "cloudeko/services"
 
