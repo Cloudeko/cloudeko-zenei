@@ -11,7 +11,7 @@ permissions:
 
 env:
   JAVA_VERSION: "21"
-  DISTRIBUTION: "openjdk"
+  DISTRIBUTION: "corretto"
   CONTAINER_REGISTRY: "ghcr.io"
   CONTAINER_GROUP: "cloudeko/services"
 
