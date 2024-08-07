@@ -5,7 +5,7 @@ on:
     branches:
       - master
   release:
-    types: [created]
+    types: [ created ]
 
 permissions:
   contents: read
@@ -19,7 +19,11 @@ env:
   MODULE_NAME: "zenei"
 
 jobs:
+  test:
+    uses: ./.github/workflows/run-tests.yml
+
   build-and-push:
+    needs: test
     strategy:
       matrix:
         include:
