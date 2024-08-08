@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   zenei-auth:
-    image: ghcr.io/cloudeko/services/native/zenei:c3b1f43
+    image: ghcr.io/cloudeko/services/native/zenei:a494bcb
     restart: always
     volumes:
       - ./dev/dev-private-key.pem:/app/dev-private-key.pem
