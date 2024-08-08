@@ -2,10 +2,9 @@ package dev.cloudeko.zenei.application.web.resource;
 
 import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
 import dev.cloudeko.zenei.application.web.model.response.PrivateUserResponse;
-import dev.cloudeko.zenei.application.web.model.response.PublicUserResponse;
 import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
 import dev.cloudeko.zenei.domain.feature.*;
-import dev.cloudeko.zenei.domain.model.email.ConfirmEmailInput;
+import dev.cloudeko.zenei.domain.model.email.VerifyMagicLinkInput;
 import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
@@ -27,7 +26,7 @@ import java.net.URI;
 public class AuthenticationResource {
 
     private final CreateUser createUser;
-    private final VerifyEmail verifyEmail;
+    private final VerifyMagicLink verifyMagicLink;
     private final RefreshAccessToken refreshAccessToken;
     private final SendMagicLinkVerifyEmail sendMagicLinkVerifyEmail;
     private final LoginUserWithPassword loginUserWithPassword;
@@ -55,7 +54,7 @@ public class AuthenticationResource {
     @Path("/verify-email")
     @Consumes(MediaType.MEDIA_TYPE_WILDCARD)
     public Response verifyEmail(@QueryParam("token") String token, @QueryParam("redirect_to") URI redirectTo) {
-        verifyEmail.handle(new ConfirmEmailInput(token));
+        verifyMagicLink.handle(new VerifyMagicLinkInput(token));
         if (redirectTo != null) {
             return Response.temporaryRedirect(redirectTo).build();
         }
