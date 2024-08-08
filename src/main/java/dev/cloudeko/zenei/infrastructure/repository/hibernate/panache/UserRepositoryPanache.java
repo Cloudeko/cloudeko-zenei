@@ -5,6 +5,7 @@ import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.Cacheable;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;

@@ -1,27 +1,8 @@
 version: '3.8'
 
 services:
-  zenei-auth:
-    image: ghcr.io/cloudeko/services/native/zenei:a494bcb
-    restart: always
-    volumes:
-      - ./dev/dev-private-key.pem:/app/dev-private-key.pem
-      - ./dev/dev-public-key.pem:/app/dev-public-key.pem
-    environment:
-      - quarkus.application.name=cloudeko-zenei-auth-service
-      - quarkus.datasource.db-kind=postgresql
-      - quarkus.datasource.jdbc.url=jdbc:postgresql://db:5432/zenei_db
-      - quarkus.datasource.jdbc.driver=org.postgresql.Driver
-      - quarkus.datasource.username=zenei_user
-      - quarkus.datasource.password=zenei_password
-      - quarkus.hibernate-orm.database.generation=update
-      - smallrye.jwt.sign.key.location=dev-private-key.pem
-      - mp.jwt.verify.publickey.location=dev-public-key.pem
-      - mp.jwt.verify.issuer=https://example.com/issuer
-      - quarkus.mailer.mock=true
-
   db:
-    image: postgres:14
+    image: postgres:15
     restart: always
     environment:
       - POSTGRES_DB=zenei_db
@@ -29,6 +10,25 @@ services:
       - POSTGRES_PASSWORD=zenei_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  zenei-auth:
+    image: ghcr.io/cloudeko/services/native/zenei:9daebd4
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./dev/dev-private-key.pem:/key/dev-private-key.pem
+      - ./dev/dev-public-key.pem:/key/dev-public-key.pem
+    ports:
+      - 8080:8080
+    environment:
+      - quarkus.datasource.jdbc.url=jdbc:postgresql://db:5432/zenei_db
+      - quarkus.datasource.username=zenei_user
+      - quarkus.datasource.password=zenei_password
+      - smallrye.jwt.sign.key.location=/key/dev-private-key.pem
+      - mp.jwt.verify.publickey.location=/key/dev-public-key.pem
+      - mp.jwt.verify.issuer=https://example.com/issuer
+      - quarkus.mailer.mock=true
 
 volumes:
   postgres_data:
