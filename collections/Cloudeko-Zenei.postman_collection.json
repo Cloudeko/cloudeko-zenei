@@ -1,0 +1,292 @@
+{
+	"info": {
+		"_postman_id": "5b43d32d-7b90-4495-8544-fa89f45a8cd1",
+		"name": "Cloudeko-Zenei",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15051103"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'id' property\", response.hasOwnProperty('id'));\r",
+									"pm.test(\"Response contains 'username' property\", response.hasOwnProperty('username'));\r",
+									"pm.test(\"Response contains 'primary_email_address' property\", response.hasOwnProperty('primary_email_address'));\r",
+									"pm.test(\"Response contains 'created_at' property\", response.hasOwnProperty('created_at'));\r",
+									"pm.test(\"Response contains 'updated_at' property\", response.hasOwnProperty('created_at'));\r",
+									"\r",
+									"pm.test(\"Response property 'primary_email_address' equals {{EMAIL}}\",  pm.expect(response).to.have.property('primary_email_address').that.equals(pm.variables.get(\"EMAIL\")));\r",
+									"pm.test(\"Response property 'username' equals {{USERNAME}}\",  pm.expect(response).to.have.property('username').that.equals(pm.variables.get(\"USERNAME\")));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{USERNAME}}",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "{{EMAIL}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{PASSWORD}}",
+									"type": "text"
+								},
+								{
+									"key": "strategy",
+									"value": "PASSWORD",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Random User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'id' property\", response.hasOwnProperty('id'));\r",
+									"pm.test(\"Response contains 'username' property\", response.hasOwnProperty('username'));\r",
+									"pm.test(\"Response contains 'primary_email_address' property\", response.hasOwnProperty('primary_email_address'));\r",
+									"pm.test(\"Response contains 'created_at' property\", response.hasOwnProperty('created_at'));\r",
+									"pm.test(\"Response contains 'updated_at' property\", response.hasOwnProperty('created_at'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{$randomUserName}}",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "{{$randomEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{$randomPassword}}",
+									"type": "text"
+								},
+								{
+									"key": "strategy",
+									"value": "PASSWORD",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'access_token' property\", response.hasOwnProperty('access_token'));\r",
+									"pm.test(\"Response contains 'token_type' property\", response.hasOwnProperty('token_type'));\r",
+									"pm.test(\"Response contains 'expires_in' property\", response.hasOwnProperty('expires_in'));\r",
+									"pm.test(\"Response contains 'refresh_token' property\", response.hasOwnProperty('refresh_token'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/token?grant_type=password&username={{EMAIL}}&password={{PASSWORD}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"token"
+							],
+							"query": [
+								{
+									"key": "grant_type",
+									"value": "password"
+								},
+								{
+									"key": "username",
+									"value": "{{EMAIL}}"
+								},
+								{
+									"key": "password",
+									"value": "{{PASSWORD}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login and Remember Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'access_token' property\", response.hasOwnProperty('access_token'));\r",
+									"pm.test(\"Response contains 'token_type' property\", response.hasOwnProperty('token_type'));\r",
+									"pm.test(\"Response contains 'expires_in' property\", response.hasOwnProperty('expires_in'));\r",
+									"pm.test(\"Response contains 'refresh_token' property\", response.hasOwnProperty('refresh_token'));\r",
+									"\r",
+									"if(pm.test(\"Response contains 'access_token' property\", response.hasOwnProperty('access_token'))){\r",
+									"    pm.globals.set('access_token', response.access_token)\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Global variable 'access_token' has been set\", pm.globals.get('access_token') === response.access_token)\r",
+									"\r",
+									"if(pm.test(\"Response contains 'refresh_token' property\", response.hasOwnProperty('refresh_token'))){\r",
+									"    pm.globals.set('refresh_token', response.refresh_token)\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Global variable 'refresh_token' has been set\", pm.globals.get('refresh_token') === response.refresh_token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/token?grant_type=password&username={{EMAIL}}&password={{PASSWORD}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"token"
+							],
+							"query": [
+								{
+									"key": "grant_type",
+									"value": "password"
+								},
+								{
+									"key": "username",
+									"value": "{{EMAIL}}"
+								},
+								{
+									"key": "password",
+									"value": "{{PASSWORD}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "USERNAME",
+			"value": "test-user",
+			"type": "string"
+		},
+		{
+			"key": "EMAIL",
+			"value": "test@test.com",
+			"type": "string"
+		},
+		{
+			"key": "PASSWORD",
+			"value": "12345678",
+			"type": "string"
+		}
+	]
+}

@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.auth;
 
+import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
 import dev.cloudeko.zenei.domain.model.Token;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -36,7 +37,7 @@ public class AuthenticationFlowTest {
     void testCreateUser() {
         given()
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .formParam("username", "test-user")
+                .formParam("username", "test-user2")
                 .formParam("email", "test@test.com")
                 .formParam("password", "test-password")
                 .formParam("strategy", "PASSWORD")
@@ -46,28 +47,46 @@ public class AuthenticationFlowTest {
                 .body(
                         "id", notNullValue(),
                         "username", notNullValue(),
-                        "primaryEmailAddress", notNullValue()
+                        "primary_email_address", notNullValue()
                 );
     }
 
     @Test
+    @Order(1)
+    @DisplayName("Create user via email and password and redirect (POST /user) should return redirect (303 SEE_OTHER)")
+    void testCreateUserWithRedirect() {
+        given()
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .formParam("username", "test-user")
+                .formParam("email", "test2@test.com")
+                .formParam("password", "test-password")
+                .formParam("strategy", "PASSWORD")
+                .formParam("redirect_to", "https://google.com")
+                .post("/user")
+                .then()
+                .statusCode(Response.Status.TEMPORARY_REDIRECT.getStatusCode());
+    }
+
+    @Test
     @Order(2)
-    @DisplayName("Validate user email (POST /user/verify-email) should return redirect (303 SEE_OTHER)")
+    @DisplayName("Validate user email (POST /user/verify-email) should return (204 NO_CONTENT)")
+    void testVerifyEmailWithoutRedirect() {
+        var verificationLink = getVerificationLink("test@test.com");
+        assertNotNull(verificationLink);
+
+        verificationLink = verificationLink.replace("http://localhost:8080", "http://localhost:" + quarkusPort);
+
+        given()
+                .post(verificationLink)
+                .then()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Validate user email with redirect (POST /user/verify-email) should return redirect (303 SEE_OTHER)")
     void testVerifyEmail() {
-        assertEquals(1, mailbox.getTotalMessagesSent());
-
-        final var sentMails = mailbox.getMailMessagesSentTo("test@test.com");
-        assertEquals(1, sentMails.size());
-
-        final var mail = sentMails.getFirst();
-
-        assertNotNull(mail);
-        assertEquals("Welcome to Zenei", mail.getSubject());
-
-        final var body = mail.getHtml();
-        assertNotNull(body);
-
-        var verificationLink = body.substring(body.indexOf("href=\"") + 6, body.indexOf("\">"));
+        var verificationLink = getVerificationLink("test2@test.com");
         assertNotNull(verificationLink);
 
         verificationLink = verificationLink.replace("http://localhost:8080", "http://localhost:" + quarkusPort);
@@ -92,8 +111,8 @@ public class AuthenticationFlowTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
-                        "accessToken", notNullValue(),
-                        "refreshToken", notNullValue()
+                        "access_token", notNullValue(),
+                        "refresh_token", notNullValue()
                 );
     }
 
@@ -124,10 +143,10 @@ public class AuthenticationFlowTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
-                        "accessToken", notNullValue(),
-                        "refreshToken", notNullValue()
+                        "access_token", notNullValue(),
+                        "refresh_token", notNullValue()
                 )
-                .extract().as(Token.class);
+                .extract().as(TokenResponse.class);
 
         given()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,9 +156,23 @@ public class AuthenticationFlowTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
-                        "accessToken", notNullValue(),
-                        "refreshToken", notNullValue()
+                        "access_token", notNullValue(),
+                        "refresh_token", notNullValue()
                 );
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Try to retrieve a new access token using invalid grant type (POST /user/token) should return (400 BAD_REQUEST)")
+    void testGetAccessTokenUsingInvalidGrantType() {
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("grant_type", "invalid-grant-type")
+                .queryParam("username", "invalid-username")
+                .queryParam("password", "invalid-password")
+                .post("/user/token")
+                .then()
+                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
 
     @Test
@@ -153,5 +186,20 @@ public class AuthenticationFlowTest {
                 .post("/user/token")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
+    private String getVerificationLink(String email) {
+        final var sentMails = mailbox.getMailMessagesSentTo(email);
+        assertEquals(1, sentMails.size());
+
+        final var mail = sentMails.getFirst();
+
+        assertNotNull(mail);
+        assertEquals("Welcome to Zenei", mail.getSubject());
+
+        final var body = mail.getHtml();
+        assertNotNull(body);
+
+        return body.substring(body.indexOf("href=\"") + 6, body.indexOf("\">"));
     }
 }

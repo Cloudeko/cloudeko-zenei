@@ -1,6 +1,9 @@
 package dev.cloudeko.zenei.application.web.resource;
 
 import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
+import dev.cloudeko.zenei.application.web.model.response.PrivateUserResponse;
+import dev.cloudeko.zenei.application.web.model.response.PublicUserResponse;
+import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
 import dev.cloudeko.zenei.domain.feature.*;
 import dev.cloudeko.zenei.domain.model.email.ConfirmEmailInput;
 import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
@@ -44,7 +47,7 @@ public class AuthenticationResource {
             return Response.temporaryRedirect(request.getRedirectTo()).build();
         }
 
-        return Response.ok(user).build();
+        return Response.ok(new PrivateUserResponse(user)).build();
     }
 
     @POST
@@ -70,11 +73,11 @@ public class AuthenticationResource {
         return switch (grantType) {
             case "password" -> {
                 final var token = loginUserWithPassword.handle(new LoginPasswordInput(username, password));
-                yield Response.ok(token).build();
+                yield Response.ok(new TokenResponse(token)).build();
             }
             case "refresh_token" -> {
                 final var token = refreshAccessToken.handle(new RefreshTokenInput(refreshToken));
-                yield Response.ok(token).build();
+                yield Response.ok(new TokenResponse(token)).build();
             }
             default -> Response.status(Response.Status.BAD_REQUEST).build();
         };

@@ -20,7 +20,7 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
         final var userEntity = userMapper.toEntity(user);
         userEntity.getEmailAddresses().forEach(emailAddressEntity -> emailAddressEntity.setUser(userEntity));
 
-        persist(userEntity);
+        persistAndFlush(userEntity);
 
         userMapper.updateDomainFromEntity(userEntity, user);
     }
