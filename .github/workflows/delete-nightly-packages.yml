@@ -25,4 +25,5 @@ jobs:
         with:
           package-name: ${{ matrix.module }}
           package-type: "container"
+          ignore-versions: "^(?!.*-nightly).*$"
           min-versions-to-keep: 3
