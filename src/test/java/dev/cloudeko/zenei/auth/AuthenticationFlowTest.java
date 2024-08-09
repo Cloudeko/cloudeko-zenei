@@ -188,6 +188,44 @@ public class AuthenticationFlowTest {
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
 
+    @Test
+    @Order(6)
+    @DisplayName("Retrieve user information (GET /user) should return (200 OK)")
+    void testGetUserInfo() {
+        final var token = given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("grant_type", "password")
+                .queryParam("username", "test@test.com")
+                .queryParam("password", "test-password")
+                .post("/user/token")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract().as(TokenResponse.class);
+
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token.getAccessToken())
+                .get("/user")
+                .then()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .body(
+                        "id", notNullValue(),
+                        "username", notNullValue(),
+                        "primary_email_address", notNullValue()
+                );
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Retrieve user information without token (GET /user) should return (401 UNAUTHORIZED)")
+    void testGetUserInfoWithoutToken() {
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .get("/user")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
     private String getVerificationLink(String email) {
         final var sentMails = mailbox.getMailMessagesSentTo(email);
         assertEquals(1, sentMails.size());

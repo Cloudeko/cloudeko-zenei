@@ -8,11 +8,14 @@ import dev.cloudeko.zenei.domain.model.email.VerifyMagicLinkInput;
 import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
+import io.quarkus.security.Authenticated;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import lombok.AllArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -26,10 +29,21 @@ import java.net.URI;
 public class AuthenticationResource {
 
     private final CreateUser createUser;
+    private final FindUserByIdentifier findUserByIdentifier;
+
     private final VerifyMagicLink verifyMagicLink;
     private final RefreshAccessToken refreshAccessToken;
     private final SendMagicLinkVerifyEmail sendMagicLinkVerifyEmail;
     private final LoginUserWithPassword loginUserWithPassword;
+
+    @GET
+    @Authenticated
+    public Response getCurrentUserInfo(@Context SecurityContext securityContext) {
+        final var userId = Long.parseLong(securityContext.getUserPrincipal().getName());
+        final var user = findUserByIdentifier.handle(userId);
+
+        return Response.ok(new PrivateUserResponse(user)).build();
+    }
 
     @POST
     @Transactional

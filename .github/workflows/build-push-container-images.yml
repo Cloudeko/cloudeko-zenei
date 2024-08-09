@@ -1,9 +1,8 @@
 name: Build and Push Container Images
 
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: "0 0 * * *"
   release:
     types: [ created ]
 
@@ -30,10 +29,10 @@ jobs:
         include:
           - type: jvm
             build_args: "-Dquarkus.container-image.build=true"
-            group: "cloudeko/services" # We cannot use this for now ${{ env.CONTAINER_GROUP }}. So we need to hardcode it.
+            group: "cloudeko/services/jvm" # We cannot use this for now ${{ env.CONTAINER_GROUP }}. So we need to hardcode it.
           - type: native
             build_args: "-Dnative -Dquarkus.native.container-build=true"
-            group: "cloudeko/services/native" # We cannot use this for now ${{ env.CONTAINER_GROUP }}/native. So we need to hardcode it.
+            group: "cloudeko/services" # We cannot use this for now ${{ env.CONTAINER_GROUP }}/native. So we need to hardcode it.
 
     name: Build and Push ${{ matrix.type }} Image
     environment: development
@@ -63,7 +62,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "release" ]]; then
             VERSION="${{ github.event.release.tag_name }}"
           else
-            VERSION=$(echo $GITHUB_SHA | head -c7)
+            VERSION=$(echo $GITHUB_SHA | head -c7)-nightly
           fi
           IMAGE_NAME=$(echo "${{ env.MODULE_NAME }}" | sed -r 's/([a-z])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
           echo "version=${VERSION}" >> $GITHUB_OUTPUT

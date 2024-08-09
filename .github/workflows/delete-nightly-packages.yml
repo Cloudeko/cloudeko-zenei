@@ -1,0 +1,28 @@
+name: Delete Nightly Packages
+
+on:
+  schedule:
+    - cron: "10 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  packages: write
+
+jobs:
+  delete:
+    name: Clean Up Nightly Packages
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module:
+          [
+            services/jvm/zenei,
+            services/zenei
+          ]
+
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ matrix.module }}
+          package-type: "container"
+          min-versions-to-keep: 3

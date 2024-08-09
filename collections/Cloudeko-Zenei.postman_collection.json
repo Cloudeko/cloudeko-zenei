@@ -243,6 +243,54 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get Current User Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains 'id' property\", response.hasOwnProperty('id'));\r",
+									"pm.test(\"Response contains 'username' property\", response.hasOwnProperty('username'));\r",
+									"pm.test(\"Response contains 'primary_email_address' property\", response.hasOwnProperty('primary_email_address'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
