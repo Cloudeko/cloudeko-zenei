@@ -10,6 +10,14 @@ It's built with [Quarkus](https://quarkus.io) and provides authentication via OA
 > [!Warning]
 > Zenei is still in development and is not ready for production use. Currently there is no documentation available.
 
+## Features
+
+- [x] Basic user authentication
+- [ ] Admin user management
+- [ ] OAuth2 support (Github, Google, Facebook, etc.)
+- [ ] Organizations management
+- [ ] API/Access token generation
+
 ## License
 
 Zenei is licensed under the [Apache-2.0](LICENSE) license.

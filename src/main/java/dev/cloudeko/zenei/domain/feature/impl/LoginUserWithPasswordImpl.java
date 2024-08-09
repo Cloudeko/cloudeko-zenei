@@ -7,7 +7,6 @@ import dev.cloudeko.zenei.domain.feature.util.TokenUtil;
 import dev.cloudeko.zenei.domain.model.Token;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
-import dev.cloudeko.zenei.domain.model.user.UserPassword;
 import dev.cloudeko.zenei.domain.model.user.UserPasswordRepository;
 import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.HashProvider;

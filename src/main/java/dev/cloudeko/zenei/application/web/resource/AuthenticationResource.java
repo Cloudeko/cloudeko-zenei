@@ -4,8 +4,8 @@ import dev.cloudeko.zenei.application.web.model.request.SignupRequest;
 import dev.cloudeko.zenei.application.web.model.response.PrivateUserResponse;
 import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
 import dev.cloudeko.zenei.domain.feature.*;
-import dev.cloudeko.zenei.domain.model.email.VerifyMagicLinkInput;
 import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
+import dev.cloudeko.zenei.domain.model.email.VerifyMagicLinkInput;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
 import io.quarkus.security.Authenticated;
@@ -52,7 +52,7 @@ public class AuthenticationResource {
         final var user = createUser.handle(request.toCreateUserInput());
         final var emailAddress = user.getPrimaryEmailAddress();
 
-        if (!emailAddress.getEmailVerified() && emailAddress.getEmailVerificationToken() != null) {
+        if (!emailAddress.getEmailVerified() && emailAddress.getEmailVerificationToken() != null){
             sendMagicLinkVerifyEmail.handle(new EmailAddressInput(emailAddress));
         }
 

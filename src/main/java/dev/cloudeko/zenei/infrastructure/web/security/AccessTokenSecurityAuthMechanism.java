@@ -1,22 +1,5 @@
 package dev.cloudeko.zenei.infrastructure.web.security;
 
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.quarkus.security.credential.TokenCredential;
-import io.quarkus.security.identity.IdentityProviderManager;
-import io.quarkus.security.identity.SecurityIdentity;
-import io.quarkus.security.identity.request.AuthenticationRequest;
-import io.quarkus.security.identity.request.TokenAuthenticationRequest;
-import io.quarkus.vertx.http.runtime.security.ChallengeData;
-import io.quarkus.vertx.http.runtime.security.HttpAuthenticationMechanism;
-import io.smallrye.mutiny.Uni;
-import io.vertx.ext.web.RoutingContext;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import static io.vertx.ext.web.handler.impl.HTTPAuthorizationHandler.Type.BEARER;
-
 public class AccessTokenSecurityAuthMechanism {}/*implements HttpAuthenticationMechanism {
 
     // The set of supported credential types

@@ -10,16 +10,10 @@ import org.eclipse.microprofile.jwt.Claims;
 @ApplicationScoped
 public class JwtTokenProvider implements TokenProvider {
 
-    private String issuer;
-    private Integer expirationTimeInMinutes;
+    private final String issuer;
 
-    public JwtTokenProvider(
-            @ConfigProperty(name = "mp.jwt.verify.issuer") String issuer/*,
-            @ConfigProperty(name = "jwt.secret") String secret,
-            @ConfigProperty(name = "jwt.expiration.time.minutes") Integer expirationTimeInMinutes*/) {
-
+    public JwtTokenProvider(@ConfigProperty(name = "zenei.jwt.issuer") String issuer) {
         this.issuer = issuer;
-        //this.expirationTimeInMinutes = expirationTimeInMinutes;
     }
 
     @Override

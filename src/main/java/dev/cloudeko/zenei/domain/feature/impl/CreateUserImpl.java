@@ -7,9 +7,11 @@ import dev.cloudeko.zenei.domain.model.email.EmailAddress;
 import dev.cloudeko.zenei.domain.model.user.*;
 import dev.cloudeko.zenei.domain.provider.HashProvider;
 import dev.cloudeko.zenei.domain.provider.StringTokenProvider;
+import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateUserImpl implements CreateUser {
 
+    private final ApplicationConfig config;
+
     private final HashProvider hashProvider;
     private final StringTokenProvider stringTokenProvider;
 
@@ -29,8 +33,8 @@ public class CreateUserImpl implements CreateUser {
     @Override
     @Transactional
     public User handle(CreateUserInput createUserInput) {
-        final var emailAddress = EmailAddress.builder().email(createUserInput.getEmail()).build();
-        if (true) { //Will be based on configuration
+        final var emailAddress = EmailAddress.builder().email(createUserInput.getEmail()).emailVerified(true).build();
+        if (!config.getAutoConfirm()) {
             final var token = stringTokenProvider.generateToken("mail", emailAddress.getEmail() + UUID.randomUUID());
 
             emailAddress.setEmailVerificationToken(token);
