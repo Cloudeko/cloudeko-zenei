@@ -55,7 +55,6 @@ public class AuthenticationFlowWithDisabledMailingTest {
     @DisplayName("Retrieve user information (GET /user) should return (200 OK)")
     void testGetUserInfo() {
         final var token = given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "password")
                 .queryParam("username", "test@test.com")
                 .queryParam("password", "test-password")
@@ -65,7 +64,6 @@ public class AuthenticationFlowWithDisabledMailingTest {
                 .extract().as(TokenResponse.class);
 
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token.getAccessToken())
                 .get("/user")
                 .then()

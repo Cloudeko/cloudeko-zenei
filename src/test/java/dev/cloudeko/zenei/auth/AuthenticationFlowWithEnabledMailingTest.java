@@ -105,7 +105,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve a access token using username and password (POST /user/token) should return (200 OK)")
     void testGetAccessToken() {
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "password")
                 .queryParam("username", "test@test.com")
                 .queryParam("password", "test-password")
@@ -123,7 +122,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Try to retrieve a access token using invalid username and password (POST /user/token) should return (401 UNAUTHORIZED)")
     void testGetAccessTokenInvalid() {
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "password")
                 .queryParam("username", "test@test.com")
                 .queryParam("password", "invalid-password")
@@ -137,7 +135,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve a new access token using refresh token (POST /user/token) should return (200 OK)")
     void testGetAccessTokenUsingRefreshToken() {
         final var token = given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "password")
                 .queryParam("username", "test@test.com")
                 .queryParam("password", "test-password")
@@ -151,7 +148,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
                 .extract().as(TokenResponse.class);
 
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "refresh_token")
                 .queryParam("refresh_token", token.getRefreshToken())
                 .post("/user/token")
@@ -168,7 +164,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Try to retrieve a new access token using invalid grant type (POST /user/token) should return (400 BAD_REQUEST)")
     void testGetAccessTokenUsingInvalidGrantType() {
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "invalid-grant-type")
                 .queryParam("username", "invalid-username")
                 .queryParam("password", "invalid-password")
@@ -182,7 +177,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Try to retrieve a new access token using invalid refresh token (POST /user/token) should return (401 UNAUTHORIZED)")
     void testGetAccessTokenUsingInvalidRefreshToken() {
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "refresh_token")
                 .queryParam("refresh_token", "invalid-refresh-token")
                 .post("/user/token")
@@ -195,7 +189,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve user information (GET /user) should return (200 OK)")
     void testGetUserInfo() {
         final var token = given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("grant_type", "password")
                 .queryParam("username", "test@test.com")
                 .queryParam("password", "test-password")
@@ -205,7 +198,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
                 .extract().as(TokenResponse.class);
 
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token.getAccessToken())
                 .get("/user")
                 .then()
@@ -225,7 +217,6 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve user information without token (GET /user) should return (401 UNAUTHORIZED)")
     void testGetUserInfoWithoutToken() {
         given()
-                .contentType(MediaType.APPLICATION_JSON)
                 .get("/user")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
