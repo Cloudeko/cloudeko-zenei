@@ -7,6 +7,7 @@ import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -59,5 +60,12 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
         }
 
         return Optional.of(userMapper.toDomain(userEntity));
+    }
+
+    @Override
+    public List<User> listUsers(int offset, int limit) {
+        return findAll().page(offset, limit).list().stream()
+                .map(userMapper::toDomain)
+                .toList();
     }
 }

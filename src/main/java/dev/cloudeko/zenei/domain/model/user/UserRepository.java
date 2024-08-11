@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.domain.model.user;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
@@ -15,4 +16,6 @@ public interface UserRepository {
     Optional<User> getUserByEmail(String email);
 
     Optional<User> getUserByUsername(String username);
+
+    List<User> listUsers(int offset, int limit);
 }
