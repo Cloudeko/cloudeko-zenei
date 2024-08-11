@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +36,10 @@ public class PrivateUserResponse {
     @JsonProperty("primary_email_address")
     @Schema(description = "Primary email of the user")
     private String primaryEmailAddress;
+
+    @JsonProperty("email_addresses")
+    @Schema(description = "Email addresses of the user")
+    private List<EmailAddressResponse> emailAddresses;
 
     @JsonProperty("image")
     @Schema(description = "URL of the user's profile picture")
@@ -64,6 +69,7 @@ public class PrivateUserResponse {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.primaryEmailAddress = user.getPrimaryEmailAddress().getEmail();
+        this.emailAddresses = user.getEmailAddresses().stream().map(EmailAddressResponse::new).toList();
         this.image = user.getImage();
         this.admin = user.isAdmin();
         this.passwordEnabled = user.isPasswordEnabled();

@@ -1,9 +1,10 @@
 package dev.cloudeko.zenei.auth;
 
 import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
-import dev.cloudeko.zenei.domain.model.Token;
+import dev.cloudeko.zenei.profile.MailingEnabledProfile;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 import io.restassured.RestAssured;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
@@ -12,13 +13,14 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
+@TestProfile(MailingEnabledProfile.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AuthenticationFlowTest {
+public class AuthenticationFlowWithEnabledMailingTest {
 
     @ConfigProperty(name = "quarkus.http.test-port")
     int quarkusPort;
@@ -211,7 +213,10 @@ public class AuthenticationFlowTest {
                 .body(
                         "id", notNullValue(),
                         "username", notNullValue(),
-                        "primary_email_address", notNullValue()
+                        "primary_email_address", notNullValue(),
+                        "email_addresses", notNullValue(),
+                        "email_addresses.size()", greaterThanOrEqualTo(1),
+                        "email_addresses.getFirst().email_verified", equalTo(true)
                 );
     }
 
