@@ -9,7 +9,6 @@ import io.restassured.RestAssured;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
@@ -20,9 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestProfile(MailingDisabledProfile.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AuthenticationFlowWithDisabledMailingTest {
-
-    @ConfigProperty(name = "quarkus.http.test-port")
-    int quarkusPort;
 
     @Inject
     MockMailbox mailbox;
