@@ -9,9 +9,15 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 public class ApplicationConfig {
 
+    @ConfigProperty(name = "zenei.auth.sign-up.enabled", defaultValue = "true")
+    Boolean signUpEnabled;
+
     @ConfigProperty(name = "zenei.mailer.auto-confirm", defaultValue = "false")
     Boolean autoConfirm;
 
     @Inject
     DefaultUsersConfig defaultUsersConfig;
+
+    @Inject
+    OAuthProvidersConfig oAuthProvidersConfig;
 }

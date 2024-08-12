@@ -29,7 +29,7 @@ public class SignupRequest {
     @FormParam("redirect_to")
     private URI redirectTo;
 
-    public CreateUserInput toCreateUserInput() {
-        return new CreateUserInput(username, email, strategy.equals(Strategy.PASSWORD), password);
+    public CreateUserInput toCreateUserInput(boolean autoconfirm) {
+        return new CreateUserInput(username, email, autoconfirm, strategy.equals(Strategy.PASSWORD), password);
     }
 }

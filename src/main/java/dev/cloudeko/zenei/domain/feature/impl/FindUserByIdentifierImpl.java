@@ -14,7 +14,7 @@ public class FindUserByIdentifierImpl implements FindUserByIdentifier {
     private final UserRepository userRepository;
 
     @Override
-    public User handle(Long identifier) {
+    public User handle(long identifier) {
         return userRepository.getUserById(identifier).orElseThrow(UserNotFoundException::new);
     }
 }

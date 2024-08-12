@@ -7,7 +7,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class CreateUserInput {
     private String username;
+
     private String email;
+    private boolean autoConfirmEmail;
+
     private boolean passwordEnabled;
     private String password;
 }

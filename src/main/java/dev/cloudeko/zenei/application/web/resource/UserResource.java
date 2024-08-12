@@ -8,6 +8,7 @@ import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
 import dev.cloudeko.zenei.domain.model.email.VerifyMagicLinkInput;
 import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenInput;
+import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
 import io.quarkus.security.Authenticated;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -25,6 +26,8 @@ import java.net.URI;
 @AllArgsConstructor
 @Tag(name = "User Service", description = "API for user authentication")
 public class UserResource {
+
+    private final ApplicationConfig applicationConfig;
 
     private final CreateUser createUser;
     private final FindUserByIdentifier findUserByIdentifier;
@@ -49,10 +52,14 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response signup(@BeanParam @Valid SignupRequest request) {
-        final var user = createUser.handle(request.toCreateUserInput());
+        if (!applicationConfig.getSignUpEnabled()) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        final var user = createUser.handle(request.toCreateUserInput(applicationConfig.getAutoConfirm()));
         final var emailAddress = user.getPrimaryEmailAddress();
 
-        if (!emailAddress.getEmailVerified() && emailAddress.getEmailVerificationToken() != null){
+        if (!emailAddress.getEmailVerified() && emailAddress.getEmailVerificationToken() != null) {
             sendMagicLinkVerifyEmail.handle(new EmailAddressInput(emailAddress));
         }
 
