@@ -11,7 +11,6 @@ import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

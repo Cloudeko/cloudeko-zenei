@@ -20,11 +20,8 @@ public class BusinessExceptionMapper implements ExceptionMapper<BusinessExceptio
         this.exceptionMapper = configureExceptionMapper();
     }
 
-    private Map<Class<? extends BusinessException>, Function<BusinessException, Response>>
-    configureExceptionMapper() {
-
-        final var handlerMap =
-                new HashMap<Class<? extends BusinessException>, Function<BusinessException, Response>>();
+    private Map<Class<? extends BusinessException>, Function<BusinessException, Response>> configureExceptionMapper() {
+        final var handlerMap = new HashMap<Class<? extends BusinessException>, Function<BusinessException, Response>>();
 
         handlerMap.put(EmailAlreadyExistsException.class, this::conflict);
         handlerMap.put(EmailNotFoundException.class, this::notFound);
