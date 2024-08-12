@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.domain.model.user;
 
+import dev.cloudeko.zenei.domain.model.account.Account;
 import dev.cloudeko.zenei.domain.model.email.EmailAddress;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,8 @@ public class User {
     private String image;
     private boolean admin;
     private boolean passwordEnabled;
+
+    private List<Account> accounts;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

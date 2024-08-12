@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(config = QuarkusMappingConfig.class, uses = EmailAddressMapper.class)
+@Mapper(config = QuarkusMappingConfig.class, uses = { EmailAddressMapper.class, AccountMapper.class })
 public interface UserMapper {
 
     List<User> toDomainList(List<UserEntity> entities);

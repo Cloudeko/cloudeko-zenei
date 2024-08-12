@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.application.web.resource;
 
+import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;
 import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
 import dev.cloudeko.zenei.infrastructure.config.OAuthProviderConfig;
 import jakarta.ws.rs.GET;
@@ -17,6 +18,8 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 public class OAuthResource {
 
     private final ApplicationConfig config;
+
+    private final LoginUserWithAuthorizationCode loginUserWithAuthorizationCode;
 
     @GET
     @Path("/login/{provider}")
@@ -47,7 +50,9 @@ public class OAuthResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.ok("Received auth code: " + code).build();
+        final var token = loginUserWithAuthorizationCode.handle(code);
+
+        return Response.ok("Received auth code: " + token.getAccessToken()).build();
     }
 
     private OAuthProviderConfig getProviderConfig(String provider) {
