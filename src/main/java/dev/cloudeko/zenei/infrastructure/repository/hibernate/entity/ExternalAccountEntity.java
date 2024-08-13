@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "accounts")
+@Table(name = "external_accounts")
 @NamedQueries({
-        @NamedQuery(name = "AccountEntity.findByUserId", query = "SELECT a FROM AccountEntity a WHERE a.user = :userId"),
-        @NamedQuery(name = "AccountEntity.findByProviderId", query = "SELECT a FROM AccountEntity a WHERE a.providerId = :providerId"),
+        @NamedQuery(name = "AccountEntity.findByUserId", query = "SELECT a FROM ExternalAccountEntity a WHERE a.user = :userId"),
+        @NamedQuery(name = "AccountEntity.findByProviderId", query = "SELECT a FROM ExternalAccountEntity a WHERE a.providerId = :providerId"),
 })
-public class AccountEntity extends PanacheEntity {
+public class ExternalAccountEntity extends PanacheEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)

@@ -57,7 +57,7 @@ public class UserEntity extends PanacheEntity {
     private List<SessionEntity> sessions;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AccountEntity> accounts;
+    private List<ExternalAccountEntity> accounts;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RefreshTokenEntity> refreshTokens = new ArrayList<>();

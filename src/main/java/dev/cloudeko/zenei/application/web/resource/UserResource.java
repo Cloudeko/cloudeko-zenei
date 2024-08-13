@@ -35,7 +35,9 @@ public class UserResource {
     private final VerifyMagicLink verifyMagicLink;
     private final RefreshAccessToken refreshAccessToken;
     private final SendMagicLinkVerifyEmail sendMagicLinkVerifyEmail;
+
     private final LoginUserWithPassword loginUserWithPassword;
+    private final LoginUserWithAuthorizationCode loginUserWithAuthorizationCode;
 
     @GET
     @Authenticated
