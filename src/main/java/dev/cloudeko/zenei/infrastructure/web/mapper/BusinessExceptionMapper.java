@@ -29,10 +29,17 @@ public class BusinessExceptionMapper implements ExceptionMapper<BusinessExceptio
         handlerMap.put(InvalidPasswordException.class, this::unauthorized);
         handlerMap.put(InvalidConfirmationTokenException.class, this::unauthorized);
         handlerMap.put(InvalidRefreshTokenException.class, this::unauthorized);
+        handlerMap.put(InvalidExternalAuthProvider.class, this::unauthorized);
         handlerMap.put(UsernameAlreadyExistsException.class, this::conflict);
         handlerMap.put(ModelValidationException.class, this::unprocessableEntity);
 
         return handlerMap;
+    }
+
+    private Response badRequest(BusinessException businessException) {
+        return Response.ok(errorResponse(businessException))
+                .status(Response.Status.BAD_REQUEST)
+                .build();
     }
 
     private Response notFound(BusinessException businessException) {

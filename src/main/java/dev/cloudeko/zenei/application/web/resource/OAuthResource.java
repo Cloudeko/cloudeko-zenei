@@ -2,7 +2,8 @@ package dev.cloudeko.zenei.application.web.resource;
 
 import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;
 import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
-import dev.cloudeko.zenei.infrastructure.config.OAuthProviderConfig;
+import dev.cloudeko.zenei.infrastructure.config.ExternalAuthProviderConfig;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -34,12 +35,13 @@ public class OAuthResource {
                 .queryParam("client_id", providerConfig.clientId())
                 .queryParam("redirect_uri", providerConfig.redirectUri())
                 .queryParam("response_type", "code")
-                .queryParam("scope", "openid profile email");
+                .queryParam("scope", providerConfig.scope());
 
         return Response.temporaryRedirect(uriBuilder.build()).build();
     }
 
     @GET
+    @Transactional
     @Path("/callback/{provider}")
     public Response callback(@PathParam("provider") String provider,
             @QueryParam("code") String code,
@@ -50,12 +52,12 @@ public class OAuthResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        final var token = loginUserWithAuthorizationCode.handle(code);
+        final var token = loginUserWithAuthorizationCode.handle(provider, code);
 
-        return Response.ok("Received auth code: " + token.getAccessToken()).build();
+        return Response.ok(token).build();
     }
 
-    private OAuthProviderConfig getProviderConfig(String provider) {
-        return config.getOAuthProvidersConfig().providers().get(provider);
+    private ExternalAuthProviderConfig getProviderConfig(String provider) {
+        return config.getExternalAuthProvidersConfig().providers().get(provider);
     }
 }

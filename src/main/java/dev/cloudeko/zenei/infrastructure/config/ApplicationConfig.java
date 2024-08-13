@@ -19,5 +19,5 @@ public class ApplicationConfig {
     DefaultUsersConfig defaultUsersConfig;
 
     @Inject
-    OAuthProvidersConfig oAuthProvidersConfig;
+    ExternalAuthProvidersConfig externalAuthProvidersConfig;
 }

@@ -15,11 +15,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "accounts")
+@NamedQueries({
+        @NamedQuery(name = "AccountEntity.findByUserId", query = "SELECT a FROM AccountEntity a WHERE a.user = :userId"),
+        @NamedQuery(name = "AccountEntity.findByProviderId", query = "SELECT a FROM AccountEntity a WHERE a.providerId = :providerId"),
+})
 public class AccountEntity extends PanacheEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserEntity userId;
+    private UserEntity user;
 
     @Column(name = "type")
     private String type;

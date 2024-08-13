@@ -6,8 +6,8 @@ import io.smallrye.config.WithParentName;
 import java.util.Map;
 
 @ConfigMapping(prefix = "zenei.oauth.providers")
-public interface OAuthProvidersConfig {
+public interface ExternalAuthProvidersConfig {
 
     @WithParentName
-    Map<String, OAuthProviderConfig> providers();
+    Map<String, ExternalAuthProviderConfig> providers();
 }

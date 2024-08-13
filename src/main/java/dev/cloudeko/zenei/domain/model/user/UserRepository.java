@@ -17,5 +17,7 @@ public interface UserRepository {
 
     Optional<User> getUserByUsername(String username);
 
+    Optional<User> getByAccountProviderId(String providerId);
+
     List<User> listUsers(int offset, int limit);
 }

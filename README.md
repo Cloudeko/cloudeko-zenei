@@ -1,7 +1,7 @@
 # Cloudeko Zenei
 
-Zenei is a open-source user management system that allows you to use authentication, user management and organizations management
-in your applications.
+Zenei is a open-source user management system that allows you to use authentication, user management and organizations
+management in your applications.
 
 It's built with [Quarkus](https://quarkus.io) and provides authentication via OAuth2.
 
@@ -17,6 +17,10 @@ It's built with [Quarkus](https://quarkus.io) and provides authentication via OA
 - [ ] OAuth2 support (Github, Google, Facebook, etc.)
 - [ ] Organizations management
 - [ ] API/Access token generation
+
+## TODO
+
+- Maybe split the oauth (external) to a separate module
 
 ## License
 

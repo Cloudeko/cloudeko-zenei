@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
+import static io.quarkus.panache.common.Parameters.with;
+
 @ApplicationScoped
 @AllArgsConstructor
 public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity> implements UserRepository {
@@ -19,7 +21,9 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
     @Override
     public void createUser(User user) {
         final var userEntity = userMapper.toEntity(user);
+
         userEntity.getEmailAddresses().forEach(emailAddressEntity -> emailAddressEntity.setUser(userEntity));
+        userEntity.getAccounts().forEach(accountEntity -> accountEntity.setUser(userEntity));
 
         persistAndFlush(userEntity);
 
@@ -54,12 +58,22 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        final var userEntity = find("username", username).firstResult();
-        if (userEntity == null) {
+        final var user = find("username", username).firstResult();
+        if (user == null) {
             return Optional.empty();
         }
 
-        return Optional.of(userMapper.toDomain(userEntity));
+        return Optional.of(user).map(userMapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> getByAccountProviderId(String providerId) {
+        final var user = find("#UserEntity.findByAccountProviderId", with("providerId", providerId)).firstResult();
+        if (user == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(user).map(userMapper::toDomain);
     }
 
     @Override

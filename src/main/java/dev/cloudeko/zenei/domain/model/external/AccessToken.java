@@ -1,4 +1,4 @@
-package dev.cloudeko.zenei.domain.web.client;
+package dev.cloudeko.zenei.domain.model.external;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,12 @@ public class AccessToken {
 
     @JsonProperty("access_token")
     private String accessToken;
+
+    @JsonProperty("expires_in")
+    private Long expiresIn;
+
+    @JsonProperty("refresh_token")
+    private String refreshToken;
 
     @JsonProperty("scope")
     private String scope;

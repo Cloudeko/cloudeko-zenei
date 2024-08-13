@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.infrastructure.config;
 
-public interface OAuthProviderConfig {
+public interface ExternalAuthProviderConfig {
 
     String clientId();
 
@@ -10,7 +10,7 @@ public interface OAuthProviderConfig {
 
     String tokenUri();
 
-    String userInfoUri();
+    String baseUri();
 
     String redirectUri();
 

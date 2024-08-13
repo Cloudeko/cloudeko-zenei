@@ -29,6 +29,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.org.jboss.logging>3.5.3.Final</version.org.jboss.logging>
         <surefire-plugin.version>3.1.2</surefire-plugin.version>
+        <wiremock.version>3.9.1</wiremock.version>
     </properties>
 
     <!-- Repository declarations -->
@@ -174,6 +175,12 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-test-security</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock</artifactId>
+            <scope>test</scope>
+            <version>${wiremock.version}</version>
         </dependency>
     </dependencies>
     <build>

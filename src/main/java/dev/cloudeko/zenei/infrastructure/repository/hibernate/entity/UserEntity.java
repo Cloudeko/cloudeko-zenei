@@ -21,6 +21,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.primaryEmailAddress = :email"),
         @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
+        @NamedQuery(name = "UserEntity.findByAccountProviderId", query = "SELECT u FROM UserEntity u JOIN u.accounts a WHERE a.providerId = :providerId"),
 })
 public class UserEntity extends PanacheEntity {
 
@@ -55,7 +56,7 @@ public class UserEntity extends PanacheEntity {
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SessionEntity> sessions;
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountEntity> accounts;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
