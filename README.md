@@ -18,10 +18,6 @@ It's built with [Quarkus](https://quarkus.io) and provides authentication via OA
 - [ ] Organizations management
 - [ ] API/Access token generation
 
-## TODO
-
-- Maybe split the oauth (external) to a separate module
-
 ## Contributing
 
 Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
