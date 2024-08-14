@@ -47,8 +47,8 @@ jobs:
       - name: Generate Development Key Pair
         run: |
           mkdir -p src/main/resources
-          openssl genpkey -algorithm RSA -out src/main/resources/dev-private-key.pem -pkeyopt rsa_keygen_bits:2048
-          openssl rsa -in src/main/resources/dev-private-key.pem -pubout -out src/main/resources/dev-public-key.pem
+          openssl genpkey -algorithm RSA -out core/src/main/resources/dev-private-key.pem -pkeyopt rsa_keygen_bits:2048
+          openssl rsa -in core/src/main/resources/dev-private-key.pem -pubout -out core/src/main/resources/dev-public-key.pem
 
       - name: Run Tests
         run: mvn clean test ${{ matrix.build_args }}
