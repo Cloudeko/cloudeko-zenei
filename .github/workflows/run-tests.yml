@@ -48,10 +48,7 @@ jobs:
           cache: maven
 
       - name: Generate Development Key Pair
-        run: |
-          mkdir -p src/main/resources
-          openssl genpkey -algorithm RSA -out core/src/main/resources/dev-private-key.pem -pkeyopt rsa_keygen_bits:2048
-          openssl rsa -in core/src/main/resources/dev-private-key.pem -pubout -out core/src/main/resources/dev-public-key.pem
+        run: ./generate-dev-keys.sh
 
       - name: Run Tests
         run: mvn clean test ${{ matrix.build_args }}
