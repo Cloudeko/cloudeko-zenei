@@ -1,9 +1,6 @@
 package dev.cloudeko.zenei.extension.external.web.client;
 
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 
@@ -12,9 +9,11 @@ public interface LoginOAuthClient {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @ClientHeaderParam(name = "Accept", value = MediaType.APPLICATION_JSON)
-    ExternalAccessToken getAccessToken(@QueryParam("client_id") String clientId,
-            @QueryParam("client_secret") String clientSecret,
-            @QueryParam("code") String code,
-            @QueryParam("redirect_uri") String redirectUri);
+    ExternalAccessToken getAccessToken(@FormParam("grant_type") String grantType,
+            @FormParam("client_id") String clientId,
+            @FormParam("client_secret") String clientSecret,
+            @FormParam("code") String code,
+            @FormParam("redirect_uri") String redirectUri);
 }

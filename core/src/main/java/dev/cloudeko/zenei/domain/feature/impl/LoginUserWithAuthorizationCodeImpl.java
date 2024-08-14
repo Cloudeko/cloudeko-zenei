@@ -54,8 +54,11 @@ public class LoginUserWithAuthorizationCodeImpl implements LoginUserWithAuthoriz
                 .baseUri(URI.create(externalProvider.getTokenEndpoint()))
                 .build(LoginOAuthClient.class);
 
-        final var accessToken = client.getAccessToken(externalProvider.config().clientId(),
-                externalProvider.config().clientSecret(), code, null);
+        final var accessToken = client.getAccessToken("authorization_code",
+                externalProvider.config().clientId(),
+                externalProvider.config().clientSecret(),
+                code,
+                externalProvider.config().redirectUri().orElseThrow());
 
         if (accessToken == null) {
             throw new IllegalArgumentException("Invalid authorization code");

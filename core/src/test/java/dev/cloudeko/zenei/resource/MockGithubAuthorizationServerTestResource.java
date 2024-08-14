@@ -30,9 +30,11 @@ public class MockGithubAuthorizationServerTestResource extends AbstractMockAutho
 
             // Mock the access token endpoint
             server.stubFor(WireMock.post(WireMock.urlPathEqualTo("/github/login/oauth/access_token"))
-                    .withQueryParam("client_id", WireMock.matching(".*"))
-                    .withQueryParam("client_secret", WireMock.matching(".*"))
-                    .withQueryParam("code", WireMock.matching(".*"))
+                    .withFormParam("client_id", WireMock.matching(".*"))
+                    .withFormParam("client_secret", WireMock.matching(".*"))
+                    .withFormParam("code", WireMock.matching(".*"))
+                    .withFormParam("grant_type", WireMock.matching(".*"))
+                    .withFormParam("redirect_uri", WireMock.matching(".*"))
                     .willReturn(WireMock.aResponse()
                             .withHeader("Content-Type", "application/json")
                             .withBody(objectMapper.writeValueAsString(

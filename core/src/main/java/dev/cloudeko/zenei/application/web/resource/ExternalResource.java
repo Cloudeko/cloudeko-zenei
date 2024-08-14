@@ -36,9 +36,9 @@ public class ExternalResource {
 
         final var uriBuilder = UriBuilder.fromUri(providerConfig.get().getAuthorizationEndpoint())
                 .queryParam("client_id", providerConfig.get().config().clientId())
-                .queryParam("redirect_uri", providerConfig.get().config().redirectUri())
+                .queryParam("redirect_uri", providerConfig.get().config().redirectUri().orElse(""))
                 .queryParam("response_type", "code")
-                .queryParam("scope", providerConfig.get().config().scope());
+                .queryParam("scope", providerConfig.get().config().scope().orElse(""));
 
         return Response.temporaryRedirect(uriBuilder.build()).build();
     }
