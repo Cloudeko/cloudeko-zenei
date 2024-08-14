@@ -9,7 +9,7 @@ import java.util.List;
 @Path("/")
 public interface GithubApiClient {
 
-    @GET()
+    @GET
     @Path("/user")
     GithubUser getCurrentlyLoggedInUser(@HeaderParam("Authorization") String token);
 

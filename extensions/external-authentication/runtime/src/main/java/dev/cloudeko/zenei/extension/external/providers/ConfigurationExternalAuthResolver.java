@@ -30,6 +30,10 @@ public class ConfigurationExternalAuthResolver implements ExternalAuthResolver {
                 yield new GithubExternalAuthProvider(providerConfig);
             }
 
+            case "discord": {
+                yield new DiscordExternalAuthProvider(providerConfig);
+            }
+
             default: {
                 yield null;
             }
