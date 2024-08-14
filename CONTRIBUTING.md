@@ -30,6 +30,8 @@ Thank you for your interest in contributing to the Cloudeko Zenei Auth Service! 
       mvn quarkus:dev
       ```
 
+<hr />
+
 **Making Contributions**
 
 1. **Fork the Repository**

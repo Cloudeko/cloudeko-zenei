@@ -22,6 +22,10 @@ It's built with [Quarkus](https://quarkus.io) and provides authentication via OA
 
 - Maybe split the oauth (external) to a separate module
 
+## Contributing
+
+Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
+
 ## License
 
 Zenei is licensed under the [Apache-2.0](LICENSE) license.
