@@ -5,7 +5,7 @@ import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 
 @Path("/")
-public interface DiscordApiClient {
+public interface DiscordClient {
 
     @GET
     @Path("/users/@me")

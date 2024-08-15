@@ -19,6 +19,7 @@ import dev.cloudeko.zenei.domain.provider.TokenProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthResolver;
 import dev.cloudeko.zenei.extension.external.ExternalUserProfile;
+import dev.cloudeko.zenei.extension.external.providers.AvailableProvider;
 import dev.cloudeko.zenei.extension.external.web.client.ExternalAccessToken;
 import dev.cloudeko.zenei.extension.external.web.client.LoginOAuthClient;
 import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
@@ -57,8 +58,7 @@ public class LoginUserWithAuthorizationCodeImpl implements LoginUserWithAuthoriz
         final var accessToken = client.getAccessToken("authorization_code",
                 externalProvider.config().clientId(),
                 externalProvider.config().clientSecret(),
-                code,
-                externalProvider.config().redirectUri().orElseThrow());
+                code, AvailableProvider.getProvider(provider).getRedirectUri());
 
         if (accessToken == null) {
             throw new IllegalArgumentException("Invalid authorization code");

@@ -2,9 +2,9 @@ package dev.cloudeko.zenei.extension.external.endpoint;
 
 public interface DefaultProviderEndpoints {
 
-    public String getAuthorizationEndpoint();
+    String getAuthorizationEndpoint();
 
-    public String getTokenEndpoint();
+    String getTokenEndpoint();
 
-    public String getBaseEndpoint();
+    String getBaseEndpoint();
 }

@@ -7,7 +7,7 @@ import jakarta.ws.rs.Path;
 import java.util.List;
 
 @Path("/")
-public interface GithubApiClient {
+public interface GithubClient {
 
     @GET
     @Path("/user")

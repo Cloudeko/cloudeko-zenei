@@ -1,7 +1,9 @@
 package dev.cloudeko.zenei.auth;
 
+import dev.cloudeko.zenei.extension.external.providers.AvailableProvider;
 import dev.cloudeko.zenei.resource.MockDiscordAuthorizationServerTestResource;
 import dev.cloudeko.zenei.resource.MockGithubAuthorizationServerTestResource;
+import dev.cloudeko.zenei.resource.MockGoogleAuthorizationServerTestResource;
 import dev.cloudeko.zenei.resource.MockServerResource;
 import io.quarkus.test.common.WithTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -22,9 +24,12 @@ import static org.hamcrest.Matchers.notNullValue;
 @WithTestResource.List({
         @WithTestResource(MockServerResource.class),
         @WithTestResource(MockGithubAuthorizationServerTestResource.class),
-        @WithTestResource(MockDiscordAuthorizationServerTestResource.class)
+        @WithTestResource(MockDiscordAuthorizationServerTestResource.class),
+        @WithTestResource(MockGoogleAuthorizationServerTestResource.class)
 })
 public class AuthenticationFlowWithExternalProviderTest {
+
+    private static final String[] IGNORED_PROVIDERS = { null };
 
     @BeforeAll
     static void setup() {
@@ -33,7 +38,7 @@ public class AuthenticationFlowWithExternalProviderTest {
 
     @MethodSource("createProviderData")
     @ParameterizedTest(name = "Test Case for provider: {0}")
-    @DisplayName("Retrieve a access token using authorization (GET /external/login/github) should return (200 OK)")
+    @DisplayName("Retrieve a access token using authorization (GET /external/login/<PROVIDER>) should return (200 OK)")
     void testGetUserInfo(String provider) {
         given().get("/external/login/" + provider)
                 .then()
@@ -45,6 +50,17 @@ public class AuthenticationFlowWithExternalProviderTest {
     }
 
     static Stream<Arguments> createProviderData() {
-        return Stream.of(Arguments.of("github"), Arguments.of("discord"));
+        return Stream.of(AvailableProvider.values())
+                .filter(provider -> !isIgnoredProvider(provider))
+                .map(provider -> Arguments.of(provider.name()));
+    }
+
+    private static boolean isIgnoredProvider(AvailableProvider provider) {
+        for (String ignoredProvider : IGNORED_PROVIDERS) {
+            if (provider.name().equalsIgnoreCase(ignoredProvider)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

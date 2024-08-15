@@ -5,7 +5,7 @@ import dev.cloudeko.zenei.extension.external.ExternalUserProfile;
 import dev.cloudeko.zenei.extension.external.config.ExternalAuthProviderConfig;
 import dev.cloudeko.zenei.extension.external.endpoint.ProviderEndpoints;
 import dev.cloudeko.zenei.extension.external.web.client.ExternalAccessToken;
-import dev.cloudeko.zenei.extension.external.web.external.github.GithubApiClient;
+import dev.cloudeko.zenei.extension.external.web.external.github.GithubClient;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 
 import java.net.URI;
@@ -16,7 +16,7 @@ public record GithubExternalAuthProvider(ExternalAuthProviderConfig config) impl
     public ExternalUserProfile getExternalUserProfile(ExternalAccessToken accessToken) {
         final var client = QuarkusRestClientBuilder.newBuilder()
                 .baseUri(URI.create(getBaseEndpoint()))
-                .build(GithubApiClient.class);
+                .build(GithubClient.class);
 
         final var externalUserBuilder = ExternalUserProfile.builder();
         final var user = client.getCurrentlyLoggedInUser("Bearer " + accessToken.getAccessToken());

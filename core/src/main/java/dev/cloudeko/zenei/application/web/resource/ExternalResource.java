@@ -4,6 +4,7 @@ import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
 import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;
 import dev.cloudeko.zenei.extension.external.ExternalAuthProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthResolver;
+import dev.cloudeko.zenei.extension.external.providers.AvailableProvider;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -36,7 +37,7 @@ public class ExternalResource {
 
         final var uriBuilder = UriBuilder.fromUri(providerConfig.get().getAuthorizationEndpoint())
                 .queryParam("client_id", providerConfig.get().config().clientId())
-                .queryParam("redirect_uri", providerConfig.get().config().redirectUri().orElse(""))
+                .queryParam("redirect_uri", AvailableProvider.getProvider(provider).getRedirectUri())
                 .queryParam("response_type", "code")
                 .queryParam("scope", providerConfig.get().config().scope().orElse(""));
 

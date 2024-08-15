@@ -2,46 +2,18 @@ package dev.cloudeko.zenei.resource;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import dev.cloudeko.zenei.extension.external.web.client.ExternalAccessToken;
 import dev.cloudeko.zenei.extension.external.web.external.github.GithubUser;
 import dev.cloudeko.zenei.extension.external.web.external.github.GithubUserEmail;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MockGithubAuthorizationServerTestResource extends AbstractMockAuthorizationServerTestResource {
 
     @Override
     protected Map<String, String> providerSpecificStubsAndConfig(WireMockServer server) {
-        final var testPort = ConfigProvider.getConfig().getOptionalValue("quarkus.http.test-port", Integer.class).orElse(8081);
-
         try {
-            // Mock the GitHub authorization URL
-            server.stubFor(WireMock.get(WireMock.urlPathEqualTo("/github/login/oauth/authorize"))
-                    .withQueryParam("client_id", WireMock.matching(".*"))
-                    .withQueryParam("redirect_uri", WireMock.matching(".*"))
-                    .withQueryParam("scope", WireMock.matching(".*"))
-                    .willReturn(WireMock.aResponse()
-                            .withStatus(Response.Status.FOUND.getStatusCode())
-                            .withHeader("Location",
-                                    "http://localhost:" + testPort + "/external/callback/github?code=mock_code&state=mock_state")));
-
-            // Mock the access token endpoint
-            server.stubFor(WireMock.post(WireMock.urlPathEqualTo("/github/login/oauth/access_token"))
-                    .withFormParam("client_id", WireMock.matching(".*"))
-                    .withFormParam("client_secret", WireMock.matching(".*"))
-                    .withFormParam("code", WireMock.matching(".*"))
-                    .withFormParam("grant_type", WireMock.matching(".*"))
-                    .withFormParam("redirect_uri", WireMock.matching(".*"))
-                    .willReturn(WireMock.aResponse()
-                            .withHeader("Content-Type", "application/json")
-                            .withBody(objectMapper.writeValueAsString(
-                                    new ExternalAccessToken("mock_access_token", 3600L, "mock_refresh_token", "user,email",
-                                            "bearer")
-                            ))));
-
             // Mock the GitHub user data endpoints
             server.stubFor(WireMock.get(WireMock.urlPathEqualTo("/github/user"))
                     .withHeader("Authorization", WireMock.equalTo("Bearer mock_access_token"))
@@ -70,10 +42,22 @@ public class MockGithubAuthorizationServerTestResource extends AbstractMockAutho
                 "zenei.external.auth.providers.github.base-uri", server.baseUrl() + "/github",
                 "zenei.external.auth.providers.github.client-id", "mock_client_id",
                 "zenei.external.auth.providers.github.client-secret", "mock_client_secret",
-                "zenei.external.auth.providers.github.authorization-uri", server.baseUrl() + "/github/login/oauth/authorize",
-                "zenei.external.auth.providers.github.token-uri", server.baseUrl() + "/github/login/oauth/access_token",
-                "zenei.external.auth.providers.github.redirect-uri", "http://localhost:8081/external/callback/github",
+                "zenei.external.auth.providers.github.authorization-uri",
+                server.baseUrl() + getFeaturePath(TestProviderFeature.AUTHORIZE),
+                "zenei.external.auth.providers.github.token-uri",
+                server.baseUrl() + getFeaturePath(TestProviderFeature.ACCESS_TOKEN),
+                "zenei.external.auth.providers.github.redirect-uri", getCallbackEndpoint(),
                 "zenei.external.auth.providers.github.scope", "user,email"
         );
+    }
+
+    @Override
+    protected Set<TestProviderFeature> getFeatures() {
+        return Set.of(TestProviderFeature.AUTHORIZE, TestProviderFeature.ACCESS_TOKEN);
+    }
+
+    @Override
+    protected String getProvider() {
+        return "github";
     }
 }

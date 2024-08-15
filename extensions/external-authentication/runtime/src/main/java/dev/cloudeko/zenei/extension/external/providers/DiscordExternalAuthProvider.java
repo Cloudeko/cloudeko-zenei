@@ -5,8 +5,7 @@ import dev.cloudeko.zenei.extension.external.ExternalUserProfile;
 import dev.cloudeko.zenei.extension.external.config.ExternalAuthProviderConfig;
 import dev.cloudeko.zenei.extension.external.endpoint.ProviderEndpoints;
 import dev.cloudeko.zenei.extension.external.web.client.ExternalAccessToken;
-import dev.cloudeko.zenei.extension.external.web.external.discord.DiscordApiClient;
-import dev.cloudeko.zenei.extension.external.web.external.github.GithubApiClient;
+import dev.cloudeko.zenei.extension.external.web.external.discord.DiscordClient;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 
 import java.net.URI;
@@ -18,18 +17,26 @@ public record DiscordExternalAuthProvider(ExternalAuthProviderConfig config) imp
     public ExternalUserProfile getExternalUserProfile(ExternalAccessToken accessToken) {
         final var client = QuarkusRestClientBuilder.newBuilder()
                 .baseUri(URI.create(getBaseEndpoint()))
-                .build(DiscordApiClient.class);
+                .build(DiscordClient.class);
 
-        final var externalUserBuilder = ExternalUserProfile.builder();
         final var user = client.getCurrentlyLoggedInUser("Bearer " + accessToken.getAccessToken());
 
-        externalUserBuilder.id(user.getId());
-        externalUserBuilder.username(user.getUsername());
-        externalUserBuilder.avatarUrl(user.getAvatar());
-        externalUserBuilder.emails(
-                List.of(new ExternalUserProfile.ExternalUserEmail(user.getEmail(), true, user.isVerified())));
+        // Avatar URL handling
+        String avatarUrl;
+        if (user.getAvatar() == null || user.getAvatar().isEmpty()) {
+            final var discriminator = Integer.parseInt(user.getDiscriminator());
+            avatarUrl = String.format("https://cdn.discordapp.com/embed/avatars/%d.png", discriminator % 5);
+        } else {
+            final var extension = user.getAvatar().startsWith("a_") ? "gif" : "png";
+            avatarUrl = String.format("https://cdn.discordapp.com/avatars/%s/%s.%s", user.getId(), user.getAvatar(), extension);
+        }
 
-        return externalUserBuilder.build();
+        return ExternalUserProfile.builder()
+                .id(user.getId())
+                .username(String.format("%s#%s", user.getUsername(), user.getDiscriminator()))
+                .avatarUrl(avatarUrl)
+                .emails(List.of(new ExternalUserProfile.ExternalUserEmail(user.getEmail(), true, user.isVerified())))
+                .build();
     }
 
     @Override
