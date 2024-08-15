@@ -9,16 +9,19 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 public enum AvailableProvider {
-    GITHUB("github", GithubExternalAuthProvider::new),
-    DISCORD("discord", DiscordExternalAuthProvider::new),
-    GOOGLE("google", GoogleExternalAuthProvider::new);
+    GITHUB("github", "user:email", GithubExternalAuthProvider::new),
+    DISCORD("discord", "identify email", DiscordExternalAuthProvider::new),
+    GOOGLE("google", "openid email profile", GoogleExternalAuthProvider::new);
 
     @Getter
     private final String providerName;
+    private final String scope;
+
     private final Function<ExternalAuthProviderConfig, ExternalAuthProvider> provider;
 
-    AvailableProvider(String providerName, Function<ExternalAuthProviderConfig, ExternalAuthProvider> provider) {
+    AvailableProvider(String providerName, String scope, Function<ExternalAuthProviderConfig, ExternalAuthProvider> provider) {
         this.providerName = providerName;
+        this.scope = scope;
         this.provider = provider;
     }
 
@@ -35,6 +38,12 @@ public enum AvailableProvider {
 
     public ExternalAuthProvider getProvider(ExternalAuthProviderConfig config) {
         return provider.apply(config);
+    }
+
+    public String getScope() {
+        return ConfigProvider.getConfig()
+                .getOptionalValue("zenei.external.auth." + providerName + ".scope", String.class)
+                .orElse(scope);
     }
 
     public String getRedirectUri() {

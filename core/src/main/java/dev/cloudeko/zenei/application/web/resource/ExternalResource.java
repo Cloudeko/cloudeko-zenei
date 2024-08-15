@@ -39,7 +39,7 @@ public class ExternalResource {
                 .queryParam("client_id", providerConfig.get().config().clientId())
                 .queryParam("redirect_uri", AvailableProvider.getProvider(provider).getRedirectUri())
                 .queryParam("response_type", "code")
-                .queryParam("scope", providerConfig.get().config().scope().orElse(""));
+                .queryParam("scope", AvailableProvider.getProvider(provider).getScope());
 
         return Response.temporaryRedirect(uriBuilder.build()).build();
     }
