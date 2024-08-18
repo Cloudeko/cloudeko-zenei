@@ -37,9 +37,9 @@ public class AuthenticationFlowWithAdminUserTest {
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
-                        "users.size()", greaterThanOrEqualTo(1),
-                        "users.getFirst().username", equalTo("admin"),
-                        "users.getFirst().primary_email_address", equalTo("admin@test.com")
+                        "size()", greaterThanOrEqualTo(1),
+                        "getFirst().username", equalTo("admin"),
+                        "getFirst().primary_email_address", equalTo("admin@test.com")
                 );
     }
 }

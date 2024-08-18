@@ -8,7 +8,8 @@ import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;
 import dev.cloudeko.zenei.domain.feature.util.TokenUtil;
 import dev.cloudeko.zenei.domain.model.Token;
 import dev.cloudeko.zenei.domain.model.account.Account;
-import dev.cloudeko.zenei.domain.model.account.AccountRepository;
+import dev.cloudeko.zenei.domain.model.account.ExternalAccessToken;
+import dev.cloudeko.zenei.domain.model.account.ExternalAccountRepository;
 import dev.cloudeko.zenei.domain.model.email.EmailAddress;
 import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
 import dev.cloudeko.zenei.domain.model.user.User;
@@ -20,7 +21,7 @@ import dev.cloudeko.zenei.extension.external.ExternalAuthProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthResolver;
 import dev.cloudeko.zenei.extension.external.ExternalUserProfile;
 import dev.cloudeko.zenei.extension.external.providers.AvailableProvider;
-import dev.cloudeko.zenei.extension.external.web.client.ExternalAccessToken;
+import dev.cloudeko.zenei.extension.external.web.client.ExternalProviderAccessToken;
 import dev.cloudeko.zenei.extension.external.web.client.LoginOAuthClient;
 import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
@@ -39,7 +40,7 @@ public class LoginUserWithAuthorizationCodeImpl implements LoginUserWithAuthoriz
     private final ApplicationConfig config;
 
     private final UserRepository userRepository;
-    private final AccountRepository accountRepository;
+    private final ExternalAccountRepository externalAccountRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final RefreshTokenProvider refreshTokenProvider;
@@ -95,16 +96,20 @@ public class LoginUserWithAuthorizationCodeImpl implements LoginUserWithAuthoriz
     private User createUserFromExternalUserProfile(ExternalUserProfile externalUserProfile,
             ExternalUserProfile.ExternalUserEmail externalEmail,
             String provider,
-            ExternalAccessToken accessToken) {
+            ExternalProviderAccessToken accessToken) {
 
         final var emailAddress = EmailAddress.builder().email(externalEmail.email()).emailVerified(true).build();
-        final var account = Account.builder()
-                .provider(provider)
-                .providerId(externalUserProfile.getId())
-                .scope(accessToken.getScope())
+        final var externalAccessToken = ExternalAccessToken.builder()
                 .accessToken(accessToken.getAccessToken())
                 .refreshToken(accessToken.getRefreshToken())
                 .tokenType(accessToken.getTokenType())
+                .scope(accessToken.getScope())
+                .build();
+
+        final var account = Account.builder()
+                .provider(provider)
+                .providerId(externalUserProfile.getId())
+                .accessTokens(new ArrayList<>(List.of(externalAccessToken)))
                 .build();
 
         final var user = User.builder()

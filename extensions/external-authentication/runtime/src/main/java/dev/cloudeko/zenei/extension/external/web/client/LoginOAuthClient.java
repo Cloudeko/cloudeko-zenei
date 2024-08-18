@@ -11,7 +11,7 @@ public interface LoginOAuthClient {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @ClientHeaderParam(name = "Accept", value = MediaType.APPLICATION_JSON)
-    ExternalAccessToken getAccessToken(@FormParam("grant_type") String grantType,
+    ExternalProviderAccessToken getAccessToken(@FormParam("grant_type") String grantType,
             @FormParam("client_id") String clientId,
             @FormParam("client_secret") String clientSecret,
             @FormParam("code") String code,

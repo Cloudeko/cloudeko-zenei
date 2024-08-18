@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,14 +19,8 @@ public class Account {
     private String provider;
     private String providerId;
 
-    private String refreshToken;
-    private String accessToken;
-    private Long accessTokenExpiresAt;
+    private List<ExternalAccessToken> accessTokens;
 
-    private String tokenType;
-    private String scope;
-
-    private String idToken;
     private String sessionState;
 
     private LocalDateTime createdAt;

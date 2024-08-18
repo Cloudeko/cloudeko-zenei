@@ -25,6 +25,9 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
         userEntity.getEmailAddresses().forEach(emailAddressEntity -> emailAddressEntity.setUser(userEntity));
         userEntity.getAccounts().forEach(accountEntity -> accountEntity.setUser(userEntity));
 
+        userEntity.getAccounts().forEach(accountEntity -> accountEntity.getAccessTokens()
+                .forEach(accessTokenEntity -> accessTokenEntity.setAccount(accountEntity)));
+
         persistAndFlush(userEntity);
 
         userMapper.updateDomainFromEntity(userEntity, user);

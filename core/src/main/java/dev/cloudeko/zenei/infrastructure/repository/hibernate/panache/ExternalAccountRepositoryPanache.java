@@ -2,7 +2,7 @@ package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
 import dev.cloudeko.zenei.domain.mapping.AccountMapper;
 import dev.cloudeko.zenei.domain.model.account.Account;
-import dev.cloudeko.zenei.domain.model.account.AccountRepository;
+import dev.cloudeko.zenei.domain.model.account.ExternalAccountRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.ExternalAccountEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,8 @@ import static io.quarkus.panache.common.Parameters.with;
 
 @ApplicationScoped
 @AllArgsConstructor
-public class AccountRepositoryPanache extends AbstractPanacheRepository<ExternalAccountEntity> implements AccountRepository {
+public class ExternalAccountRepositoryPanache extends AbstractPanacheRepository<ExternalAccountEntity> implements
+        ExternalAccountRepository {
 
     private final AccountMapper accountMapper;
 
