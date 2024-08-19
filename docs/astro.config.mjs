@@ -6,6 +6,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
+  base: "/cloudeko-zenei",
   site: "https://docs.cloudeko.dev/zenei",
   markdown: {
     smartypants: true,
