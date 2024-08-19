@@ -1,4 +1,4 @@
-package dev.cloudeko.zenei.application.web.resource;
+package dev.cloudeko.zenei.application.web.resource.frontend;
 
 import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
 import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;

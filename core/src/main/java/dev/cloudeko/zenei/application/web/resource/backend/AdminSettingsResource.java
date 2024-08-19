@@ -1,4 +1,4 @@
-package dev.cloudeko.zenei.application.web.resource;
+package dev.cloudeko.zenei.application.web.resource.backend;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

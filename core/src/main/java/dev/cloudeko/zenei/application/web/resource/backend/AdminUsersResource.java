@@ -1,4 +1,4 @@
-package dev.cloudeko.zenei.application.web.resource;
+package dev.cloudeko.zenei.application.web.resource.backend;
 
 import dev.cloudeko.zenei.application.web.model.response.ExternalAccessTokenResponse;
 import dev.cloudeko.zenei.application.web.model.response.ExternalAccessTokensResponse;

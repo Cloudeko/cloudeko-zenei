@@ -38,12 +38,11 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Create user via email and password (POST /user) should return (200 OK)")
     void testCreateUser() {
         given()
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formParam("username", "test-user2")
                 .formParam("email", "test@test.com")
                 .formParam("password", "test-password")
                 .formParam("strategy", "PASSWORD")
-                .post("/user")
+                .post("/frontend/register")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
@@ -64,7 +63,7 @@ public class AuthenticationFlowWithEnabledMailingTest {
                 .formParam("password", "test-password")
                 .formParam("strategy", "PASSWORD")
                 .formParam("redirect_to", "https://google.com")
-                .post("/user")
+                .post("/frontend/register")
                 .then()
                 .statusCode(Response.Status.TEMPORARY_REDIRECT.getStatusCode());
     }
@@ -105,10 +104,9 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve a access token using username and password (POST /user/token) should return (200 OK)")
     void testGetAccessToken() {
         given()
-                .queryParam("grant_type", "password")
-                .queryParam("username", "test@test.com")
-                .queryParam("password", "test-password")
-                .post("/user/token")
+                .formParam("identifier", "test@test.com")
+                .formParam("password", "test-password")
+                .post("/frontend/login")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
@@ -122,10 +120,9 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Try to retrieve a access token using invalid username and password (POST /user/token) should return (401 UNAUTHORIZED)")
     void testGetAccessTokenInvalid() {
         given()
-                .queryParam("grant_type", "password")
-                .queryParam("username", "test@test.com")
-                .queryParam("password", "invalid-password")
-                .post("/user/token")
+                .formParam("identifier", "test@test.com")
+                .formParam("password", "invalid-password")
+                .post("/frontend/login")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
@@ -135,10 +132,9 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve a new access token using refresh token (POST /user/token) should return (200 OK)")
     void testGetAccessTokenUsingRefreshToken() {
         final var token = given()
-                .queryParam("grant_type", "password")
-                .queryParam("username", "test@test.com")
-                .queryParam("password", "test-password")
-                .post("/user/token")
+                .formParam("identifier", "test@test.com")
+                .formParam("password", "test-password")
+                .post("/frontend/login")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
@@ -148,9 +144,8 @@ public class AuthenticationFlowWithEnabledMailingTest {
                 .extract().as(TokenResponse.class);
 
         given()
-                .queryParam("grant_type", "refresh_token")
                 .queryParam("refresh_token", token.getRefreshToken())
-                .post("/user/token")
+                .post("/frontend/session/refresh")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
@@ -161,25 +156,11 @@ public class AuthenticationFlowWithEnabledMailingTest {
 
     @Test
     @Order(5)
-    @DisplayName("Try to retrieve a new access token using invalid grant type (POST /user/token) should return (400 BAD_REQUEST)")
-    void testGetAccessTokenUsingInvalidGrantType() {
-        given()
-                .queryParam("grant_type", "invalid-grant-type")
-                .queryParam("username", "invalid-username")
-                .queryParam("password", "invalid-password")
-                .post("/user/token")
-                .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
-    }
-
-    @Test
-    @Order(5)
     @DisplayName("Try to retrieve a new access token using invalid refresh token (POST /user/token) should return (401 UNAUTHORIZED)")
     void testGetAccessTokenUsingInvalidRefreshToken() {
         given()
-                .queryParam("grant_type", "refresh_token")
                 .queryParam("refresh_token", "invalid-refresh-token")
-                .post("/user/token")
+                .post("/frontend/session/refresh")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
@@ -189,17 +170,16 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve user information (GET /user) should return (200 OK)")
     void testGetUserInfo() {
         final var token = given()
-                .queryParam("grant_type", "password")
-                .queryParam("username", "test@test.com")
-                .queryParam("password", "test-password")
-                .post("/user/token")
+                .formParam("identifier", "test@test.com")
+                .formParam("password", "test-password")
+                .post("/frontend/login")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().as(TokenResponse.class);
 
         given()
                 .header("Authorization", "Bearer " + token.getAccessToken())
-                .get("/user")
+                .get("/frontend/user")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
@@ -217,7 +197,7 @@ public class AuthenticationFlowWithEnabledMailingTest {
     @DisplayName("Retrieve user information without token (GET /user) should return (401 UNAUTHORIZED)")
     void testGetUserInfoWithoutToken() {
         given()
-                .get("/user")
+                .get("/frontend/user")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }

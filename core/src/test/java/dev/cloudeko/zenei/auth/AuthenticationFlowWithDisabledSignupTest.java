@@ -24,12 +24,11 @@ public class AuthenticationFlowWithDisabledSignupTest {
     @DisplayName("Create user via email and password (POST /user) should return (403 FORBIDDEN)")
     void testCreateUser() {
         given()
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formParam("username", "test-user2")
                 .formParam("email", "test@test.com")
                 .formParam("password", "test-password")
                 .formParam("strategy", "PASSWORD")
-                .post("/user")
+                .post("/frontend/register")
                 .then()
                 .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }

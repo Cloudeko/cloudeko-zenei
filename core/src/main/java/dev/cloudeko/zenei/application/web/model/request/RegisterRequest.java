@@ -12,7 +12,7 @@ import java.net.URI;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupRequest {
+public class RegisterRequest {
 
     @FormParam("username")
     private String username;

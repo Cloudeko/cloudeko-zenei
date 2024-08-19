@@ -27,7 +27,7 @@ public class SendMagicLinkVerifyEmailImpl implements SendMagicLinkVerifyEmail {
     @Override
     public void handle(EmailAddressInput input) {
         final var content = mailTemplateProvider.defaultCreateConfirmationMailTemplate(
-                "http://localhost:8080/user/verify-email",
+                "http://localhost:8080/frontend/verify-email",
                 input.getEmailAddress().getEmailVerificationToken());
         final var mail = Mail.withHtml(input.getEmailAddress().getEmail(), "Welcome to Zenei", content);
 

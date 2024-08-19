@@ -33,12 +33,11 @@ public class AuthenticationFlowWithDisabledMailingTest {
     @DisplayName("Create user via email and password (POST /user) should return (200 OK)")
     void testCreateUser() {
         given()
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .formParam("username", "test-user2")
                 .formParam("email", "test@test.com")
                 .formParam("password", "test-password")
                 .formParam("strategy", "PASSWORD")
-                .post("/user")
+                .post("/frontend/register")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
@@ -55,17 +54,16 @@ public class AuthenticationFlowWithDisabledMailingTest {
     @DisplayName("Retrieve user information (GET /user) should return (200 OK)")
     void testGetUserInfo() {
         final var token = given()
-                .queryParam("grant_type", "password")
-                .queryParam("username", "test@test.com")
-                .queryParam("password", "test-password")
-                .post("/user/token")
+                .formParam("identifier", "test@test.com")
+                .formParam("password", "test-password")
+                .post("/frontend/login")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract().as(TokenResponse.class);
 
         given()
                 .header("Authorization", "Bearer " + token.getAccessToken())
-                .get("/user")
+                .get("/frontend/user")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .body(
