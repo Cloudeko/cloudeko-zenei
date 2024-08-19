@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.domain.mapping;
 
-import dev.cloudeko.zenei.domain.model.email.EmailAddress;
+import dev.cloudeko.zenei.extension.core.model.email.EmailAddress;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.EmailAddressEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

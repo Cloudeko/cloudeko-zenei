@@ -2,8 +2,8 @@ package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
 import dev.cloudeko.zenei.domain.exception.InvalidRefreshTokenException;
 import dev.cloudeko.zenei.domain.mapping.RefreshTokenMapper;
-import dev.cloudeko.zenei.domain.model.token.RefreshToken;
-import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
+import dev.cloudeko.zenei.extension.core.model.session.SessionRefreshToken;
+import dev.cloudeko.zenei.extension.core.repository.RefreshTokenRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.RefreshTokenEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.NoResultException;
@@ -19,45 +19,46 @@ public class RefreshTokenRepositoryPanache extends AbstractPanacheRepository<Ref
     private final RefreshTokenMapper refreshTokenMapper;
 
     @Override
-    public RefreshToken createRefreshToken(RefreshToken refreshToken) {
+    public SessionRefreshToken createRefreshToken(SessionRefreshToken sessionRefreshToken) {
         final var refreshTokenEntity = new RefreshTokenEntity();
 
-        refreshTokenEntity.setToken(refreshToken.getToken());
-        refreshTokenEntity.setUser(findUserEntityById(refreshToken.getUser().getId()));
-        refreshTokenEntity.setRevoked(refreshToken.isRevoked());
-        refreshTokenEntity.setExpiresAt(refreshToken.getExpiresAt());
+        refreshTokenEntity.setToken(sessionRefreshToken.getToken());
+        refreshTokenEntity.setUser(findUserEntityById(sessionRefreshToken.getUser().getId()));
+        refreshTokenEntity.setRevoked(sessionRefreshToken.isRevoked());
+        refreshTokenEntity.setExpiresAt(sessionRefreshToken.getExpiresAt());
 
         persist(refreshTokenEntity);
 
-        refreshToken.setCreatedAt(refreshTokenEntity.getCreatedAt());
-        refreshToken.setUpdatedAt(refreshTokenEntity.getUpdatedAt());
+        sessionRefreshToken.setCreatedAt(refreshTokenEntity.getCreatedAt());
+        sessionRefreshToken.setUpdatedAt(refreshTokenEntity.getUpdatedAt());
 
-        return refreshToken;
+        return sessionRefreshToken;
     }
 
     @Override
-    public RefreshToken swapRefreshToken(RefreshToken currentRefreshToken, RefreshToken newRefreshToken) {
-        final var currentRefreshTokenEntity = findRefreshTokenEntityByToken(currentRefreshToken.getToken())
+    public SessionRefreshToken swapRefreshToken(
+            SessionRefreshToken currentSessionRefreshToken, SessionRefreshToken newSessionRefreshToken) {
+        final var currentRefreshTokenEntity = findRefreshTokenEntityByToken(currentSessionRefreshToken.getToken())
                 .orElseThrow(InvalidRefreshTokenException::new);
         final var newRefreshTokenEntity = new RefreshTokenEntity();
 
-        newRefreshTokenEntity.setToken(newRefreshToken.getToken());
-        newRefreshTokenEntity.setUser(findUserEntityById(newRefreshToken.getUser().getId()));
-        newRefreshTokenEntity.setRevoked(newRefreshToken.isRevoked());
-        newRefreshTokenEntity.setExpiresAt(newRefreshToken.getExpiresAt());
+        newRefreshTokenEntity.setToken(newSessionRefreshToken.getToken());
+        newRefreshTokenEntity.setUser(findUserEntityById(newSessionRefreshToken.getUser().getId()));
+        newRefreshTokenEntity.setRevoked(newSessionRefreshToken.isRevoked());
+        newRefreshTokenEntity.setExpiresAt(newSessionRefreshToken.getExpiresAt());
 
         currentRefreshTokenEntity.setRevoked(true);
 
         persist(newRefreshTokenEntity, currentRefreshTokenEntity);
 
-        newRefreshToken.setCreatedAt(newRefreshTokenEntity.getCreatedAt());
-        newRefreshToken.setUpdatedAt(newRefreshTokenEntity.getUpdatedAt());
+        newSessionRefreshToken.setCreatedAt(newRefreshTokenEntity.getCreatedAt());
+        newSessionRefreshToken.setUpdatedAt(newRefreshTokenEntity.getUpdatedAt());
 
-        return newRefreshToken;
+        return newSessionRefreshToken;
     }
 
     @Override
-    public Optional<RefreshToken> findRefreshTokenByToken(String token) {
+    public Optional<SessionRefreshToken> findRefreshTokenByToken(String token) {
         final var refreshTokenResult = findRefreshTokenEntityByToken(token);
         return refreshTokenResult.map(refreshTokenMapper::toDomain);
     }

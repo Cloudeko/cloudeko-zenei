@@ -2,7 +2,7 @@ package dev.cloudeko.zenei.application.web.model.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dev.cloudeko.zenei.domain.model.user.User;
+import dev.cloudeko.zenei.extension.core.model.user.User;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Data;
 import lombok.NoArgsConstructor;

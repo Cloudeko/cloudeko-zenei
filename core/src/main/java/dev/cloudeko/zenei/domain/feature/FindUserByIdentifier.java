@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.domain.feature;
 
-import dev.cloudeko.zenei.domain.model.user.User;
+import dev.cloudeko.zenei.extension.core.model.user.User;
 
 /**
  * The {@code FindUserByIdentifier} interface represents a contract for finding a User object based on a provided identifier. It

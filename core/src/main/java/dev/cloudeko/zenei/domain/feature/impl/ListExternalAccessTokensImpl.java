@@ -2,8 +2,8 @@ package dev.cloudeko.zenei.domain.feature.impl;
 
 import dev.cloudeko.zenei.domain.feature.ListExternalAccessTokens;
 import dev.cloudeko.zenei.domain.mapping.ExternalAccessTokenMapper;
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessToken;
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessTokenRepository;
+import dev.cloudeko.zenei.extension.core.model.account.ExternalAccessToken;
+import dev.cloudeko.zenei.extension.core.repository.ExternalAccessTokenRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 

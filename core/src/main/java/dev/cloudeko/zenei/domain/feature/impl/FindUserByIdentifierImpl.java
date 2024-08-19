@@ -2,8 +2,8 @@ package dev.cloudeko.zenei.domain.feature.impl;
 
 import dev.cloudeko.zenei.domain.exception.UserNotFoundException;
 import dev.cloudeko.zenei.domain.feature.FindUserByIdentifier;
-import dev.cloudeko.zenei.domain.model.user.User;
-import dev.cloudeko.zenei.domain.model.user.UserRepository;
+import dev.cloudeko.zenei.extension.core.model.user.User;
+import dev.cloudeko.zenei.extension.core.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 

@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.domain.provider;
 
-import dev.cloudeko.zenei.domain.model.user.User;
+import dev.cloudeko.zenei.extension.core.model.user.User;
 
 public interface TokenProvider {
 

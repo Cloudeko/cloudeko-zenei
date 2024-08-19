@@ -16,6 +16,10 @@
         <!-- Zenei Dependencies -->
         <dependency>
             <groupId>dev.cloudeko</groupId>
+            <artifactId>core-extension</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.cloudeko</groupId>
             <artifactId>external-authentication</artifactId>
         </dependency>
 

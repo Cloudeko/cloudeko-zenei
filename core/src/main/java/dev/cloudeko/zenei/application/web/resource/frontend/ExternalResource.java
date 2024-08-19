@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.application.web.resource.frontend;
 
-import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
+import dev.cloudeko.zenei.application.web.model.response.SessionTokenResponse;
 import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;
 import dev.cloudeko.zenei.extension.external.ExternalAuthProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthResolver;
@@ -58,7 +58,7 @@ public class ExternalResource {
 
         final var token = loginUserWithAuthorizationCode.handle(provider, code);
 
-        return Response.ok(new TokenResponse(token)).build();
+        return Response.ok(new SessionTokenResponse(token)).build();
     }
 
     private Optional<ExternalAuthProvider> getProviderConfig(String provider) {

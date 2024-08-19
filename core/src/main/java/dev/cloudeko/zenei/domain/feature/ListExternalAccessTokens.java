@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.domain.feature;
 
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessToken;
+import dev.cloudeko.zenei.extension.core.model.account.ExternalAccessToken;
 
 import java.util.List;
 

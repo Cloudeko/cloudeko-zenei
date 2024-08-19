@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.infrastructure.provider;
 
-import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.domain.provider.RefreshTokenProvider;
+import dev.cloudeko.zenei.extension.core.model.user.User;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 

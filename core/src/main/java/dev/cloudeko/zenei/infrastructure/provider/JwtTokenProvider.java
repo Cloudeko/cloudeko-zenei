@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.infrastructure.provider;
 
-import dev.cloudeko.zenei.domain.model.user.User;
 import dev.cloudeko.zenei.domain.provider.TokenProvider;
+import dev.cloudeko.zenei.extension.core.model.user.User;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;

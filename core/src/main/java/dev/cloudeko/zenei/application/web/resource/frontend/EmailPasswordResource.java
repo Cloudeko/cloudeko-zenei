@@ -3,11 +3,10 @@ package dev.cloudeko.zenei.application.web.resource.frontend;
 import dev.cloudeko.zenei.application.web.model.request.LoginRequest;
 import dev.cloudeko.zenei.application.web.model.request.RegisterRequest;
 import dev.cloudeko.zenei.application.web.model.response.PrivateUserResponse;
-import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
+import dev.cloudeko.zenei.application.web.model.response.SessionTokenResponse;
 import dev.cloudeko.zenei.domain.feature.*;
-import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
-import dev.cloudeko.zenei.domain.model.email.VerifyMagicLinkInput;
-import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
+import dev.cloudeko.zenei.extension.core.model.email.EmailAddressInput;
+import dev.cloudeko.zenei.extension.core.model.email.VerifyMagicLinkInput;
 import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -65,8 +64,8 @@ public class EmailPasswordResource {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@BeanParam @Valid LoginRequest request) {
-        final var token = loginUserWithPassword.handle(new LoginPasswordInput(request.getIdentifier(), request.getPassword()));
-        return Response.ok(new TokenResponse(token)).build();
+        final var token = loginUserWithPassword.handle(request.getIdentifier(), request.getPassword());
+        return Response.ok(new SessionTokenResponse(token)).build();
     }
 
     @POST

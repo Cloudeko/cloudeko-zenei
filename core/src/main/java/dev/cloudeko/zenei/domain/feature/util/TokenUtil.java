@@ -1,24 +1,24 @@
 package dev.cloudeko.zenei.domain.feature.util;
 
-import dev.cloudeko.zenei.domain.model.Token;
-import dev.cloudeko.zenei.domain.model.token.RefreshToken;
-import dev.cloudeko.zenei.domain.model.user.User;
+import dev.cloudeko.zenei.extension.core.model.session.SessionRefreshToken;
+import dev.cloudeko.zenei.extension.core.model.session.SessionToken;
+import dev.cloudeko.zenei.extension.core.model.user.User;
 
 import java.time.LocalDateTime;
 
 public class TokenUtil {
 
-    public static Token createToken(User user, String accessToken, RefreshToken refreshToken) {
-        return Token.builder()
+    public static SessionToken createToken(User user, String accessToken, SessionRefreshToken sessionRefreshToken) {
+        return SessionToken.builder()
                 .accessToken(accessToken)
                 .tokenType("Bearer")
                 .expiresIn(3600)
-                .refreshToken(refreshToken.getToken())
+                .refreshToken(sessionRefreshToken.getToken())
                 .build();
     }
 
-    public static RefreshToken createRefreshToken(User user, String refreshToken) {
-        final var token = new RefreshToken();
+    public static SessionRefreshToken createRefreshToken(User user, String refreshToken) {
+        final var token = new SessionRefreshToken();
         token.setUser(user);
         token.setToken(refreshToken);
         token.setRevoked(false);

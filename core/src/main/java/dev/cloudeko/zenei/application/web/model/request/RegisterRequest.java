@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.application.web.model.request;
 
-import dev.cloudeko.zenei.domain.model.auth.Strategy;
-import dev.cloudeko.zenei.domain.model.user.CreateUserInput;
+import dev.cloudeko.zenei.extension.core.model.session.Strategy;
+import dev.cloudeko.zenei.extension.core.model.user.CreateUserInput;
 import jakarta.ws.rs.FormParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;

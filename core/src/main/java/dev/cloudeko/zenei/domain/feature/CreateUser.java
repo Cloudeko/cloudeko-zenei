@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.domain.feature;
 
-import dev.cloudeko.zenei.domain.model.user.CreateUserInput;
-import dev.cloudeko.zenei.domain.model.user.User;
+import dev.cloudeko.zenei.extension.core.model.user.CreateUserInput;
+import dev.cloudeko.zenei.extension.core.model.user.User;
 
 public interface CreateUser {
 

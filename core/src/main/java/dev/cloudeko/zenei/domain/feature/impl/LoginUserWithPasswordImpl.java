@@ -4,14 +4,13 @@ import dev.cloudeko.zenei.domain.exception.InvalidPasswordException;
 import dev.cloudeko.zenei.domain.exception.UserNotFoundException;
 import dev.cloudeko.zenei.domain.feature.LoginUserWithPassword;
 import dev.cloudeko.zenei.domain.feature.util.TokenUtil;
-import dev.cloudeko.zenei.domain.model.Token;
-import dev.cloudeko.zenei.domain.model.token.LoginPasswordInput;
-import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
-import dev.cloudeko.zenei.domain.model.user.UserPasswordRepository;
-import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.HashProvider;
 import dev.cloudeko.zenei.domain.provider.RefreshTokenProvider;
 import dev.cloudeko.zenei.domain.provider.TokenProvider;
+import dev.cloudeko.zenei.extension.core.model.session.SessionToken;
+import dev.cloudeko.zenei.extension.core.repository.RefreshTokenRepository;
+import dev.cloudeko.zenei.extension.core.repository.UserPasswordRepository;
+import dev.cloudeko.zenei.extension.core.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 
@@ -28,14 +27,14 @@ public class LoginUserWithPasswordImpl implements LoginUserWithPassword {
     private final HashProvider hashProvider;
 
     @Override
-    public Token handle(LoginPasswordInput loginPasswordInput) {
-        final var userPassword = userPasswordRepository.getUserPasswordByEmail(loginPasswordInput.getEmail());
+    public SessionToken handle(String identifier, String password) {
+        final var userPassword = userPasswordRepository.getUserPasswordByEmail(identifier);
 
         if (userPassword.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        if (hashProvider.checkPassword(loginPasswordInput.getPassword(), userPassword.get().getPasswordHash())) {
+        if (hashProvider.checkPassword(password, userPassword.get().getPasswordHash())) {
             final var user = userPassword.get().getUser();
 
             final var refreshTokenData = refreshTokenProvider.generateRefreshToken(user);

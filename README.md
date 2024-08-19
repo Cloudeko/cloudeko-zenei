@@ -16,7 +16,7 @@ It's built with [Quarkus](https://quarkus.io) and provides authentication via OA
 - [ ] Admin user management
 - [X] OAuth2 support (Github, Google, Facebook, etc.)
 - [ ] Organizations management
-- [ ] API/Access token generation
+- [ ] API/Access sessionToken generation
 
 ## Contributing
 

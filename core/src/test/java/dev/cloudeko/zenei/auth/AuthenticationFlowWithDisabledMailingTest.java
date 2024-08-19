@@ -1,13 +1,12 @@
 package dev.cloudeko.zenei.auth;
 
-import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
+import dev.cloudeko.zenei.application.web.model.response.SessionTokenResponse;
 import dev.cloudeko.zenei.profile.MailingDisabledProfile;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.restassured.RestAssured;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.*;
 
@@ -59,7 +58,7 @@ public class AuthenticationFlowWithDisabledMailingTest {
                 .post("/frontend/login")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .extract().as(TokenResponse.class);
+                .extract().as(SessionTokenResponse.class);
 
         given()
                 .header("Authorization", "Bearer " + token.getAccessToken())

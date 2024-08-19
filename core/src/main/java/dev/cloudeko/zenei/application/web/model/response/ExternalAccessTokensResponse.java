@@ -9,7 +9,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @RegisterForReflection
-@Schema(name = "External Access Token List", description = "Represents a list of external access tokens")
+@Schema(name = "External Access SessionToken List", description = "Represents a list of external access tokens")
 public class ExternalAccessTokensResponse extends ArrayList<ExternalAccessTokenResponse> {
 
     public ExternalAccessTokensResponse(List<ExternalAccessTokenResponse> externalAccessTokens) {

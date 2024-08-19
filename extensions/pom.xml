@@ -16,6 +16,7 @@
 
     <modules>
         <module>external-authentication</module>
+        <module>core</module>
     </modules>
 
     <build>

@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.application.web.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessToken;
+import dev.cloudeko.zenei.extension.core.model.account.ExternalAccessToken;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Data
 @NoArgsConstructor
 @RegisterForReflection
-@Schema(name = "External Access Token", description = "Represents an access token from an external provider")
+@Schema(name = "External Access SessionToken", description = "Represents an access token from an external provider")
 public class ExternalAccessTokenResponse {
 
     @JsonProperty("id_token")
@@ -26,7 +26,7 @@ public class ExternalAccessTokenResponse {
     private String accessToken;
 
     @JsonProperty("token_type")
-    @Schema(description = "Token type")
+    @Schema(description = "SessionToken type")
     private String tokenType;
 
     @JsonProperty("scope")

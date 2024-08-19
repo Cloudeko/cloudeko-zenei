@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.domain.mapping;
 
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessToken;
+import dev.cloudeko.zenei.extension.core.model.account.ExternalAccessToken;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.ExternalAccessTokenEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

@@ -1,8 +1,8 @@
 package dev.cloudeko.zenei.domain.feature.impl;
 
 import dev.cloudeko.zenei.domain.feature.VerifyMagicLink;
-import dev.cloudeko.zenei.domain.model.email.EmailAddressRepository;
-import dev.cloudeko.zenei.domain.model.email.VerifyMagicLinkInput;
+import dev.cloudeko.zenei.extension.core.model.email.VerifyMagicLinkInput;
+import dev.cloudeko.zenei.extension.core.repository.EmailAddressRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.jbosslog.JBossLog;

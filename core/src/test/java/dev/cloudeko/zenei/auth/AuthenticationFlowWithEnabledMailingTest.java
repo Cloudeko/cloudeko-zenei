@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.auth;
 
-import dev.cloudeko.zenei.application.web.model.response.TokenResponse;
+import dev.cloudeko.zenei.application.web.model.response.SessionTokenResponse;
 import dev.cloudeko.zenei.profile.MailingEnabledProfile;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -141,7 +141,7 @@ public class AuthenticationFlowWithEnabledMailingTest {
                         "access_token", notNullValue(),
                         "refresh_token", notNullValue()
                 )
-                .extract().as(TokenResponse.class);
+                .extract().as(SessionTokenResponse.class);
 
         given()
                 .queryParam("refresh_token", token.getRefreshToken())
@@ -175,7 +175,7 @@ public class AuthenticationFlowWithEnabledMailingTest {
                 .post("/frontend/login")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .extract().as(TokenResponse.class);
+                .extract().as(SessionTokenResponse.class);
 
         given()
                 .header("Authorization", "Bearer " + token.getAccessToken())

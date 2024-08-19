@@ -1,12 +1,12 @@
 package dev.cloudeko.zenei.domain.feature.impl;
 
 import dev.cloudeko.zenei.domain.feature.CreateDefaultUser;
-import dev.cloudeko.zenei.domain.model.email.EmailAddress;
-import dev.cloudeko.zenei.domain.model.user.User;
-import dev.cloudeko.zenei.domain.model.user.UserPassword;
-import dev.cloudeko.zenei.domain.model.user.UserPasswordRepository;
-import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.HashProvider;
+import dev.cloudeko.zenei.extension.core.model.email.EmailAddress;
+import dev.cloudeko.zenei.extension.core.model.user.User;
+import dev.cloudeko.zenei.extension.core.model.user.UserPassword;
+import dev.cloudeko.zenei.extension.core.repository.UserPasswordRepository;
+import dev.cloudeko.zenei.extension.core.repository.UserRepository;
 import dev.cloudeko.zenei.infrastructure.config.DefaultUserConfig;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

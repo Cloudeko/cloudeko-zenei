@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.domain.feature;
 
-import dev.cloudeko.zenei.domain.model.Token;
+import dev.cloudeko.zenei.extension.core.model.session.SessionToken;
 
 public interface LoginUserWithAuthorizationCode {
-    Token handle(String provider, String code);
+    SessionToken handle(String provider, String code);
 }

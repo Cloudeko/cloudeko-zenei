@@ -6,17 +6,17 @@ import dev.cloudeko.zenei.domain.exception.InvalidExternalAuthProvider;
 import dev.cloudeko.zenei.domain.exception.UsernameAlreadyExistsException;
 import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;
 import dev.cloudeko.zenei.domain.feature.util.TokenUtil;
-import dev.cloudeko.zenei.domain.model.Token;
-import dev.cloudeko.zenei.domain.model.account.Account;
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessToken;
-import dev.cloudeko.zenei.domain.model.account.ExternalAccountRepository;
-import dev.cloudeko.zenei.domain.model.email.EmailAddress;
-import dev.cloudeko.zenei.domain.model.token.RefreshTokenRepository;
-import dev.cloudeko.zenei.domain.model.user.User;
-import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.HashProvider;
 import dev.cloudeko.zenei.domain.provider.RefreshTokenProvider;
 import dev.cloudeko.zenei.domain.provider.TokenProvider;
+import dev.cloudeko.zenei.extension.core.model.account.ExternalAccessToken;
+import dev.cloudeko.zenei.extension.core.model.account.ExternalAccount;
+import dev.cloudeko.zenei.extension.core.model.email.EmailAddress;
+import dev.cloudeko.zenei.extension.core.model.session.SessionToken;
+import dev.cloudeko.zenei.extension.core.model.user.User;
+import dev.cloudeko.zenei.extension.core.repository.ExternalAccountRepository;
+import dev.cloudeko.zenei.extension.core.repository.RefreshTokenRepository;
+import dev.cloudeko.zenei.extension.core.repository.UserRepository;
 import dev.cloudeko.zenei.extension.external.ExternalAuthProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthResolver;
 import dev.cloudeko.zenei.extension.external.ExternalUserProfile;
@@ -49,7 +49,7 @@ public class LoginUserWithAuthorizationCodeImpl implements LoginUserWithAuthoriz
     private final HashProvider hashProvider;
 
     @Override
-    public Token handle(String provider, String code) {
+    public SessionToken handle(String provider, String code) {
         final var externalProvider = getExternalAuthProvider(provider);
 
         final var client = QuarkusRestClientBuilder.newBuilder()
@@ -106,7 +106,7 @@ public class LoginUserWithAuthorizationCodeImpl implements LoginUserWithAuthoriz
                 .scope(accessToken.getScope())
                 .build();
 
-        final var account = Account.builder()
+        final var account = ExternalAccount.builder()
                 .provider(provider)
                 .providerId(externalUserProfile.getId())
                 .accessTokens(new ArrayList<>(List.of(externalAccessToken)))

@@ -1,8 +1,8 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
 import dev.cloudeko.zenei.domain.mapping.ExternalAccessTokenMapper;
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessToken;
-import dev.cloudeko.zenei.domain.model.account.ExternalAccessTokenRepository;
+import dev.cloudeko.zenei.extension.core.model.account.ExternalAccessToken;
+import dev.cloudeko.zenei.extension.core.repository.ExternalAccessTokenRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.ExternalAccessTokenEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.panache;
 
 import dev.cloudeko.zenei.domain.mapping.UserMapper;
-import dev.cloudeko.zenei.domain.model.user.User;
-import dev.cloudeko.zenei.domain.model.user.UserRepository;
+import dev.cloudeko.zenei.extension.core.model.user.User;
+import dev.cloudeko.zenei.extension.core.repository.UserRepository;
 import dev.cloudeko.zenei.infrastructure.repository.hibernate.entity.UserEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,12 +22,12 @@ public class UserRepositoryPanache extends AbstractPanacheRepository<UserEntity>
     public void createUser(User user) {
         final var userEntity = userMapper.toEntity(user);
 
-        userEntity.getEmailAddresses().forEach(emailAddressEntity -> emailAddressEntity.setUser(userEntity));
+        /*userEntity.getEmailAddresses().forEach(emailAddressEntity -> emailAddressEntity.setUser(userEntity));
         userEntity.getAccounts().forEach(accountEntity -> accountEntity.setUser(userEntity));
 
         userEntity.getAccounts().forEach(accountEntity -> accountEntity.getAccessTokens()
                 .forEach(accessTokenEntity -> accessTokenEntity.setAccount(accountEntity)));
-
+*/
         persistAndFlush(userEntity);
 
         userMapper.updateDomainFromEntity(userEntity, user);

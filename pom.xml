@@ -58,6 +58,12 @@
 
             <dependency>
                 <groupId>dev.cloudeko</groupId>
+                <artifactId>core-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
                 <artifactId>external-authentication-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>

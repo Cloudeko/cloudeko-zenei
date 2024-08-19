@@ -1,6 +1,6 @@
 package dev.cloudeko.zenei.infrastructure.repository.hibernate.entity;
 
-import dev.cloudeko.zenei.domain.model.auth.Strategy;
+import dev.cloudeko.zenei.extension.core.model.session.Strategy;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

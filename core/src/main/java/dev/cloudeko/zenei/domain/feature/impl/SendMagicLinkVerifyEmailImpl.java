@@ -1,11 +1,11 @@
 package dev.cloudeko.zenei.domain.feature.impl;
 
 import dev.cloudeko.zenei.domain.feature.SendMagicLinkVerifyEmail;
-import dev.cloudeko.zenei.domain.model.email.EmailAddressInput;
-import dev.cloudeko.zenei.domain.model.email.EmailAddressRepository;
-import dev.cloudeko.zenei.domain.model.user.UserRepository;
 import dev.cloudeko.zenei.domain.provider.MailTemplateProvider;
 import dev.cloudeko.zenei.domain.provider.StringTokenProvider;
+import dev.cloudeko.zenei.extension.core.model.email.EmailAddressInput;
+import dev.cloudeko.zenei.extension.core.repository.EmailAddressRepository;
+import dev.cloudeko.zenei.extension.core.repository.UserRepository;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
 import jakarta.enterprise.context.ApplicationScoped;
