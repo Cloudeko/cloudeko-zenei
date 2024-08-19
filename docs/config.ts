@@ -1,7 +1,7 @@
 import type { SocialObjects } from "@/lib/types";
 
 export const SITE = {
-  website: "https://hyperoot.dev", // replace this with your deployed domain
+  website: "https://cloudeko.github.io/cloudeko-zenei/",
   author: "HYP3R00T and Zenei contributors",
   desc: "Documentation for Cloudeko Zenei authentication and authorization service",
   title: "Cloudeko Zenei Docs",
