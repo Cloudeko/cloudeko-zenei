@@ -21,7 +21,7 @@ import java.net.URI;
 @Path("/frontend")
 @AllArgsConstructor
 @Tag(name = "Email Password Service", description = "API for user authentication with email and password")
-public class EmailPasswordResource {
+public class IdentifierPasswordResource {
 
     private final ApplicationConfig applicationConfig;
 
@@ -71,7 +71,6 @@ public class EmailPasswordResource {
     @POST
     @Transactional
     @Path("/verify-email")
-    @Consumes(MediaType.MEDIA_TYPE_WILDCARD)
     public Response verifyEmail(@QueryParam("token") String token, @QueryParam("redirect_to") URI redirectTo) {
         verifyMagicLink.handle(new VerifyMagicLinkInput(token));
         if (redirectTo != null) {

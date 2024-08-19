@@ -13,7 +13,7 @@ public interface MailTemplateProvider {
                                 <p>
                                     You have successfully created an externalAccount on Zenei. To activate your externalAccount, please click the link below.
                                 </p>
-                                <a href="%s?sessionToken=%s">Verify Email</a>
+                                <a href="%s?token=%s">Verify Email</a>
                             </body>
                         </html>
                         """,
