@@ -1,5 +1,6 @@
 package dev.cloudeko.zenei.extension.rest.deployment;
 
+import dev.cloudeko.zenei.extension.rest.endpoint.client.UserInfoHandler;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.vertx.http.deployment.NonApplicationRootPathBuildItem;
@@ -17,8 +18,8 @@ public class ExternalAuthBuildSteps {
     @BuildStep
     public RouteBuildItem route(NonApplicationRootPathBuildItem nonApplicationRootPathBuildItem) {
         return nonApplicationRootPathBuildItem.routeBuilder()
-                .route("custom-endpoint")
-                .handler(new MyCustomHandler())
+                .route("user")
+                .handler(new UserInfoHandler())
                 .displayOnNotFoundPage()
                 .build();
     }
