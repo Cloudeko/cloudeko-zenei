@@ -52,6 +52,17 @@
             <!-- Import Zenei Dependencies -->
             <dependency>
                 <groupId>dev.cloudeko</groupId>
+                <artifactId>external-authentication-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
+                <artifactId>external-authentication-extension-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
                 <artifactId>core-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -63,23 +74,23 @@
 
             <dependency>
                 <groupId>dev.cloudeko</groupId>
+                <artifactId>rest-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
+                <artifactId>rest-extension-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
                 <artifactId>jdbc-panache-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>dev.cloudeko</groupId>
                 <artifactId>jdbc-panache-extension-deployment</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>dev.cloudeko</groupId>
-                <artifactId>external-authentication-extension</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.cloudeko</groupId>
-                <artifactId>external-authentication-extension-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

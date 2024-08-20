@@ -17,6 +17,7 @@
     <modules>
         <module>external-authentication</module>
         <module>core</module>
+        <module>rest</module>
         <module>jdbc-panache</module>
     </modules>
 
