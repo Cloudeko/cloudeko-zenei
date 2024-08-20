@@ -15,9 +15,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>external-authentication</module>
         <module>core</module>
         <module>jdbc-panache</module>
-        <module>external-authentication</module>
     </modules>
 
     <build>

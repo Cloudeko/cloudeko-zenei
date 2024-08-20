@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.application.web.resource.frontend;
 
 import dev.cloudeko.zenei.application.web.model.response.SessionTokenResponse;
-import dev.cloudeko.zenei.domain.feature.LoginUserWithAuthorizationCode;
+import dev.cloudeko.zenei.extension.core.feature.LoginUserWithAuthorizationCode;
 import dev.cloudeko.zenei.extension.external.ExternalAuthProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthResolver;
 import dev.cloudeko.zenei.extension.external.providers.AvailableProvider;

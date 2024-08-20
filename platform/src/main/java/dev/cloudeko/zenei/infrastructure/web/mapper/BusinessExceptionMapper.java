@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.infrastructure.web.mapper;
 
 import dev.cloudeko.zenei.application.web.model.response.ErrorResponse;
-import dev.cloudeko.zenei.domain.exception.*;
+import dev.cloudeko.zenei.extension.core.exception.*;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;

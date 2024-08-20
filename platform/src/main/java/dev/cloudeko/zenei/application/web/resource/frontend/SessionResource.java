@@ -1,8 +1,8 @@
 package dev.cloudeko.zenei.application.web.resource.frontend;
 
 import dev.cloudeko.zenei.application.web.model.response.SessionTokenResponse;
-import dev.cloudeko.zenei.domain.feature.RefreshAccessToken;
-import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
+import dev.cloudeko.zenei.extension.core.config.ApplicationConfig;
+import dev.cloudeko.zenei.extension.core.feature.RefreshAccessToken;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

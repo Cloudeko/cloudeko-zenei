@@ -1,6 +1,7 @@
 package dev.cloudeko.zenei.infrastructure.config;
 
-import dev.cloudeko.zenei.domain.feature.CreateDefaultUser;
+import dev.cloudeko.zenei.extension.core.config.ApplicationConfig;
+import dev.cloudeko.zenei.extension.core.feature.CreateDefaultUser;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;

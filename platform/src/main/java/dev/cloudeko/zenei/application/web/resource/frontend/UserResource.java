@@ -1,8 +1,8 @@
 package dev.cloudeko.zenei.application.web.resource.frontend;
 
 import dev.cloudeko.zenei.application.web.model.response.PrivateUserResponse;
-import dev.cloudeko.zenei.domain.feature.FindUserByIdentifier;
-import dev.cloudeko.zenei.infrastructure.config.ApplicationConfig;
+import dev.cloudeko.zenei.extension.core.config.ApplicationConfig;
+import dev.cloudeko.zenei.extension.core.feature.FindUserByIdentifier;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.ws.rs.GET;

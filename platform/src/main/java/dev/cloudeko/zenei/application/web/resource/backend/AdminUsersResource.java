@@ -4,8 +4,8 @@ import dev.cloudeko.zenei.application.web.model.response.ExternalAccessTokenResp
 import dev.cloudeko.zenei.application.web.model.response.ExternalAccessTokensResponse;
 import dev.cloudeko.zenei.application.web.model.response.PrivateUserResponse;
 import dev.cloudeko.zenei.application.web.model.response.PrivateUsersResponse;
-import dev.cloudeko.zenei.domain.feature.ListExternalAccessTokens;
-import dev.cloudeko.zenei.domain.feature.ListUsers;
+import dev.cloudeko.zenei.extension.core.feature.ListExternalAccessTokens;
+import dev.cloudeko.zenei.extension.core.feature.ListUsers;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
