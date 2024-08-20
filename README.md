@@ -1,6 +1,6 @@
 # Cloudeko Zenei
 
-Zenei is a open-source user management system that allows you to use authentication, user management and organizations
+Zenei (as Vanguard from japanese) is a open-source user management system that allows you to use authentication, user management and organizations
 management in your applications.
 
 It's built with [Quarkus](https://quarkus.io) and provides authentication via OAuth2.

@@ -2,6 +2,7 @@ package dev.cloudeko.zenei.extension.external.providers;
 
 import dev.cloudeko.zenei.extension.external.ExternalAuthProvider;
 import dev.cloudeko.zenei.extension.external.ExternalAuthResolver;
+import dev.cloudeko.zenei.extension.external.config.ExternalAuthProviderConfig;
 import dev.cloudeko.zenei.extension.external.config.ExternalAuthProvidersConfig;
 import lombok.AllArgsConstructor;
 
@@ -14,7 +15,7 @@ public class ConfigurationExternalAuthResolver implements ExternalAuthResolver {
 
     @Override
     public Optional<ExternalAuthProvider> getAuthProvider(String providerName) {
-        final var providerConfig = config.providers().get(providerName.toLowerCase());
+        ExternalAuthProviderConfig providerConfig = config.providers().get(providerName.toLowerCase());
 
         if (providerConfig == null || !providerConfig.enabled()) {
             return Optional.empty();

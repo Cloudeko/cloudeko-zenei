@@ -5,7 +5,9 @@ import dev.cloudeko.zenei.extension.external.ExternalUserProfile;
 import dev.cloudeko.zenei.extension.external.config.ExternalAuthProviderConfig;
 import dev.cloudeko.zenei.extension.external.endpoint.ProviderEndpoints;
 import dev.cloudeko.zenei.extension.external.web.client.ExternalProviderAccessToken;
+import dev.cloudeko.zenei.extension.external.web.external.BaseExternalClient;
 import dev.cloudeko.zenei.extension.external.web.external.discord.DiscordClient;
+import dev.cloudeko.zenei.extension.external.web.external.discord.DiscordUser;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 
 import java.net.URI;
@@ -15,19 +17,19 @@ public record DiscordExternalAuthProvider(ExternalAuthProviderConfig config) imp
 
     @Override
     public ExternalUserProfile getExternalUserProfile(ExternalProviderAccessToken accessToken) {
-        final var client = QuarkusRestClientBuilder.newBuilder()
+        BaseExternalClient<DiscordUser> client = QuarkusRestClientBuilder.newBuilder()
                 .baseUri(URI.create(getBaseEndpoint()))
                 .build(DiscordClient.class);
 
-        final var user = client.getCurrentlyLoggedInUser("Bearer " + accessToken.getAccessToken());
+        DiscordUser user = client.getCurrentlyLoggedInUser("Bearer " + accessToken.getAccessToken());
 
         // Avatar URL handling
         String avatarUrl;
         if (user.getAvatar() == null || user.getAvatar().isEmpty()) {
-            final var discriminator = Integer.parseInt(user.getDiscriminator());
+            int discriminator = Integer.parseInt(user.getDiscriminator());
             avatarUrl = String.format("https://cdn.discordapp.com/embed/avatars/%d.png", discriminator % 5);
         } else {
-            final var extension = user.getAvatar().startsWith("a_") ? "gif" : "png";
+            String extension = user.getAvatar().startsWith("a_") ? "gif" : "png";
             avatarUrl = String.format("https://cdn.discordapp.com/avatars/%s/%s.%s", user.getId(), user.getAvatar(), extension);
         }
 

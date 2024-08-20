@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>dev.cloudeko</groupId>
-        <artifactId>external-authentication-parent</artifactId>
+        <artifactId>external-authentication-extension-parent</artifactId>
         <version>0.0.1</version>
     </parent>
 
     <name>Zenei - Extensions - External Authentication - Deployment</name>
-    <artifactId>external-authentication-deployment</artifactId>
+    <artifactId>external-authentication-extension-deployment</artifactId>
 
     <dependencies>
         <dependency>
@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>dev.cloudeko</groupId>
-            <artifactId>external-authentication</artifactId>
+            <artifactId>external-authentication-extension</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

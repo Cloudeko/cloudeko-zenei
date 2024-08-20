@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>dev.cloudeko</groupId>
-    <artifactId>external-authentication-parent</artifactId>
+    <artifactId>external-authentication-extension-parent</artifactId>
     <version>0.0.1</version>
   </parent>
 
   <name>Zenei - Extensions - External Authentication - Runtime</name>
-  <artifactId>external-authentication</artifactId>
+  <artifactId>external-authentication-extension</artifactId>
 
   <dependencies>
     <dependency>

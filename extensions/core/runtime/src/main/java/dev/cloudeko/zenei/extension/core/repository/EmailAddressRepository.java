@@ -12,5 +12,5 @@ public interface EmailAddressRepository {
 
     Optional<EmailAddress> findByEmailAddress(String emailAddress);
 
-    void confirmEmailAddress(String token);
+    boolean confirmEmailAddress(String token);
 }

@@ -13,7 +13,7 @@
 
     <modules>
         <module>extensions</module>
-        <module>core</module>
+        <module>platform</module>
     </modules>
 
     <!-- Properties section for defining project-wide configuration -->
@@ -52,19 +52,34 @@
             <!-- Import Zenei Dependencies -->
             <dependency>
                 <groupId>dev.cloudeko</groupId>
-                <artifactId>external-authentication</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>dev.cloudeko</groupId>
                 <artifactId>core-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
+                <artifactId>core-extension-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>dev.cloudeko</groupId>
-                <artifactId>external-authentication-deployment</artifactId>
+                <artifactId>jdbc-panache-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
+                <artifactId>jdbc-panache-extension-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
+                <artifactId>external-authentication-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
+                <artifactId>external-authentication-extension-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

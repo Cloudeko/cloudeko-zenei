@@ -10,7 +10,7 @@
     </parent>
 
     <name>Zenei - Extensions - External Authentication - Parent</name>
-    <artifactId>external-authentication-parent</artifactId>
+    <artifactId>external-authentication-extension-parent</artifactId>
     <packaging>pom</packaging>
 
     <modules>

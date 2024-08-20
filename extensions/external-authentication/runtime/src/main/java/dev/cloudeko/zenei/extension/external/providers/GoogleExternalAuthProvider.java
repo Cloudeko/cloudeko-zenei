@@ -5,7 +5,9 @@ import dev.cloudeko.zenei.extension.external.ExternalUserProfile;
 import dev.cloudeko.zenei.extension.external.config.ExternalAuthProviderConfig;
 import dev.cloudeko.zenei.extension.external.endpoint.ProviderEndpoints;
 import dev.cloudeko.zenei.extension.external.web.client.ExternalProviderAccessToken;
+import dev.cloudeko.zenei.extension.external.web.external.BaseExternalClient;
 import dev.cloudeko.zenei.extension.external.web.external.google.GoogleClient;
+import dev.cloudeko.zenei.extension.external.web.external.google.GoogleUser;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 
 import java.net.URI;
@@ -15,11 +17,11 @@ public record GoogleExternalAuthProvider(ExternalAuthProviderConfig config) impl
 
     @Override
     public ExternalUserProfile getExternalUserProfile(ExternalProviderAccessToken accessToken) {
-        final var client = QuarkusRestClientBuilder.newBuilder()
+        BaseExternalClient<GoogleUser> client = QuarkusRestClientBuilder.newBuilder()
                 .baseUri(URI.create(getBaseEndpoint()))
                 .build(GoogleClient.class);
 
-        final var user = client.getCurrentlyLoggedInUser("Bearer " + accessToken.getAccessToken());
+        GoogleUser user = client.getCurrentlyLoggedInUser("Bearer " + accessToken.getAccessToken());
 
         return ExternalUserProfile.builder()
                 .id(user.getId())
