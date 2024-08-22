@@ -1,6 +1,5 @@
 package dev.cloudeko.zenei.user.deployment;
 
-import dev.cloudeko.zenei.user.UserAccountRepositoryBase;
 import dev.cloudeko.zenei.user.runtime.BasicUserAccountInitializer;
 import dev.cloudeko.zenei.user.runtime.BasicUserAccountManager;
 import dev.cloudeko.zenei.user.runtime.BasicUserAccountRecorder;
@@ -32,7 +31,7 @@ public class BasicUserAccountManagerProcessor {
 
     @BuildStep
     @Record(STATIC_INIT)
-    SyntheticBeanBuildItem createDbTokenStateInitializerProps(BasicUserAccountRecorder recorder, Capabilities capabilities) {
+    SyntheticBeanBuildItem createBasicUserInitializerConfig(BasicUserAccountRecorder recorder, Capabilities capabilities) {
         final String reactiveClient = capabilities.getCapabilities().stream()
                 .filter(c -> Arrays.asList(SUPPORTED_REACTIVE_CLIENTS).contains(c))
                 .findFirst()
@@ -92,8 +91,8 @@ public class BasicUserAccountManagerProcessor {
         return SyntheticBeanBuildItem
                 .configure(BasicUserAccountInitializer.UserAccountInitializerProperties.class)
                 .supplier(recorder.createUserAccountInitializerProps(createTableDdl, supportsIfTableNotExists))
-                .unremovable()
                 .scope(Dependent.class)
+                .unremovable()
                 .done();
     }
 
@@ -104,7 +103,7 @@ public class BasicUserAccountManagerProcessor {
 
     @BuildStep
     @Record(STATIC_INIT)
-    SyntheticBeanBuildItem syntheticBeanBuildItem(BasicUserAccountRecorder recorder, Capabilities capabilities) {
+    SyntheticBeanBuildItem createBasicUserAccountRepository(BasicUserAccountRecorder recorder, Capabilities capabilities) {
         final String reactiveClient = capabilities.getCapabilities().stream()
                 .filter(c -> Arrays.asList(SUPPORTED_REACTIVE_CLIENTS).contains(c))
                 .findFirst()
@@ -116,10 +115,9 @@ public class BasicUserAccountManagerProcessor {
 
         return SyntheticBeanBuildItem
                 .configure(BasicUserAccountRepository.class)
-                .addType(UserAccountRepositoryBase.class)
-                .unremovable()
-                .scope(Singleton.class)
                 .supplier(recorder.createBasicUserAccountRepository(config))
+                .scope(Singleton.class)
+                .unremovable()
                 .done();
     }
 
