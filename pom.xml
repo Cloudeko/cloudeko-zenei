@@ -74,6 +74,17 @@
 
             <dependency>
                 <groupId>dev.cloudeko</groupId>
+                <artifactId>zenei-user-account-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
+                <artifactId>zenei-user-account-extension-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dev.cloudeko</groupId>
                 <artifactId>rest-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>

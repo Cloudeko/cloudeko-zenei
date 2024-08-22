@@ -5,38 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>dev.cloudeko</groupId>
-        <artifactId>core-extension-parent</artifactId>
+        <artifactId>zenei-user-account-extension-parent</artifactId>
         <version>0.0.1</version>
     </parent>
 
-    <name>Zenei - Extensions - Core - Runtime</name>
-    <artifactId>core-extension</artifactId>
+    <name>Zenei - Extensions - User Account - Runtime</name>
+    <artifactId>zenei-user-account-extension</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>dev.cloudeko</groupId>
-            <artifactId>external-authentication-extension</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.cloudeko</groupId>
-            <artifactId>zenei-user-account-extension</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc</artifactId>
+            <artifactId>quarkus-core</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-mailer</artifactId>
+            <artifactId>quarkus-vertx</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-jwt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-jwt-build</artifactId>
+            <artifactId>quarkus-vertx-http</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -44,21 +31,15 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-elytron-security-common</artifactId>
+            <artifactId>quarkus-jsonp</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-jackson</artifactId>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${org.projectlombok.version}</version>
-            <scope>provided</scope>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-sql-client</artifactId>
         </dependency>
     </dependencies>
 
@@ -90,11 +71,6 @@
                         <arg>-parameters</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${org.projectlombok.version}</version>
-                        </path>
                         <path>
                             <groupId>io.quarkus</groupId>
                             <artifactId>quarkus-extension-processor</artifactId>

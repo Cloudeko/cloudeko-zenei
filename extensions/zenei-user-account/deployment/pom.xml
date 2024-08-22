@@ -5,38 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>dev.cloudeko</groupId>
-        <artifactId>core-extension-parent</artifactId>
+        <artifactId>zenei-user-account-extension-parent</artifactId>
         <version>0.0.1</version>
     </parent>
 
-    <name>Zenei - Extensions - Core - Deployment</name>
-    <artifactId>core-extension-deployment</artifactId>
+    <name>Zenei - Extensions - Rest - Deployment</name>
+    <artifactId>zenei-user-account-extension-deployment</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>dev.cloudeko</groupId>
-            <artifactId>external-authentication-extension-deployment</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.cloudeko</groupId>
-            <artifactId>zenei-user-account-extension-deployment</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc-deployment</artifactId>
+            <artifactId>quarkus-core-deployment</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-mailer-deployment</artifactId>
+            <artifactId>quarkus-vertx-http-deployment</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-jwt-deployment</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-jwt-build-deployment</artifactId>
+            <artifactId>quarkus-vertx-deployment</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -44,20 +31,18 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-elytron-security-common-deployment</artifactId>
+            <artifactId>quarkus-devservices-deployment</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-jackson-deployment</artifactId>
+            <artifactId>quarkus-jsonp-deployment</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-client-reactive-jackson-deployment</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>dev.cloudeko</groupId>
-            <artifactId>core-extension</artifactId>
+            <artifactId>zenei-user-account-extension</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5-internal</artifactId>
