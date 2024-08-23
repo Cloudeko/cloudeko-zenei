@@ -16,13 +16,10 @@ public class BasicUserAccountRepository implements UserAccountRepositoryBase<Bas
     private static final String FAILED_TO_FIND_USER_BY_IDENTIFIER = "Failed to find user by identifier";
 
     private final Map<String, String> queries;
-    private Pool pool;
+    private final Pool pool;
 
-    public BasicUserAccountRepository(Map<String, String> queries) {
-        this.queries = queries;
-    }
-
-    public void setSqlClientPool(Pool pool) {
+    public BasicUserAccountRepository(QueryProvider queryProvider, Pool pool) {
+        this.queries = queryProvider.queries();
         this.pool = pool;
     }
 
@@ -115,6 +112,9 @@ public class BasicUserAccountRepository implements UserAccountRepositoryBase<Bas
                         .toCompletionStage())
                 .onItem().transformToUni(rows -> Uni.createFrom().item(rows.rowCount() == 1))
                 .onFailure().transform(throwable -> new RuntimeException("Failed to delete user", throwable));
+    }
+
+    public record QueryProvider(Map<String, String> queries) {
     }
 
     private Uni<Row> processNullableRow(RowSet<Row> rows) {

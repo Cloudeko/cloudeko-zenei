@@ -58,7 +58,7 @@ public class CreateUserImpl implements CreateUser {
         checkExistingUsername(user.getUsername());
         checkExistingEmail(user.getPrimaryEmailAddress().getEmail());
 
-        userAccountManager.createUserBlocking(new BasicUserAccount(user.getUsername(), "test"));
+        BasicUserAccount basic = userAccountManager.createUserBlocking(new BasicUserAccount(user.getUsername(), "test"));
 
         userRepository.createUser(user);
 
