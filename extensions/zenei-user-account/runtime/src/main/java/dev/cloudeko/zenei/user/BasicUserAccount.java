@@ -5,12 +5,12 @@ import io.vertx.sqlclient.Row;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public abstract class BasicUserAccount<ID> extends UserAccount<ID> {
+public abstract class BasicUserAccount<ID, EMAIL extends EmailAddress, PHONE extends PhoneNumber> extends UserAccount<ID> {
 
     protected String username;
 
-    private List<EmailAddress> emailAddresses;
-    private List<PhoneNumber> phoneNumbers;
+    private List<EMAIL> emailAddresses;
+    private List<PHONE> phoneNumbers;
 
     public BasicUserAccount() {
 
@@ -32,33 +32,27 @@ public abstract class BasicUserAccount<ID> extends UserAccount<ID> {
         this.username = username;
     }
 
-    public EmailAddress getPrimaryEmailAddress() {
-        return emailAddresses.stream().filter(EmailAddress::primary).findFirst().orElse(null);
+    public EMAIL getPrimaryEmailAddress() {
+        return emailAddresses.stream().filter(EmailAddress::isPrimaryEmail).findFirst().orElse(null);
     }
 
-    public List<EmailAddress> getEmailAddresses() {
+    public List<EMAIL> getEmailAddresses() {
         return emailAddresses;
     }
 
-    public void setEmailAddresses(List<EmailAddress> emailAddresses) {
+    public void setEmailAddresses(List<EMAIL> emailAddresses) {
         this.emailAddresses = emailAddresses;
     }
 
-    public PhoneNumber getPrimaryPhoneNumber() {
-        return phoneNumbers.stream().filter(PhoneNumber::primary).findFirst().orElse(null);
+    public PHONE getPrimaryPhoneNumber() {
+        return phoneNumbers.stream().filter(PhoneNumber::isPrimaryPhoneNumber).findFirst().orElse(null);
     }
 
-    public List<PhoneNumber> getPhoneNumbers() {
+    public List<PHONE> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+    public void setPhoneNumbers(List<PHONE> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
-    }
-
-    public record EmailAddress(String email, boolean verified, boolean primary) {
-    }
-
-    public record PhoneNumber(String number, boolean verified, boolean primary) {
     }
 }
