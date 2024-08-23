@@ -7,13 +7,26 @@ import io.vertx.sqlclient.Pool;
 import jakarta.enterprise.event.Observes;
 import org.jboss.logging.Logger;
 
-public class BasicUserAccountInitializer {
+import java.util.Arrays;
+import java.util.Map;
 
-    private static final Logger log = Logger.getLogger(BasicUserAccountInitializer.class);
+public class DefaultUserAccountInitializer {
+
+    private static final Logger log = Logger.getLogger(DefaultUserAccountInitializer.class);
     private static final String FAILED_TO_CREATE_DB_TABLE = "unknown reason, please report the issue and create table manually";
 
-    void initialize(@Observes StartupEvent event, Vertx vertx, Pool pool, UserAccountInitializerProperties initializerProps) {
-        createDatabaseTable(pool, initializerProps.createTableDdl, initializerProps.supportsIfTableNotExists);
+    void initialize(@Observes StartupEvent event, Vertx vertx, Pool pool, InitializerProperties properties) {
+        log.debug("Initializing user account database tables");
+
+        Map<String, Boolean> tableSchemas = properties.tables();
+        if (tableSchemas == null || tableSchemas.isEmpty()) {
+            log.warn("No table schemas provided, skipping database table creation");
+            return;
+        }
+
+        tableSchemas.forEach((ddl, supportsIfNotExists) -> {
+            createDatabaseTable(pool, ddl, supportsIfNotExists);
+        });
     }
 
     private static void createDatabaseTable(Pool pool, String createTableDdl, boolean supportsIfTableNotExists) {
@@ -34,7 +47,7 @@ public class BasicUserAccountInitializer {
 
         String errMsg = tableCreationResult.await().indefinitely();
         if (errMsg != null) {
-            throw new RuntimeException("OIDC Token State Manager failed to create database table: " + errMsg);
+            throw new RuntimeException("Failed to create database table: " + errMsg);
         }
     }
 
@@ -53,6 +66,7 @@ public class BasicUserAccountInitializer {
                 });
     }
 
-    public record UserAccountInitializerProperties(String createTableDdl, boolean supportsIfTableNotExists) {
+    public record InitializerProperties(Map<String, Boolean> tables) {
+
     }
 }

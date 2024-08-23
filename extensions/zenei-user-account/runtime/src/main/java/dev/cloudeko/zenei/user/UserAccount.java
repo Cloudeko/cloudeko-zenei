@@ -5,27 +5,18 @@ import java.time.LocalDateTime;
 public abstract class UserAccount<ID> {
 
     private ID id;
-    private String username;
-    private String image;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public UserAccount() {
     }
 
-    public UserAccount(String username, String image) {
-        this(null, username, image);
+    public UserAccount(ID id) {
+        this(id, null, null);
     }
 
-    public UserAccount(ID id, String username, String image) {
-        this(id, username, image, null, null);
-    }
-
-    public UserAccount(ID id, String username, String image, LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
+    public UserAccount(ID id, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.username = username;
-        this.image = image;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -36,22 +27,6 @@ public abstract class UserAccount<ID> {
 
     public void setId(ID id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -68,11 +43,5 @@ public abstract class UserAccount<ID> {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public record EmailAddress(String email, boolean verified, boolean primary) {
-    }
-
-    public record PhoneNumber(String number, boolean verified, boolean primary) {
     }
 }

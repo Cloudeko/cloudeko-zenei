@@ -55,9 +55,9 @@ public interface UserAccountManager<ENTITY, ID> {
         return updateUser(entity).await().indefinitely();
     }
 
-    Uni<Boolean> deleteUser(ENTITY entity);
+    Uni<Boolean> deleteUser(ID identifier);
 
-    default boolean deleteUserBlocking(ENTITY entity) {
-        return deleteUser(entity).await().indefinitely();
+    default boolean deleteUserBlocking(ID identifier) {
+        return deleteUser(identifier).await().indefinitely();
     }
 }

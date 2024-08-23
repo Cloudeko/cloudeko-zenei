@@ -9,46 +9,47 @@ import org.jboss.logging.Logger;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-public class BasicUserAccountRepository implements UserAccountRepositoryBase<BasicUserAccount, Long> {
+public class DefaultUserAccountRepository implements UserAccountRepositoryBase<DefaultUserAccount, Long> {
 
-    private static final Logger log = Logger.getLogger(BasicUserAccountRepository.class);
+    private static final Logger log = Logger.getLogger(DefaultUserAccountRepository.class);
     private static final String FAILED_TO_FIND_USER_BY_IDENTIFIER = "Failed to find user by identifier";
 
     private final Map<String, String> queries;
     private final Pool pool;
 
-    public BasicUserAccountRepository(QueryProvider queryProvider, Pool pool) {
+    public DefaultUserAccountRepository(QueryProvider queryProvider, Pool pool) {
         this.queries = queryProvider.queries();
         this.pool = pool;
     }
 
     @Override
-    public Uni<BasicUserAccount> findUserByIdentifier(Long identifier) {
+    public Uni<DefaultUserAccount> findUserByIdentifier(Long identifier) {
         return Uni.createFrom()
                 .completionStage(pool
                         .preparedQuery(queries.get(QueryRegistry.USER_ACCOUNT_FIND_BY_IDENTIFIER))
                         .execute(Tuple.of(identifier))
                         .toCompletionStage())
                 .onItem().transformToUni(this::processNullableRow)
-                .onItem().ifNotNull().transform(BasicUserAccount::new)
+                .onItem().ifNotNull().transform(DefaultUserAccount::new)
                 .onFailure().invoke(throwable -> log.error(FAILED_TO_FIND_USER_BY_IDENTIFIER, throwable));
     }
 
     @Override
-    public Uni<BasicUserAccount> findUserByUsername(String username) {
+    public Uni<DefaultUserAccount> findUserByUsername(String username) {
         return Uni.createFrom()
                 .completionStage(pool
                         .preparedQuery(queries.get(QueryRegistry.USER_ACCOUNT_FIND_BY_USERNAME))
                         .execute(Tuple.of(username))
                         .toCompletionStage())
                 .onItem().transformToUni(this::processNullableRow)
-                .onItem().ifNotNull().transform(BasicUserAccount::new)
+                .onItem().ifNotNull().transform(DefaultUserAccount::new)
                 .onFailure().invoke(throwable -> log.error(FAILED_TO_FIND_USER_BY_IDENTIFIER, throwable));
     }
 
     @Override
-    public Uni<List<BasicUserAccount>> listUsers() {
+    public Uni<List<DefaultUserAccount>> listUsers() {
         return Uni.createFrom()
                 .completionStage(pool
                         .preparedQuery(queries.get(QueryRegistry.USER_ACCOUNT_LIST))
@@ -56,13 +57,13 @@ public class BasicUserAccountRepository implements UserAccountRepositoryBase<Bas
                         .toCompletionStage())
                 .onItem().transformToUni(rows -> Uni.createFrom().item(rows)
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
-                        .onItem().transform(BasicUserAccount::new)
+                        .onItem().transform(DefaultUserAccount::new)
                         .collect().asList())
                 .onFailure().invoke(throwable -> log.error(FAILED_TO_FIND_USER_BY_IDENTIFIER, throwable));
     }
 
     @Override
-    public Uni<List<BasicUserAccount>> listUsers(int page, int pageSize) {
+    public Uni<List<DefaultUserAccount>> listUsers(int page, int pageSize) {
         return Uni.createFrom()
                 .completionStage(pool
                         .preparedQuery(queries.get(QueryRegistry.USER_ACCOUNT_LIST_PAGINATED))
@@ -70,45 +71,58 @@ public class BasicUserAccountRepository implements UserAccountRepositoryBase<Bas
                         .toCompletionStage())
                 .onItem().transformToUni(rows -> Uni.createFrom().item(rows)
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
-                        .onItem().transform(BasicUserAccount::new)
+                        .onItem().transform(DefaultUserAccount::new)
                         .collect().asList())
                 .onFailure().invoke(throwable -> log.error(FAILED_TO_FIND_USER_BY_IDENTIFIER, throwable));
     }
 
     @Override
-    public Uni<BasicUserAccount> createUser(BasicUserAccount basicUserAccount) {
+    public Uni<DefaultUserAccount> createUser(DefaultUserAccount basicUserAccount) {
+        Objects.requireNonNull(basicUserAccount, "User must not be null");
+        Objects.requireNonNull(basicUserAccount.getUsername(), "Username must not be null");
+
+        if (basicUserAccount.getId() != null) {
+            throw new IllegalArgumentException("User ID must be null when creating a new user");
+        }
+
         return Uni.createFrom()
                 .completionStage(pool
                         .withTransaction(client -> client
                                 .preparedQuery(queries.get(QueryRegistry.USER_ACCOUNT_CREATE))
-                                .execute(Tuple.of(basicUserAccount.getUsername(), basicUserAccount.getImage())))
+                                .execute(Tuple.of(basicUserAccount.getUsername())))
                         .toCompletionStage())
                 .onItem().transformToUni(this::processNullableRow)
-                .onItem().ifNotNull().transform(BasicUserAccount::new)
+                .onItem().ifNotNull().transform(DefaultUserAccount::new)
                 .onFailure().transform(throwable -> new RuntimeException("Failed to create user", throwable));
     }
 
     @Override
-    public Uni<BasicUserAccount> updateUser(BasicUserAccount basicUserAccount) {
+    public Uni<DefaultUserAccount> updateUser(DefaultUserAccount basicUserAccount) {
+        Objects.requireNonNull(basicUserAccount, "User must not be null");
+        Objects.requireNonNull(basicUserAccount.getId(), "User ID must not be null");
+        Objects.requireNonNull(basicUserAccount.getUsername(), "Username must not be null");
+
         return Uni.createFrom()
                 .completionStage(pool
                         .withTransaction(client -> client
                                 .preparedQuery(queries.get(QueryRegistry.USER_ACCOUNT_UPDATE))
-                                .execute(Tuple.of(basicUserAccount.getUsername(), basicUserAccount.getImage(),
+                                .execute(Tuple.of(basicUserAccount.getUsername(),
                                         basicUserAccount.getId())))
                         .toCompletionStage())
                 .onItem().transformToUni(this::processNullableRow)
-                .onItem().ifNotNull().transform(BasicUserAccount::new)
+                .onItem().ifNotNull().transform(DefaultUserAccount::new)
                 .onFailure().transform(throwable -> new RuntimeException("Failed to update user", throwable));
     }
 
     @Override
-    public Uni<Boolean> deleteUser(BasicUserAccount basicUserAccount) {
+    public Uni<Boolean> deleteUser(Long identifier) {
+        Objects.requireNonNull(identifier, "User ID must not be null");
+
         return Uni.createFrom()
                 .completionStage(pool
                         .withTransaction(client -> client
                                 .preparedQuery(queries.get(QueryRegistry.USER_ACCOUNT_DELETE))
-                                .execute(Tuple.of(basicUserAccount.getId())))
+                                .execute(Tuple.of(identifier)))
                         .toCompletionStage())
                 .onItem().transformToUni(rows -> Uni.createFrom().item(rows.rowCount() == 1))
                 .onFailure().transform(throwable -> new RuntimeException("Failed to delete user", throwable));

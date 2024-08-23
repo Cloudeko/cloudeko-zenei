@@ -12,9 +12,9 @@ import dev.cloudeko.zenei.extension.core.model.user.User;
 import dev.cloudeko.zenei.extension.core.model.user.UserPassword;
 import dev.cloudeko.zenei.extension.core.repository.UserPasswordRepository;
 import dev.cloudeko.zenei.extension.core.repository.UserRepository;
-import dev.cloudeko.zenei.user.UserAccountManager;
-import dev.cloudeko.zenei.user.runtime.BasicUserAccount;
-import dev.cloudeko.zenei.user.runtime.BasicUserAccountManager;
+import dev.cloudeko.zenei.user.BasicUserAccount;
+import dev.cloudeko.zenei.user.runtime.DefaultUserAccount;
+import dev.cloudeko.zenei.user.runtime.DefaultUserAccountManager;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -36,7 +36,7 @@ public class CreateUserImpl implements CreateUser {
     private final UserRepository userRepository;
     private final UserPasswordRepository userPasswordRepository;
 
-    private final BasicUserAccountManager userAccountManager;
+    private final DefaultUserAccountManager userAccountManager;
 
     @Override
     @Transactional
@@ -58,7 +58,7 @@ public class CreateUserImpl implements CreateUser {
         checkExistingUsername(user.getUsername());
         checkExistingEmail(user.getPrimaryEmailAddress().getEmail());
 
-        BasicUserAccount basic = userAccountManager.createUserBlocking(new BasicUserAccount(user.getUsername(), "test"));
+        DefaultUserAccount basic = userAccountManager.createUserBlocking(new DefaultUserAccount(user.getUsername()));
 
         userRepository.createUser(user);
 

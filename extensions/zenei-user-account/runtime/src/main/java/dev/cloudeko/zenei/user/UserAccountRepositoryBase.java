@@ -18,5 +18,5 @@ public interface UserAccountRepositoryBase<ENTITY, ID> {
 
     Uni<ENTITY> updateUser(ENTITY entity);
 
-    Uni<Boolean> deleteUser(ENTITY entity);
+    Uni<Boolean> deleteUser(ID identifier);
 }
