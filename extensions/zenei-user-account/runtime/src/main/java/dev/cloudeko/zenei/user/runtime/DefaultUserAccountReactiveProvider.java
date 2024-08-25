@@ -1,22 +1,20 @@
 package dev.cloudeko.zenei.user.runtime;
 
-import dev.cloudeko.zenei.user.EmailAddress;
-import dev.cloudeko.zenei.user.UserAccountManager;
+import dev.cloudeko.zenei.user.UserAccountReactiveProvider;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import org.jboss.logging.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DefaultUserAccountManager implements UserAccountManager<DefaultUserAccount, Long> {
+public class DefaultUserAccountReactiveProvider implements UserAccountReactiveProvider<DefaultUserAccount, Long> {
 
-    private static final Logger log = Logger.getLogger(DefaultUserAccountManager.class);
+    private static final Logger log = Logger.getLogger(DefaultUserAccountReactiveProvider.class);
 
     private final DefaultUserAccountRepository userAccountRepository;
     private final DefaultUserAccountEmailAddressRepository emailAddressRepository;
 
-    public DefaultUserAccountManager(DefaultUserAccountRepository userAccountRepository,
+    public DefaultUserAccountReactiveProvider(DefaultUserAccountRepository userAccountRepository,
             DefaultUserAccountEmailAddressRepository emailAddressRepository) {
         this.userAccountRepository = userAccountRepository;
         this.emailAddressRepository = emailAddressRepository;

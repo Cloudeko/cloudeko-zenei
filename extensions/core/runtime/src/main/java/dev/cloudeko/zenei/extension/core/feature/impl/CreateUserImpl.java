@@ -12,9 +12,8 @@ import dev.cloudeko.zenei.extension.core.model.user.User;
 import dev.cloudeko.zenei.extension.core.model.user.UserPassword;
 import dev.cloudeko.zenei.extension.core.repository.UserPasswordRepository;
 import dev.cloudeko.zenei.extension.core.repository.UserRepository;
-import dev.cloudeko.zenei.user.BasicUserAccount;
 import dev.cloudeko.zenei.user.runtime.DefaultUserAccount;
-import dev.cloudeko.zenei.user.runtime.DefaultUserAccountManager;
+import dev.cloudeko.zenei.user.runtime.DefaultUserAccountReactiveProvider;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,7 @@ public class CreateUserImpl implements CreateUser {
     private final UserRepository userRepository;
     private final UserPasswordRepository userPasswordRepository;
 
-    private final DefaultUserAccountManager userAccountManager;
+    private final DefaultUserAccountReactiveProvider userAccountManager;
 
     @Override
     @Transactional

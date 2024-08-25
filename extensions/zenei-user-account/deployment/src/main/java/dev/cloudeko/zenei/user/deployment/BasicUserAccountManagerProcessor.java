@@ -1,7 +1,7 @@
 package dev.cloudeko.zenei.user.deployment;
 
 import dev.cloudeko.zenei.user.runtime.DefaultUserAccountInitializer;
-import dev.cloudeko.zenei.user.runtime.DefaultUserAccountManager;
+import dev.cloudeko.zenei.user.runtime.DefaultUserAccountReactiveProvider;
 import dev.cloudeko.zenei.user.runtime.DefaultUserAccountRecorder;
 import dev.cloudeko.zenei.user.runtime.DefaultUserAccountRepository;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
@@ -80,7 +80,7 @@ public class BasicUserAccountManagerProcessor {
 
     @BuildStep
     AdditionalBeanBuildItem setupManager() {
-        return new AdditionalBeanBuildItem(DefaultUserAccountManager.class);
+        return new AdditionalBeanBuildItem(DefaultUserAccountReactiveProvider.class);
     }
 
     private static final class ReactiveClientBuildItem extends SimpleBuildItem {
