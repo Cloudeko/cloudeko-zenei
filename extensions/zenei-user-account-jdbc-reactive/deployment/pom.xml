@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>dev.cloudeko</groupId>
-        <artifactId>zenei-user-account-extension-parent</artifactId>
+        <artifactId>zenei-user-account-jdbc-reactive-extension-parent</artifactId>
         <version>0.0.1</version>
     </parent>
 
-    <name>Zenei - Extensions - User Account - Deployment</name>
-    <artifactId>zenei-user-account-extension-deployment</artifactId>
+    <name>Zenei - Extensions - User Account JDBC Reactive - Deployment</name>
+    <artifactId>zenei-user-account-jdbc-reactive-extension-deployment</artifactId>
 
     <dependencies>
         <dependency>
@@ -40,7 +40,7 @@
 
         <dependency>
             <groupId>dev.cloudeko</groupId>
-            <artifactId>zenei-user-account-extension</artifactId>
+            <artifactId>zenei-user-account-jdbc-reactive-extension</artifactId>
         </dependency>
 
         <dependency>

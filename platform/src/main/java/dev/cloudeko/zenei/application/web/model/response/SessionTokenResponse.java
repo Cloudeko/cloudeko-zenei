@@ -3,6 +3,7 @@ package dev.cloudeko.zenei.application.web.model.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.cloudeko.zenei.extension.core.model.session.SessionToken;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -20,6 +21,8 @@ public class SessionTokenResponse {
     @JsonProperty("token_type")
     @Schema(description = "Type of the token")
     private String tokenType;
+
+    QuarkusHttpUser
 
     @JsonProperty("expires_in")
     @Schema(description = "Time in seconds until the token expires")

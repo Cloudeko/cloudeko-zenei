@@ -18,6 +18,7 @@
         <module>external-authentication</module>
         <module>core</module>
         <module>zenei-user-account</module>
+        <module>zenei-user-account-jdbc-reactive</module>
         <module>rest</module>
         <module>jdbc-panache</module>
     </modules>
